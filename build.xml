@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="mutasem-drupal-build" default="build">
+  <!-- Generic variables -->
+  <property name="dir.base" value="${project.basedir}"/>
+  <property name="dir.baselibraries" value="${project.basedir}/libraries"/>
+  <property name="dir.target" value="${dir.base}/public"/>
+  <property name="dir.tmp" value="${dir.base}/pre_installation_ddkits"/>
+  <property name="dir.sites" value="${dir.base}/sites"/>
+  <property name="dir.profiles" value="${dir.base}/profiles"/>
+  <property name="dir.files" value="${dir.base}/files"/>
+  <property name="dir.private" value="${dir.base}/private"/>
+  <property name="dir.themes" value="${dir.base}/themes"/>
+  <property name="dir.modules" value="${dir.base}/modules"/>
+  <property name="dir.features" value="${dir.base}/features"/>
+  <property name="dir.timeago" value="${dir.base}/libraries/timeago"/>
+  <property name="dir.zendlibraries" value="${dir.base}/libraries/Zend"/>
+  <property name="vendorname" value="ddkits"/>
+  <property name="memory" value='ini_set("memory_limit", "512M");'/>
+  <property name="message" value="This phing built by Mutasem Elayyoub for DDKits.com"/>
+  
+  <target name="welcome">
+      <echo msg="${message}"/>
+  <echo msg="${message}"/>
+  </target>
+  
+  <!-- Set of sites in the codebase -->
+  <fileset dir="${dir.sites}" id="sites">
+      <type type="dir"/>
+      <depth max="0" min="0"/>
+  </fileset>
+
+  <!-- Generic build task -->
+  <target name="build"  depends="drupal:build, project:build"
+    description="Build the project"/>
+
+  <!-- Place to add build tasks for this project. -->
+  <target name="project:build" description="Run project specific build tasks.">
+    <!-- Sample task to avoid Warnings from phing of target without tasks. -->
+    <property name="project-builded" value="1"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <!-- Drupal build tasks -->
+  <target name="drupal:build"
+    depends="php-check,
+      composer-check,
+      drupal:drush:make,
+      drupal:cleanup-temp,
+      drupal:symlink:profiles, drupal:symlink:sites, drupal:symlink:themes, drupal:symlink:modules, drupal:symlink:features, drupal:symlink:files, drupal:symlink:private,
+      drupal:compass:compile,
+      drupal:overwrite,
+      drupal:chmod,
+      ww:dockerInstall,
+      ww:resync,
+      ww:docker,
+      ww:jenkins,
+      copy:zend:to:libraries:for:oauth"
+    description="Build the Drupal codebase" />
+
+
+<!-- check php first -->
+    <target name="php-check">
+        <condition property="php" value="php">
+            <not>
+                <isset property="${php}"/>
+            </not>
+        </condition>
+        <echo msg="${php}"/>
+        <echo msg="DDKits installed."/>
+    </target>
+
+<!-- check docker first -->
+<target name="ww:dockerInstall" depends="ww:dockerDownload">
+    <echo msg="check docker now ==> "/>
+    <exec command="docker -v" logoutput="true" checkreturn="true"/>
+    <exec command="docker-compose -v" logoutput="true" checkreturn="true"/>
+    <exec command="docker-machine -v" logoutput="true" checkreturn="true"/>
+</target>
+
+<!-- install docker -->
+<target name="ww:dockerDownload">
+    <echo msg="Install docker compose now ==> "/>
+    <exec command="ddkits" outputProperty="currentuser" />
+    <!-- Set the 'issudo' property to be true if the user is root -->
+    <condition property="issudo">
+        <equals arg1="${currentuser}" arg2="root" />
+    </condition>
+    <exec command="curl -L --fail https://github.com/docker/compose/releases/download/1.13.0/run.sh >> /usr/local/bin/docker-compose" logoutput="true" checkreturn="false"/>
+    <exec command="echo ${sudoPassword} | sudo -S chmod +x /usr/local/bin/docker-compose" logoutput="true" checkreturn="false"/>
+</target>
+
+
+<target name="drupal:revert"
+    depends="drupal:updatedb,
+      drupal:registry-rebuild,
+      drupal:features-revert-all,
+      drupal:cache-clear"
+    description="Update the current site install with the new codebase." />
+
+  <!-- resync all the file to deploy folder to copy it in the docker container -->
+  
+  <target name="ww:resync" description="Resynce all files into deploy and copy it into docker container">
+    <!-- # run docker-compose -->
+    <if>
+      <not>
+        <available file="${dir.base}/deploy" type="dir" />
+      </not>
+      <then>
+       <exec command="mkdir ${dir.base}/deploy" logoutput="true" checkreturn="true"/>
+    </then>
+  </if>
+    <exec command="rsync -rLcpzv --exclude=.git --exclude=.idea --exclude=settings.local.php --exclude=**/bower_components --exclude=**/node_modules --exclude=**/.sass-cache  --exclude=/sites/*/files --exclude=aftermerge.rtf  public/ deploy/public" logoutput="true" checkreturn="false"/>
+    <if>
+      <not>
+        <available file="${dir.base}/deploy/public/sites/default/files" type="dir" />
+      </not>
+      <then>
+       <exec command="mkdir ${dir.base}/deploy/public/sites/default/files" logoutput="true" checkreturn="true"/>
+       <exec command="chmod -Rv 777 ${dir.base}/deploy/public/sites/default" logoutput="true" checkreturn="true"/>
+       <exec command="chmod 644 ${dir.base}/deploy/public/sites/default/default.settings.php" logoutput="true" checkreturn="true"/>
+    </then>
+  </if>
+  <if>
+      <not>
+        <available file="${dir.base}/deploy/logs" type="dir" />
+      </not>
+      <then>
+       <exec command="mkdir ${dir.base}/deploy/logs" logoutput="true" checkreturn="true"/>
+    </then>
+  </if>
+  <if>
+      <not>
+        <available file="${dir.base}/deploy/phpmyadmin" type="dir" />
+      </not>
+      <then>
+       <exec command="mkdir ${dir.base}/deploy/phpmyadmin" logoutput="true" checkreturn="true"/>
+    </then>
+  </if>
+  <if>
+      <not>
+        <available file="${dir.base}/sites" type="dir" />
+      </not>
+      <then>
+        <exec command="rm -rf ${dir.base}/sites" logoutput="true" checkreturn="false"/>
+    </then>
+  </if>
+</target>
+
+  <!--  -->
+<target name="ww:docker" description="fix all docker options and folders">
+    <!-- # run docker-compose -->
+    <exec command="docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d" logoutput="true" checkreturn="true"/>
+    <!-- docker run -p 9090:80 -v $PATH/public:/var/www/html -t ddkits/drupal -->
+  </target>
+
+
+ <target name="ww:jenkins" description="fix all docker options and folders">
+  <if>
+            <not>
+                <available file="${dir.base}/jenkins" type="dir" />
+            </not>
+            <then>
+              <!-- if you want to make your own jenkins Dockerfile uncommnent the line below -->
+          <!-- <exec command="mkdir ${dir.base}/jenkins" logoutput="true" checkreturn="true"/> -->
+          <exec command="git clone https://github.com/jenkinsci/docker.git ${dir.base}/jenkins" />
+          <exec command="rm -rf ${dir.base}/jenkins/test ${dir.base}/jenkins/docker-compose.yml" />
+          </then>
+        </if>
+    <echo msg="${message}"/>
+  </target>
+  <!--  Install all the requirments com through and to composer  -->
+    <target name="composer-check">
+        <available file="${composerPhar}" property="composer.present"/>
+    </target>
+    
+    <target name="composer-download" depends="composer-check">
+        <property name="composer.noselfupdate" value="true"/>
+        <httpget url="https://getcomposer.org/composer.phar" dir="${dir.base}"/>
+    </target>
+    
+    <target name="composer-selfupdate" depends="php-check,composer-download" unless="composer.noselfupdate">
+        <exec executable="${php}">
+            <arg value="${composerPhar}"/>
+            <arg value="self-update"/>
+            <arg value="--quiet"/>
+        </exec>
+    </target>
+    
+    <target name="composerUpdate" depends="composer-selfupdate" unless="composer.noselfupdate" description="Run composer update">
+        <exec executable="${php}">
+            <arg value="${composerPhar}"/>
+            <arg value="update"/>
+        </exec>
+    </target>
+    
+    <target name="composerInstall" description="Installing dependencies by composer" depends="composer-check">
+        <delete dir="${dir.vendor}"/>
+        
+        <composer command="install">
+            <arg/>
+        </composer>
+    </target>
+    
+    <target name="drupal:drush:make" description="Run drush make and create the temporary codebase.">
+        <exec command="rm -rf ${dir.tmp}" logoutput="true" checkreturn="true"/>
+        <exec command="drush make -y --concurrency=2 --no-patch-txt ${dir.base}/ddkits-files/drupal/project.make ${dir.tmp}" logoutput="true" checkreturn="true"/>
+        
+        <echo msg="${message}"/>
+    </target>
+
+  <target name="drupal:cleanup-temp" description="Clean unnecessary files in the temporary Drupal directory">
+    <!-- Remove all text files except robots.txt and other usefull txts. -->
+    <!-- <exec command="find ${dir.tmp} -iname '*.txt' -not -path '*features*' -not -path '*test*' -not -path '*context*' -not -path '*zen*' -not -name 'robots.txt' -print -delete" logoutput="true" checkreturn="false" /> -->
+
+    <!-- Remove all patch files. -->
+    <exec command="find ${dir.tmp} -iname '*.patch' -print -delete" logoutput="true" checkreturn="false" />
+
+    <!-- Remove all .htaccess files which are not used by servers other then apache2. -->
+    <if>
+      <not>
+        <available file="/etc/apache2" type="dir" />
+      </not>
+      <then>
+        <exec command="find ${dir.tmp} -name .htaccess -delete" logoutput="true" checkreturn="false" />
+      </then>
+    </if>
+
+    <!-- Remove config files for IIS. -->
+    <delete file="${dir.tmp}/web.config" />
+
+    <!-- Remove unneeded gitignore. -->
+    <delete file="${dir.tmp}/.gitignore" />
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:symlink:profiles" description="Symlink all profiles to the temporary build.">
+    <!-- Create default directory if it does not exist. -->
+    <if>
+      <available file="${dir.profiles}" type="dir" />
+      <then>
+        <fileset dir="${dir.profiles}" id="profiles">
+          <type type="dir"/>
+          <depth max="0" min="0"/>
+        </fileset>
+
+        <!-- Copy all profiles directories to the build. -->
+        <foreach param="profile" absparam="profilepath" target="drupal:symlink:profiles:profile">
+          <fileset refid="profiles"/>
+        </foreach>
+      </then>
+    </if>
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:symlink:profiles:profile">
+    <exec command="ln -sfn ${dir.base}/profiles/${profile} ${dir.tmp}/profiles/${profile}" checkreturn="true"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:symlink:sites" description="Symlink all sites to the temporary build.">
+    <!-- Create default directory if it does not exist. -->
+    <if>
+      <not>
+        <available file="${dir.sites}" type="dir" />
+      </not>
+      <then>
+        <!-- Prepare default sites directory for installation. -->
+        <mkdir dir="${dir.sites}" mode="0755"/>
+        <mkdir dir="${dir.sites}/default" mode="0755"/>
+        <copy file="${dir.base}/ddkits-files/drupal/settings.php" tofile="${dir.sites}/default/default.settings.php" />
+        <copy file="${dir.base}/ddkits-files/drupal/settings.php" tofile="${dir.sites}/default/settings.php" />
+       <chmod file="${dir.sites}/default/settings.php" mode="0777" />
+       <exec command="echo '/* This version build by Mutasem Elayyoub DDKits.com. */' >> ${dir.tmp}/sites/default/settings.php" checkreturn="true"/>
+       <!-- <exec command=". ${dir.base}/ddkits.alias.sh" checkreturn="true"/> -->
+      </then>
+    </if>
+    
+    
+    
+    <delete dir="${dir.tmp}/sites/default" includeemptydirs="true" failonerror="true" />
+
+    <!-- Copy all sites directories to the build. -->
+    <foreach param="site" absparam="sitepath" target="drupal:symlink:sites:site">
+      <fileset refid="sites"/>
+    </foreach>
+  
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:symlink:sites:site">
+    <exec command="ln -sfn ${dir.base}/sites/${site} ${dir.tmp}/sites/${site}" checkreturn="true"/>
+    <!-- <foreach param="site" absparam="sitepath" target="drupal:symlink:sites:site">
+        <fileset refid="sites"/>
+        <echo msg="Try to symlinks all sites/folders on ${dir.base} for different multi sites ${site}"/>
+        <exec command="ln -s . ${site}" dir="${dir.base}" checkreturn="true"/>
+    </foreach> -->
+  <echo msg="${message}"/>
+  </target>
+  
+  <target name="drupal:symlink:files" description="Symlink all sites files to the temporary build.">
+    <!-- Create default directory if it does not exist. -->
+    <if>
+      <not>
+        <available file="${dir.files}" type="dir" />
+      </not>
+      <then>
+        <!-- Prepare default files directory for installation. -->
+        <mkdir dir="${dir.files}" mode="0755"/>
+        <mkdir dir="${dir.files}/default" mode="0777" />
+      </then>
+    </if>
+
+   
+    
+    <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:symlink:files:site">
+    <if>
+      <not>
+        <available file="${dir.files}/${site}" type="dir" />
+      </not>
+      <then>
+        <mkdir dir="${dir.files}/${site}" mode="0777" />
+        <chmod file="${dir.files}/${site}/settings.php" mode="0777" />
+        <exec command="echo '${memory}' >> public/sites/${site}/settings.php" checkreturn="false"/>
+        <exec command='echo "// This version build by Mutasem Elayyoub DDKits.com. " >> ${dir.files}/${site}/settings.php' checkreturn="false"/>
+      </then>
+    </if>
+     <!-- Copy all sites files directories to the build. -->
+    <foreach param="site" absparam="sitepath" target="drupal:symlink:files:site">
+      <fileset refid="sites"/>
+    </foreach>
+    <exec command="unlink ${dir.tmp}/sites/${site}/files" checkreturn="true"/>
+    <exec command="ln -sfn ${dir.files}/${site} ${dir.tmp}/sites/${site}/files" checkreturn="false"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:symlink:private" description="Symlink all sites private files to the temporary build.">
+    <if>
+      <not>
+        <available file="${dir.private}" type="dir" />
+      </not>
+      <then>
+        <mkdir dir="${dir.private}" mode="0755" />
+      </then>
+    </if>
+
+    <!-- Copy all sites private directories to the build. -->
+    <foreach param="site" absparam="sitepath" target="drupal:symlink:private:site">
+      <fileset refid="sites"/>
+    </foreach>
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:symlink:private:site">
+    <if>
+      <not>
+        <available file="${dir.private}/${site}" type="dir" />
+      </not>
+      <then>
+        <mkdir dir="${dir.private}/${site}"/>
+      </then>
+    </if>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:compass:compile" description="Compile CSS with compass for all themes.">
+    <foreach param="dirname" absparam="absname" target="drupal:compass:compile:theme">
+      <fileset dir="${dir.themes}">
+        <type type="dir" />
+        <depth max="0" min="0" />
+      </fileset>
+    </foreach>
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:compass:compile:theme">
+    <if>
+      <available file="${absname}/sass" type="dir" />
+      <then>
+        <echo msg="Cleaning SCSS..." />
+        <exec command="compass clean ${absname}" logoutput="true" checkreturn="true" />
+        <echo msg="Compiling SCSS..." />
+        <exec command="compass compile ${absname}" logoutput="true" checkreturn="true" />
+        <echo msg="Installing npm for each theme..." />
+         <exec command="npm install" dir="${absname}" logoutput="true" checkreturn="true" />
+      </then>
+    </if>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:symlink:themes" description="Symlink themes to the temporary build.">
+    <if>
+      <not>
+        <available file="${dir.themes}" type="dir" />
+      </not>
+      <then>
+        <mkdir dir="${dir.themes}"/>
+      </then>
+    </if>
+    <exec command="ln -sfn ${dir.themes} ${dir.tmp}/sites/all/themes/${vendorname}" checkreturn="true"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:symlink:modules" description="Symlink modules to the temporary build.">
+    <if>
+      <not>
+        <available file="${dir.modules}" type="dir" />
+      </not>
+      <then>
+        <mkdir dir="${dir.modules}"/>
+      </then>
+    </if>
+    <exec command="ln -sfn ${dir.modules} ${dir.tmp}/sites/all/modules/${vendorname}" checkreturn="true"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:symlink:features" description="Symlink features to the temporary build.">
+    <if>
+      <not>
+        <available file="${dir.featrues}" type="dir" />
+      </not>
+      <then>
+        <mkdir dir="${dir.features}"/>
+      </then>
+    </if>
+    <exec command="ln -sfn ${dir.features} ${dir.tmp}/sites/all/modules/features" checkreturn="true"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:overwrite" description="Move the new codebase to the target.">
+    <!-- Check or the new codebase and old is available. If so delete the old -->
+    <if>
+      <and>
+        <available file="${dir.target}" type="dir" />
+        <available file="${dir.tmp}" type="dir" />
+      </and>
+      <then>
+        <delete dir="${dir.target}" includeemptydirs="true" failonerror="true" />
+      </then>
+    </if>
+
+    <!-- Check or the new codebase is available and move it to the target. -->
+    <if>
+      <available file="${dir.tmp}" type="dir" />
+      <then>
+        <exec command="mv ${dir.tmp} ${dir.target}" logoutput="true" checkreturn="true"/>
+      </then>
+    </if>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:chmod" description="Sets the correct permissions to the codebase.">
+    <!-- Basic files and directory permissions. -->
+    <exec command="find -L ${dir.target} -type d -not -name files -print0 | xargs -0 chmod 755" logoutput="true" />
+    <exec command="find -L ${dir.target} -type f -not -name settings.php -print0 | xargs -0 chmod 644" logoutput="true" />
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:updatedb" description="Update the db for all sites">
+    <foreach param="site" target="drupal:updatedb:site">
+      <fileset refid="sites"/>
+    </foreach>
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:updatedb:site">
+    <exec command="drush -y -r ${dir.target} -l ${site} updatedb" logoutput="true" checkreturn="true"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:registry-rebuild" description="Rebuild the registry for all sites">
+    <foreach param="site" target="drupal:registry-rebuild:site">
+      <fileset refid="sites"/>
+    </foreach>
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:registry-rebuild:site">
+    <exec command="drush -y -r ${dir.target} -l ${site} rr" logoutput="true" checkreturn="true"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:cache-clear" description="Clear all caches">
+    <foreach param="site" target="drupal:cache-clear:site">
+      <fileset refid="sites"/>
+    </foreach>
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:cache-clear:site">
+    <exec command="drush -y -r ${dir.target} -l ${site} cache-clear all" logoutput="true" checkreturn="true"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="drupal:features-revert-all" description="Revert all features">
+    <if>
+      <available file="code/sites/all/modules/contrib/features" type="dir" />
+      <then>
+        <foreach param="site" target="drupal:features-revert-all:site">
+          <fileset refid="sites"/>
+        </foreach>
+      </then>
+    </if>
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:features-revert-all:site">
+    <exec command="drush -y -r ${dir.target} -l ${site} features-revert-all" logoutput="true" checkreturn="false"/>
+
+    <!-- We do this twice because features is often fucked up. -->
+    <exec command="drush -y -r ${dir.target} -l ${site} features-revert-all" logoutput="true" checkreturn="false"/>
+  <echo msg="${message}"/>
+  </target>
+
+  <!-- Tasks for setting the site in a certain stage -->
+  <target name="drupal:mode:production" description="Sets the Drupal installation to production mode">
+    <!-- Do not need the installation file. -->
+    <delete file="${dir.target}/install.php" failonerror="false" />
+
+    <!-- Settings files should be non writable -->
+    <exec command="find -L ${dir.target} -name settings.php -print0 | xargs -0 chmod 555" logoutput="true" />
+
+    <!-- Run commands which should be done for every drupal install dir -->
+    <foreach param="site" target="drupal:mode:production:site">
+      <fileset refid="sites"/>
+    </foreach>
+  <echo msg="${message}"/>
+  </target>
+  <target name="drupal:mode:production:site">
+    <!-- Disable modules which should not be activated on production. -->
+    <exec command="drush -y -r ${dir.target} -l ${site} pm-disable *_ui devel* coder*" logoutput="true" checkreturn="false"/>
+  <echo msg="${message}"/>
+  </target>
+  <target name="copy:zend:to:libraries:for:oauth">
+    <echo msg="Copying to build directory..."/>
+    <exec command="ln -sfn ${dir.zendlibraries} ${dir.target}/sites/all/libraries/Zend" checkreturn="true"/>
+    <exec command="ln -sfn ${dir.timeago} ${dir.target}/sites/all/libraries/timeago" checkreturn="true"/>
+   <echo msg="${message}"/>
+   <echo msg="Copying the system files for multiple sites if Exist"/>
+      <if>
+        <available file="${dir.base}/sites/sites.php" type="dir" />
+      <then>
+        <copy file="${dir.base}/sites/sites.php" tofile="${dir.base}/public/sites/sites.php" />
+    </then>
+  </if>
+  <exec command=" echo -e '\n##################################################################################\n
+Your website on ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} is ready enjoy it !!\n
+www.ddkits.com \n\n
+ ##################################################################################'" />
+  </target>
+
+  <!-- Tasks for testing the codebase -->
+  <target name="tests:run"
+    depends="tests:setup-filesets, tests:php:custom:lint, tests:php:custom:debug-code, tests:php:custom:code-style"
+    description="Run various tests on the Drupal installation.">
+  <echo msg="${message}"/>
+  </target>
+  <target name="tests:setup-filesets">
+    
+    <!-- Define pattern sets for future reference -->
+
+    <!-- PHP files -->
+    <patternset id="php">
+      <include name="**/*.php" />
+      <include name="**/*.module" />
+      <include name="**/*.install" />
+      <include name="**/*.inc" />
+      <include name="**/*.profile" />
+      <include name="**/*.test" />
+    </patternset>
+
+    <!-- Javascript files -->
+    <patternset id="js">
+      <include name="**/*.js" />
+      <!-- Minimized JavaScript files should not be analyzed.
+           In their optimized state they can not be expexted
+           to conform to coding standards. -->
+      <exclude name="**/*.min.js" />
+    </patternset>
+
+    <!-- CSS files -->
+    <patternset id="css">
+      <include name="**/*.css" />
+    </patternset>
+
+    <!-- Directories for community contributed code. We exclude these from
+         code analysis as we cannot be held responsible for any problems
+         here. -->
+    <patternset id="contrib">
+      <exclude name="**/contrib/**/*.*" />
+      <exclude name="**/libraries/**/*.*" />
+    </patternset>
+
+
+
+    <!-- We exclude generated files from We exclude these from code analysis
+         as we cannot be held responsible for any problems here. -->
+    <patternset id="generated">
+      <exclude name="**/*.features.*" />
+      <exclude name="**/*.field_group.inc" />
+      <exclude name="**/*.layouts.inc" />
+      <exclude name="**/*.pages_default.inc" />
+      <exclude name="**/*.panels_default.inc" />
+      <exclude name="**/*.strongarm.inc" />
+      <exclude name="**/*.views_default.inc" />
+    </patternset>
+
+    <!-- Define file sets for future reference -->
+
+    <!-- All PHP files -->
+    <fileset id="src.php" dir="${dir.target}">
+      <patternset refid="php"/>
+    </fileset>
+
+    <!-- Custom PHP Module files -->
+    <fileset id="src.php.custom.modules" dir="${dir.modules}">
+      <patternset refid="php" />
+    </fileset>
+    <!-- Custom PHP Theme files -->
+    <fileset id="src.php.custom.themes" dir="${dir.themes}">
+      <patternset refid="php" />
+    </fileset>
+
+    <!-- All Javascript files -->
+    <fileset id="src.js" dir="${dir.target}">
+      <patternset refid="js" />
+    </fileset>
+
+    <!-- Custom Javascript files -->
+    <fileset id="src.js.custom" dir="${dir.base}">
+      <include name="modules/**" />
+      <include name="themes/**" />
+      <exclude name="code/**" />
+      <patternset refid="js" />
+    </fileset>
+
+    <!-- All CSS files -->
+    <fileset id="src.css" dir="${dir.target}">
+      <patternset refid="css" />
+    </fileset>
+
+    <!-- Custom CSS files -->
+    <fileset id="src.css.custom" dir="${dir.themes}">
+      <patternset refid="css" />
+      <patternset refid="contrib" />
+    </fileset>
+    
+
+    <!-- Sample task to avoid Warnings from phing of target without tasks. -->
+    <property name="fileset-loaded" value="1"/>
+    
+    
+    
+  <echo msg="${message}"/>
+  </target>
+
+
+  <target name="tests:php:all:lint"
+          description="Check all PHP files for syntax errors using PHPLint"
+          depends="tests:setup-filesets">
+    <phplint haltonfailure="true">
+      <fileset refid="src.php" />
+    </phplint>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="tests:php:custom:lint"
+          description="Check custom PHP files for syntax errors using PHPLint"
+          depends="tests:setup-filesets">
+    <phplint haltonfailure="true">
+      <fileset refid="src.php.custom.modules" />
+    </phplint>
+    <phplint haltonfailure="true">
+      <fileset refid="src.php.custom.themes" />
+    </phplint>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="tests:php:custom:debug-code"
+          description="Check custom PHP code for debug statements"
+          depends="tests:setup-filesets">
+    <phingcall target="tests:run-debug-code">
+      <property name="debug.language" value="PHP" override="true" />
+      <property name="debug.pattern" value="(print_r\(|var_dump\(|dsm\(|dpm\()"
+                override="true" />
+      <property name="debug.fileset" value="src.php.custom.modules"/>
+    </phingcall>
+    <phingcall target="tests:run-debug-code">
+      <property name="debug.language" value="PHP" override="true" />
+      <property name="debug.pattern" value="(print_r\(|var_dump\(|dsm\(|dpm\()"
+                override="true" />
+      <property name="debug.fileset" value="src.php.custom.themes"/>
+    </phingcall>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="tests:php:all:debug-code"
+          description="Check all PHP code for debug statements"
+          depends="tests:setup-filesets">
+    <phingcall target="tests:run-debug-code">
+      <property name="debug.language" value="PHP" override="true" />
+      <property name="debug.pattern" value="(print_r\(|var_dump\(|dsm\(|dpm\()"
+                override="true" />
+      <property name="debug.fileset" value="src.php"/>
+    </phingcall>
+  <echo msg="${message}"/>
+  </target>
+
+  <!-- #### Check a fileset for debug code -->
+  <target name="tests:run-debug-code"
+          depends="tests:setup-filesets">
+    <php function="strtolower" returnProperty="debug.language.lower">
+      <param value="${debug.language}" />
+    </php>
+    <property name="debug.output"
+              value="/tmp/debug_${debug.language.lower}.txt"
+              override="true" />
+    <delete file="${debug.output}"/>
+    <append text="" destFile="${debug.output}" />
+
+    <foreach target="tests:run-debug-code:file" param="filename"
+             absparam="absfilename">
+      <fileset refid="${debug.fileset}"/>
+    </foreach>
+
+    <loadfile property="debug.lines" file="${debug.output}" />
+    <!-- Break if debug code is detected! -->
+    <if>
+      <not>
+        <equals arg1="${debug.lines}" arg2="" />
+      </not>
+      <then>
+        <fail message="${debug.language} debug code detected:${line.separator}
+                       ${debug.lines}" />
+      </then>
+    </if>
+  <echo msg="${message}"/>
+  </target>
+  <!-- #### Check an individual file for debug code -->
+  <target name="tests:run-debug-code:file">
+    <loadfile property="debug.lines" file="${absfilename}">
+      <filterchain>
+        <linecontainsregexp>
+            <regexp pattern="${debug.pattern}" />
+          </linecontainsregexp>
+      </filterchain>
+    </loadfile>
+    <if>
+      <not>
+        <equals arg1="${debug.lines}" arg2="" />
+      </not>
+      <then>
+        <append text="${filename}:${line.separator}
+                      ${debug.lines}${line.separator}
+                      ${line.separator}"
+                destFile="${debug.output}"/>
+      </then>
+    </if>
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="tests:php:custom:code-style"
+    description="Test custom modules to code style">
+    <exec command="phpcs -n --report=full --standard=Drupal --extensions=install,module,php,inc ${dir.modules}" logoutput="true" checkreturn="true" />
+    <exec command="phpcs -n --report=full --standard=Drupal --ignore=*.tpl.php --extensions=php,inc ${dir.themes}" logoutput="true" checkreturn="true" />
+  <echo msg="${message}"/>
+  </target>
+
+  <target name="tests:drupal:coder-review"
+    description="Run coder review on custom modules and themes">
+    <exec command="drush -r ${dir.target} -y dl coder" checkreturn="false" logoutput="false" />
+    <exec command="drush -r ${dir.target} -y pm-enable coder_review" checkreturn="false" logoutput="false" />
+
+    <exec command="drush -r ${dir.target} coder-review --reviews=druplart,i18n,release,security,sql --no-empty sites/all/modules/${vendorname}" logoutput="true" checkreturn="true" />
+    <exec command="drush -r ${dir.target} coder-review --reviews=druplart,i18n,release,security,sql --no-empty sites/all/themes/${vendorname}" logoutput="true" checkreturn="true" />
+  <echo msg="${message}"/>
+  </target>
+</project>

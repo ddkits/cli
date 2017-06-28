@@ -1,0 +1,23 @@
+--- profiles/commons/commons_1.profile	2015-02-19 22:29:09.000000000 +0100
++++ profiles/commons/commons.profile	2015-02-26 10:36:31.673685797 +0100
+@@ -109,9 +109,9 @@
+   $form['server_settings']['enable_acquia_connector'] = array(
+     '#type' => 'checkbox',
+     '#title' => 'Use Acquia Network Connector',
+-    '#default_value' => 1,
++    '#default_value' => 0,
+     '#weight' => -10,
+-    '#return_value' => 1,
++    '#return_value' => 0,
+   );
+   $form['server_settings']['acquia_connector_modules'] = array(
+     '#type' => 'checkboxes',
+@@ -128,7 +128,7 @@
+     '#weight' => -9,
+     '#states' => array(
+       'visible' => array(
+-        ':input[name="enable_acquia_connector"]' => array('checked' => TRUE),
++        ':input[name="enable_acquia_connector"]' => array('checked' => FALSE),
+       ),
+     ),
+   );

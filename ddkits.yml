@@ -1,0 +1,37 @@
+version: "2"
+
+services:
+  ddkits:
+    build: ./ddkits-files/ddkits
+    image: ddkits
+    container_name: ddkits
+    links:
+        - jenkins
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+        - ./deploy/docker.sock:/tmp/docker.sock
+        - /etc/nginx
+        # - ./deploy/nginx:/etc/nginx/sites-available/
+        # - ./deploy/nginx:/etc/nginx/sites-enabled/
+    networks:
+      - ddkits
+
+  jenkins:
+    image: whywebs/jenkins:latest
+    ports:
+      - "4040:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins:/var/jenkins_home 
+    stdin_open: true
+    tty: true
+    container_name: ddkits_jenkins
+    networks:
+      - ddkits
+
+networks:
+  ddkits:
+
+  

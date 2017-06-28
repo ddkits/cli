@@ -1,0 +1,18 @@
+# Ignore configuration files that may contain sensitive information.
+public/sites/*/settings*.php
+public/sites/*/default.settings.php
+
+# Ignore paths that contain user-generated content.
+public/*
+deploy/*
+ll-deploy/*
+wp-deploy/*
+jm-deploy/*
+sites/*
+vendor/*
+pre_installation_whywebs/*
+jenkins/*
+nginx/*
+cache/*
+
+*.DS_Store*

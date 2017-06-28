@@ -1,0 +1,9 @@
+--- profiles/commons/modules/contrib/message_notify/message_notify.module	2015-06-18 13:50:46.000000000 +0200
++++ profiles/commons/modules/contrib/message_notify/message_notify.module	2015-06-18 13:50:50.342125778 +0200
+@@ -190,5 +190,5 @@
+  * @deprecated
+  */
+ function message_notify_send_mail(Message $message, array $options = array()) {
+-  message_notify_send_message($message, $options, 'email');
++//  message_notify_send_message($message, $options, 'email');
+ }
