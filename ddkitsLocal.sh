@@ -205,11 +205,11 @@ read MYSQL_DATABASE
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
           PLATFORM='linux-gnu'
           echo 'This machine is '$PLATFORM' Docker setup will start now'
-          echo $SUDOPASS | sudo -S apt-get install wget -y
+          echo $SUDOPASS | sudo -S apt-get install wget git -y
         elif [[ "$OSTYPE" == "darwin"* ]]; then
           PLATFORM='MacOS'
           echo 'This machine is '$PLATFORM' Docker setup will start now'
-          echo $SUDOPASS | sudo -S gem install wget -y
+          echo $SUDOPASS | sudo -S gem install wget git -y
         elif [[ "$OSTYPE" == "cygwin" ]]; then
           PLATFORM='cygwin'
           echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM' 
@@ -413,15 +413,72 @@ services:
         if [[ -f "ddkitsnew.yml" ]]; then
           rm ddkitsnew.yml
         fi
-  echo -e "\033[33;31m"
-  echo -e 'Enter your DocumentRoot folder name which will be inside your deploy folder "if your site directly in deploy no subfolders, then leave this blank": \033[33;32m '
-  echo -e "\033[33;30m "
-read DOCUMENTROOT
+  
+DOCUMENTROOT='public'
+
+# Build out docker file to start our install
+echo -e '
+FROM ddkits/lamp:7
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+RUN export TERM=xterm
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
+
+# Set the default command to execute
+
+RUN chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite 
+
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw ' >> ./ddkits-files/wordpress/Dockerfile
+
+
+# create different containers files for conf
+echo -e '
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/'$DOCUMENTROOT'
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/wordpress/sites/$DDKITSHOSTNAME.conf
+
 echo -e 'version: "2"
 
 services:
   web:
-    image: wordpress:latest
+    build: ./ddkits-files/wordpress
+    image: ddkits/wordpress:latest
     depends_on:
       # Link the Solr container:
       - "solr"
@@ -430,14 +487,25 @@ services:
     stdin_open: true
     tty: true
     container_name: '$DDKITSHOSTNAME'_ddkits_wp_web
+    volumes:
+      - ./wp-deploy:/var/www/html
     networks:
       - ddkits
     ports:
-      - "'$DDKITSWEBPORT':8983" 
+      - "'$DDKITSWEBPORT':80" 
     environment:
        WORDPRESS_DB_HOST: '$DDKITSIP':'$DDKITSDBPORT'
        WORDPRESS_DB_USER: '$MYSQL_USER'
-       WORDPRESS_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >> ddkits.env.yml    
+       WORDPRESS_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >> ddkits.env.yml  
+
+wget http://wordpress.org/latest.tar.gz
+tar xfz latest.tar.gz  
+mkdir ./wp-deploy
+mkdir ./wp-deploy/public
+mv wordpress/* ./wp-deploy/public
+rmdir ./wordpress/
+rm -f latest.tar.gz
+
              break
             ;;
             # case of joomla
@@ -450,15 +518,71 @@ services:
         if [[ -f "ddkitsnew.yml" ]]; then
           rm ddkitsnew.yml
         fi
-  echo -e "\033[33;31m"
-  echo -e 'Enter your DocumentRoot folder name which will be inside your deploy folder "if your site directly in deploy no subfolders, then leave this blank": \033[33;32m '
-  echo -e "\033[33;30m "
-read DOCUMENTROOT
+DOCUMENTROOT='public'
+
+# Build out docker file to start our install
+echo -e '
+FROM ddkits/lamp:latest
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+RUN export TERM=xterm
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
+
+# Set the default command to execute
+
+RUN chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite 
+
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw ' >> ./ddkits-files/joomla/Dockerfile
+
+
+# create different containers files for conf
+echo -e '
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/'$DOCUMENTROOT'
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/joomla/sites/$DDKITSHOSTNAME.conf
+
 echo -e 'version: "2"
 
 services:
   web:
-    image: joomla
+    build: ./ddkits-files/joomla
+    image: ddkits/joomla:latest
     depends_on:
       # Link the Solr container:
       - "solr"
@@ -466,15 +590,22 @@ services:
       - "mariadb"
     stdin_open: true
     tty: true
-    container_name: '$DDKITSHOSTNAME'_ddkits_joomla_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_wp_web
+    volumes:
+      - ./jom-deploy:/var/www/html
     networks:
       - ddkits
     ports:
-      - "'$DDKITSWEBPORT':80"
+      - "'$DDKITSWEBPORT':80" 
     environment:
        JOOMLA_DB_HOST: '$DDKITSIP':'$DDKITSDBPORT'
        JOOMLA_DB_USER: '$MYSQL_USER'
        JOOMLA_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >> ddkits.env.yml  
+
+mkdir ./jom-deploy
+mkdir ./jom-deploy/public
+git clone https://github.com/ddkits/Joomla.git ./jom-deploy/public
+
              break
             ;;
         "Laravel")
@@ -809,7 +940,6 @@ services:
     image: whywebs/jenkins:latest
     ports:
       - "'$DDKITSJENKINSPORT':4040"
-      - "4040:'$DDKITSJENKINSPORT'"
     volumes:
       - ./jenkins:/var/jenkins_home 
     stdin_open: true
