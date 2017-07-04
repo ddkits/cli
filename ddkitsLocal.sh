@@ -25,27 +25,7 @@ echo -e "DDKits required field are all required please make sure to write them c
 Your docker IP is : '$DDKITSIP'\n
 to cancel anytime use the regular system command ==> ctrl+c
 "
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-          PLATFORM='linux-gnu'
-          echo 'This machine is '$PLATFORM' Docker setup will start now'
-        elif [[ "$OSTYPE" == "darwin"* ]]; then
-          PLATFORM='MacOS'
-          echo 'This machine is '$PLATFORM' Docker setup will start now'
-        elif [[ "$OSTYPE" == "cygwin" ]]; then
-          PLATFORM='cygwin'
-          echo 'This machine is '$PLATFORM' Docker setup will start now'
-        elif [[ "$OSTYPE" == "msys" ]]; then
-           PLATFORM='msys'
-          echo 'This machine is '$PLATFORM' Docker setup will start now'        
-        elif [[ "$OSTYPE" == "win32" ]]; then
-            PLATFORM='win32'
-          echo 'This machine is '$PLATFORM' Docker setup will start now'        
-        elif [[ "$OSTYPE" == "freebsd"* ]]; then
-           PLATFORM='freebsd'
-          echo 'This machine is '$PLATFORM' Docker setup will start now'        
-        else
-          break
-fi
+
   echo -e "\033[33;30m" 
 	echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 	echo -e "\033[33;30m "
@@ -55,7 +35,7 @@ read MAIL_ADDRESS
   echo -e "Your new Web port is \033[33;31m ${DDKITSWEBPORT}  \033[33;30m"
   DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
   echo -e "Your new DB port is \033[33;31m ${DDKITSDBPORT}  \033[33;30m"
-  DDKITSJENKINSPORT="4040"
+  DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
   echo -e "Your new Jenkins port is \033[33;31m ${DDKITSJENKINSPORT} \033[33;30m"
   DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
   echo -e "Your new Solr port is \033[33;31m ${DDKITSSOLRPORT} \033[33;30m"
@@ -95,8 +75,8 @@ read DDKITSSITESALIAS
 <VirtualHost *:80>
   ServerName jenkins."$DDKITSSITES"
   ProxyPreserveHost on
-  ProxyPass / http://"$DDKITSIP":4040/
-  ProxyPassReverse / http://"$DDKITSIP":4040/
+  ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
+  ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
 </VirtualHost>
 
 <VirtualHost *:80>
@@ -137,8 +117,8 @@ read DDKITSSITESALIAS
 <VirtualHost *:80>
   ServerName jenkins."$DDKITSSITES"
   ProxyPreserveHost on
-  ProxyPass / http://"$DDKITSIP":4040/
-  ProxyPassReverse / http://"$DDKITSIP":4040/
+  ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
+  ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
 </VirtualHost>
 
 <VirtualHost *:80>
@@ -190,8 +170,8 @@ read DDKITSSITESALIAS
 <VirtualHost *:80>
   ServerName jenkins."$DDKITSSITES"
   ProxyPreserveHost on
-  ProxyPass / http://"$DDKITSIP":4040/
-  ProxyPassReverse / http://"$DDKITSIP":4040/
+  ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
+  ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
 </VirtualHost>
 
 <VirtualHost *:80>
@@ -222,7 +202,31 @@ read MYSQL_ROOT_PASSWORD
 	echo -e "\033[33;30m "
 read MYSQL_DATABASE
 	echo -e "\033[33;30m "
-DDKITS_DOCKER='Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to fully function)'
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+          PLATFORM='linux-gnu'
+          echo 'This machine is '$PLATFORM' Docker setup will start now'
+          echo $SUDOPASS | sudo -S apt-get install wget -y
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+          PLATFORM='MacOS'
+          echo 'This machine is '$PLATFORM' Docker setup will start now'
+          echo $SUDOPASS | sudo -S gem install wget -y
+        elif [[ "$OSTYPE" == "cygwin" ]]; then
+          PLATFORM='cygwin'
+          echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM' 
+        elif [[ "$OSTYPE" == "msys" ]]; then
+           PLATFORM='msys'
+          echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM'        
+        elif [[ "$OSTYPE" == "win32" ]]; then
+            PLATFORM='win32'
+          echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM'         
+        elif [[ "$OSTYPE" == "freebsd"* ]]; then
+           PLATFORM='freebsd'
+          echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM'        
+        else
+          break
+fi
+  echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to fully function)'"
+DDKITS_DOCKER='Do you have docker'
 options=("Yes" "No" "Quit")
 select opt in "${options[@]}"
 do
@@ -283,7 +287,7 @@ MYSQL_PASSWORD='"$MYSQL_PASSWORD"'\n
 MAIL_ADDRESS='"$MAIL_ADDRESS"'\n" >> ./ddkits-files/drupal/ddkitscli.sh
 cat ddkits-drupal.sh >> ./ddkits-files/drupal/ddkitscli.sh
 DDKITS_PLATFORM='Please pick which platform you want to install: '
-options=("Drupal" "Wordpress" "Joomla" "Laravel" "Quit")
+options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -397,13 +401,6 @@ services:
       - ddkits      
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
-
-# install composer locally for drush needs and other composer packages
-wget https://getcomposer.org/composer.phar
-echo $SUDOPASS | sudo -S mv composer.phar /usr/local/bin/
-chmod  -R 777 /usr/local/bin/composer.phar
-composer global require drush/drush:dev-master
-
              break
             ;;
             # case of wordpress 
@@ -496,8 +493,8 @@ services:
           rm ddkits-files/Laravel/Dockerfile
         fi
         # delete the old environment yml file
-        if [[ -f "ddkits-files/Laravel/ddkits.fix.sh" ]]; then
-          rm ddkits-files/Laravel/ddkits.fix.sh
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
         fi
         if [[ -f "ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf" ]]; then
           rm ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
@@ -507,8 +504,8 @@ php artisan key:generate
 php artisan cache:clear
 php artisan config:clear
 chmod -R 777 storage
-composer install
- ' > ./ddkits-files/Laravel/ddkits.fix.sh
+ ' > ./ll-deploy/ddkits.fix.sh
+
 
 echo -e '
 <VirtualHost *:80>
@@ -555,7 +552,6 @@ RUN apt-get update \
   && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw \
   && chmod -Rv 755 /var/www/html 
 
-COPY ddkits.fix.sh /var/www/html/ddkits.fix.sh
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/Laravel/Dockerfile
 
@@ -580,16 +576,32 @@ services:
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
 
+if [[ ! -f "composer.phar" ]]; then
+  wget https://getcomposer.org/composer.phar
+fi
+
+echo $SUDOPASS | sudo -S chmod 777 composer.phar
+
 echo -e 'Now installing Laravel through composer '
-composer create-project laravel/laravel --prefer-dist ll-deploy
-echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy
-echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy/storage
-rm -rf ./ll-deploy/storage/logs/laravel.logs
-cd ll-deploy
-php artisan cache:clear
-php artisan config:cache
-cd ..
-rm ./ll-deploy/.env
+php composer.phar create-project laravel/laravel --prefer-dist ll-deploy
+
+
+if [[ -f "ll-deploy/storage/logs/laravel.logs" ]]; then
+ rm -rf ./ll-deploy/storage/logs/laravel.logs
+fi
+
+if [[ -d "ll-deploy" ]]; then
+  cd ll-deploy
+  php artisan cache:clear
+  php artisan config:cache
+  cd ..
+  echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy
+  echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy/storage
+fi
+
+if [[ -f "ll-deploy/.env" ]]; then
+  rm ./ll-deploy/.env
+fi
 
 echo -e 'APP_NAME="DDKits Laravel"
 APP_ENV=local
@@ -625,8 +637,55 @@ PUSHER_APP_ID=
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 ' >> ./ll-deploy/.env
+
+alias ddklf="docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web bash ddkits.fix.sh"
             break
             ;;
+        "LAMP/PHP5")
+echo -e 'version: "2"
+
+services:
+  web:
+    image: ddkits/lamp:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./lamp5-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_lamp5_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+        break
+        ;;
+        "LAMP/PHP7")
+echo -e 'version: "2"
+
+services:
+  web:
+    image: ddkits/lamp:7
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./lamp7-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_lamp7_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+        break
+        ;;
+
         "Quit")
             break
             ;;
@@ -745,6 +804,19 @@ services:
       - ddkits
     ports:
       - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+
+  jenkins:
+    image: whywebs/jenkins:latest
+    ports:
+      - "'$DDKITSJENKINSPORT':4040"
+      - "4040:'$DDKITSJENKINSPORT'"
+    volumes:
+      - ./jenkins:/var/jenkins_home 
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
+    networks:
+      - ddkits
 
 networks:
     ddkits:
