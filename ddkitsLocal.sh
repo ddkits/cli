@@ -5,7 +5,7 @@
 . ddkits.alias.sh
 
 # make user the main owner of the files
-chown $(echo "$USER") ./
+# chown $(echo "$USER") ./
 
 #  built by  by Mutasem Elayyoub DDKits.com"
 DDKITSIP=$(docker-machine ip)
@@ -430,7 +430,7 @@ fi
 # } 
 
 alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
-echo 123 | sudo -S cat ~/.bashrc_profile
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
 echo $ddkd-$DDKITSSITES >> ~/.bashrc
 
 ln -sfn ./deploy/sites ./deploy/public/sites/default
@@ -567,7 +567,7 @@ else
   cd ./deploy/public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
   cd $DDKITSFL
   chmod -R 777 ./deploy/public/sites/default/files
-  chown $(echo "$USER") ./deploy
+  # chown $(echo "$USER") ./deploy
 fi                  
 
  else
@@ -590,7 +590,7 @@ fi
 #   fi
 # } 
 alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
-echo 123 | sudo -S cat ~/.bashrc_profile
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
 echo $ddkd-$DDKITSSITES >> ~/.bashrc
 
 
