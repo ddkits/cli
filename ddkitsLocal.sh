@@ -4,6 +4,9 @@
 # insert DDKits alias into anyh system command lines
 . ddkits.alias.sh
 
+# make user the main owner of the files
+# chown $(echo "$USER") ./
+
 #  built by  by Mutasem Elayyoub DDKits.com"
 DDKITSIP=$(docker-machine ip)
 
@@ -25,27 +28,24 @@ echo -e "DDKits required field are all required please make sure to write them c
 Your docker IP is : '$DDKITSIP'\n
 to cancel anytime use the regular system command ==> ctrl+c
 "
-
-  echo -e "\033[33;30m" 
+  echo -e "\033[33;32m" 
 	echo -e "Enter your E-mail address that you want to use in your website as an admin: "
-	echo -e "\033[33;30m "
 read MAIL_ADDRESS 
-	echo -e "\033[33;30m"	
+	echo -e "\033[33;32m"	
 	DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new Web port is \033[33;31m ${DDKITSWEBPORT}  \033[33;30m"
+  echo -e "Your new Web port is \033[33;31m ${DDKITSWEBPORT}  \033[33;32m"
   DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new DB port is \033[33;31m ${DDKITSDBPORT}  \033[33;30m"
+  echo -e "Your new DB port is \033[33;31m ${DDKITSDBPORT}  \033[33;32m"
   DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new Jenkins port is \033[33;31m ${DDKITSJENKINSPORT} \033[33;30m"
+  echo -e "Your new Jenkins port is \033[33;31m ${DDKITSJENKINSPORT} \033[33;32m"
   DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new Solr port is \033[33;31m ${DDKITSSOLRPORT} \033[33;30m"
+  echo -e "Your new Solr port is \033[33;31m ${DDKITSSOLRPORT} \033[33;32m"
   DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new PhpMyAdmin port is \033[33;31m ${DDKITSADMINPORT} \033[33;30m"
+  echo -e "Your new PhpMyAdmin port is \033[33;31m ${DDKITSADMINPORT} \033[33;32m"
   DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new Radis port is \033[33;31m ${DDKITSREDISPORT} \033[33;30m"
+  echo -e "Your new Radis port is \033[33;31m ${DDKITSREDISPORT} \033[33;32m"
 	echo -e "\033[33;31m"
 	echo -e 'Enter your Domain Name: \033[33;32m '
-	echo -e "\033[33;30m "
 read DDKITSSITES
 	echo -e "\033[33;31m"
 	echo -e ' domain alias (ex. www.ddkits.site) if there is no alias just leave this blank'
@@ -187,21 +187,21 @@ read DDKITSSITESALIAS
 	fi
 	echo -e "\033[33;31m"
 	echo -e 'Enter your Sudo Password: \033[33;32m '
-	echo -e "\033[33;30m "
+	
 read SUDOPASS
 	echo -e "\033[33;31m"
 	echo -e 'Enter your MYSQL ROOT USER: \033[33;32m '
-	echo -e "\033[33;30m "
+	
 read MYSQL_USER
 	echo -e "\033[33;31m"
 	echo -e 'Enter your MYSQL ROOT USER Password: \033[33;32m '
-	echo -e "\033[33;30m "
+	
 read MYSQL_ROOT_PASSWORD
 	echo -e "\033[33;31m"
 	echo -e 'Enter your MYSQL DataBase: \033[33;32m '
-	echo -e "\033[33;30m "
+	
 read MYSQL_DATABASE
-	echo -e "\033[33;30m "
+	
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
           PLATFORM='linux-gnu'
           echo 'This machine is '$PLATFORM' Docker setup will start now'
@@ -274,7 +274,7 @@ done
 
 
 # echo -e "Enter your E-mail address that you want to use in your website as an admin: "
-#   echo -e "\033[33;30m "
+#   
 # read MAIL_ADDRESS 
 #   echo -e "\033[33;31m"
 DDKITSHOSTNAME=${DDKITSSITES//./_}
@@ -293,7 +293,13 @@ do
     case $opt in
         # case of drupal
         "Drupal")
-DOCUMENTROOT="public"
+
+  echo -e "\033[33;31m"
+  echo -e 'What Drupal Version you want to start with: 7 or 8 ?'
+read DDKITSDRUPALV
+
+if [[ $DDKITSDRUPALV == '7' ]]; then
+  DOCUMENTROOT="public"
 # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -303,10 +309,6 @@ DOCUMENTROOT="public"
         if [[ -f "ddkitsnew.yml" ]]; then
           rm ddkitsnew.yml
         fi
-# delete the old settings file
-        # if [[ -f "ddkits-files/drupal/settings.php" ]]; then
-        #   rm ./ddkits-files/drupal/settings.php
-        # fi
         
 if [[ -f "ddkits-files/drupal/Dockerfile" ]]; then
   rm ./ddkits-files/drupal/Dockerfile
@@ -317,7 +319,7 @@ else
   DDKITSSERVERS=''
 fi
 
-     
+
 # create different containers files for conf
 echo -e '
 NameVirtualHost *:80
@@ -354,7 +356,7 @@ RUN export TERM=xterm
 RUN rm /etc/apache2/sites-enabled/000-default.conf
 COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
 COPY ddkitscli.sh /var/www/html/ddkitscli.sh
-COPY php.ini /usr/local/etc/php/conf.d/php.ini
+COPY php5.ini /usr/local/etc/php/conf.d/php.ini
 
 # Set the default command to execute
 
@@ -401,6 +403,197 @@ services:
       - ddkits      
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+if [[ ! -d "deploy" ]]; then
+  git clone https://github.com/ddkits/drupal-7.git ./deploy
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+  mv -f ./deploy/deploy/* ./deploy
+  chmod -R 755 ./deploy/public
+  mkdir ./deploy/public/sites/default/files
+  chmod -R 777 ./deploy/public/sites/default/files
+fi        
+
+#  Drush setup for this enviroment
+
+# ddkd(){
+#   if [[ $1 == $DDKITSSITES ]]; then
+#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush 
+#   elif [[ $1 == "-h" ]]; then
+#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush
+#   elif [[ $1 == "rsync" ]]; then
+#     rsync -rLcpzv --exclude=.git --exclude=.idea --exclude=settings.php --exclude=**/bower_components --exclude=**/node_modules --exclude=**/.sass-cache --exclude=/sites/*/files  ./deploy/public/ ./public/
+#   else
+#     # echo -e 'Please make sure to specify the domain you want to use drush with
+#     # ex. ddkd ddkits.dev cc all # to clear cache from ddkits drupal site' 
+#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush
+#   fi
+# } 
+
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkd-$DDKITSSITES >> ~/.bashrc
+
+ln -sfn ./deploy/sites ./deploy/public/sites/default
+
+elif [[  $DDKITSDRUPALV == '8'  ]]; then
+    
+  DOCUMENTROOT="public"
+# delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+
+# delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        
+if [[ -f "ddkits-files/drupal/Dockerfile" ]]; then
+  rm ./ddkits-files/drupal/Dockerfile
+fi
+if [[ $DDKITSSITESALIAS != "" ]]; then
+  DDKITSSERVERS='ServerAlias '$DDKITSSITESALIAS' '$DDKITSSITESALIAS2' '$DDKITSSITESALIAS3''
+else
+  DDKITSSERVERS=''
+fi
+
+     
+# create different containers files for conf
+echo -e '
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/'$DOCUMENTROOT'
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Options Indexes FollowSymLinks
+  AllowOverride All
+  Require all granted
+  RewriteEngine on
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^ index.php [L]
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf
+
+# Build out docker file to start our install
+echo -e '
+FROM ddkits/lamp:7
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+RUN export TERM=xterm
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+COPY ddkitscli.sh /var/www/html/ddkitscli.sh
+COPY php7.ini /usr/local/etc/php/conf.d/php.ini
+
+# Set the default command to execute
+
+RUN chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite 
+
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw
+
+RUN chmod -R 777 /var/www/html/ddkitscli.sh ' >> ./ddkits-files/drupal/Dockerfile
+
+#  create ddkits compose file for the new website
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/drupal
+    image: ddkits/drupal8:latest
+    volumes:
+      # Mount the local drupal directory in the container
+      - ./deploy:/var/www/html
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    stdin_open: true
+    tty: true
+    environment:
+      - DDKITSHOSTNAME="'$DDKITSHOSTNAME'"
+    container_name: '$DDKITSHOSTNAME'_ddkits_drupal_web
+    networks:
+      - ddkits      
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+if [[ ! -d "deploy" ]]; then
+  git clone https://github.com/ddkits/drupal-8.git ./deploy
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+  mv -f ./deploy/deploy/* ./deploy
+  chmod -R 777 ./deploy/public
+  mkdir ./deploy/public/sites/default/files
+  chmod -R 777 ./deploy/public/sites/default
+  rm -rf ./deploy/public/vendor
+  cp -f ./deploy/public/sites/default/default.settings.php ./deploy/public/sites/default/settings.php
+  cp -f ./deploy/public/sites/default/default.services.yml ./deploy/public/sites/default/services.yml
+  cp ./deploy/composer.phar ./deploy/public/ddkits.phar
+  cd ./deploy/public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $DDKITSFL
+else
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+  rm -rf ./deploy/public/vendor
+  cd ./deploy/public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $DDKITSFL
+  chmod -R 777 ./deploy/public/sites/default/files
+  # chown $(echo "$USER") ./deploy
+fi                  
+
+ else
+  echo -e 'Not a valid version please try again.'
+fi
+
+#  Drush setup for this enviroment
+
+# ddkd(){
+#   if [[ $1 == $DDKITSSITES ]]; then
+#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush 
+#   elif [[ $1 == "-h" ]]; then
+#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush
+#   elif [[ $1 == "rsync" ]]; then
+#     rsync -rLcpzv --exclude=.git --exclude=.idea --exclude=settings.php --exclude=**/bower_components --exclude=**/node_modules --exclude=**/.sass-cache --exclude=/sites/*/files  ./deploy/public/ ./public/
+#   else
+#     # echo -e 'Please make sure to specify the domain you want to use drush with
+#     # ex. ddkd ddkits.dev cc all # to clear cache from ddkits drupal site' 
+#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush
+#   fi
+# } 
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkd-$DDKITSSITES >> ~/.bashrc
+
+
              break
             ;;
             # case of wordpress 
@@ -835,6 +1028,8 @@ host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} 
 ddkits_host_entry="${DDKITSIP} jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES}"
 
 # echo "Please enter your password if requested."
+
+echo ${SUDOPASS} | sudo -S cat /etc/hosts
 
 if [ ! -z "$matches_in_hosts" ]
 then
