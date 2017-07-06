@@ -13,7 +13,8 @@ ddk(){
 			echo 'command source ~/.ddkits_alias 2>/dev/null || true ' >> ~/.bash_profile
 			echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
 		fi
-		
+	elif [[ $1 == "fix" ]]; then
+        docker restart $(docker ps -q)
 	elif [[ $1 == "update" ]]; then
 		docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d
     elif [[ $1 == "rebuild" ]]; then
@@ -96,13 +97,13 @@ ddk(){
     PhpMyAdmin     http://admin.YOUR_WEBSITE
 
         '
-        echo -e "\033[33;30m "
+        echo -e "\033[33;32m "
      else
      	echo -e "\033[33;31m "
      	echo 'DDkits build by Mutasem Elayyoub and ready to use.  www.DDKits.com
      	To see all commands write " ddk -h / ddk --help "'
      	ddk -h
-     	echo -e "\033[33;30m "
+     	echo -e "\033[33;32m "
    fi
 }
 alias ddkrc='docker rm -f '

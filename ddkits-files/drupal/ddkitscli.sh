@@ -1,4 +1,4 @@
-DDKITSSITES='ddkits-joomla.dev'
+DDKITSSITES='d8.dev'
 
 DDKITSIP='192.168.99.100'
 
