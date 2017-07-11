@@ -31,9 +31,7 @@
   "scripts": {
     "post-install-cmd": [
       "composer config --global process-timeout 9999",
-      ". ddkits.alias.sh",
-      "rm -rf ~/.composer/cache/*",
-      "phing -debug"
+      "rm -rf ~/.composer/cache/*"
     ],
     "lint": [
       "./vendor/bin/phplint",

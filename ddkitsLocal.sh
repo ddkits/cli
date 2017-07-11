@@ -4,11 +4,19 @@
 # insert DDKits alias into anyh system command lines
 . ddkits.alias.sh
 
-# make user the main owner of the files
-# chown $(echo "$USER") ./
-
 #  built by  by Mutasem Elayyoub DDKits.com"
-DDKITSIP=$(docker-machine ip)
+# docker-machine create --driver virtualbox ddkits
+# docker-machine start ddkits
+# eval $(docker-machine env ddkits)
+echo -e 'Please make sure that you installed your DDKits at the same environment \n(1) Localhost \n(2) virtualbox'
+          read DDKITSVER
+    if [[ $DDKITSVER == 1 ]]; then
+  DDKITSIP='127.0.0.1'
+    else
+  DDKITSIP=$(docker-machine ip ddkits)
+fi
+  
+
 
 #  delete ddkits conf file for the custom site if available
 if [ -f "ddkits-files/ddkits/sites/ddkitscust.conf" ]
@@ -23,17 +31,20 @@ else
     echo "there is no old file we will create new file for you ==> "
 fi
 
-echo -e "\033[33;32m"
+
 echo -e "DDKits required field are all required please make sure to write them correct. \n
-Your docker IP is : '$DDKITSIP'\n
+Your DDKits IP is : '$DDKITSIP'\n
+in case of using your localhost then please ignore this ip and use your localhost ip (127.0.0.1)\n
 to cancel anytime use the regular system command ==> ctrl+c
 "
-  echo -e "\033[33;32m" 
-	echo -e "Enter your E-mail address that you want to use in your website as an admin: "
+
+  echo -e "Enter your E-mail address that you want to use in your website as an admin: \033[33;32m"
 read MAIL_ADDRESS 
-	echo -e "\033[33;32m"	
-	DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new Web port is \033[33;31m ${DDKITSWEBPORT}  \033[33;32m"
+  
+  echo -e ' Ports info **IMPORTANT** \033[33;32m
+  '
+  DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+  echo -e " \033[33;32m Your new Web port is \033[33;31m ${DDKITSWEBPORT}  \033[33;32m"
   DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
   echo -e "Your new DB port is \033[33;31m ${DDKITSDBPORT}  \033[33;32m"
   DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
@@ -44,17 +55,17 @@ read MAIL_ADDRESS
   echo -e "Your new PhpMyAdmin port is \033[33;31m ${DDKITSADMINPORT} \033[33;32m"
   DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
   echo -e "Your new Radis port is \033[33;31m ${DDKITSREDISPORT} \033[33;32m"
-	echo -e "\033[33;31m"
-	echo -e 'Enter your Domain Name: \033[33;32m '
+  echo -e "\033[33;31m"
+  echo -e 'Enter your Domain Name: \033[33;32m '
 read DDKITSSITES
-	echo -e "\033[33;31m"
-	echo -e ' domain alias (ex. www.ddkits.site) if there is no alias just leave this blank'
+  echo -e "\033[33;31m"
+  echo -e ' domain alias (ex. www.ddkits.site) if there is no alias just leave this blank \033[33;32m'
 read DDKITSSITESALIAS
-	if [[ "$DDKITSSITESALIAS" == "" ]]
-		then
-		DDKITSSITESALIAS=""
-		DDKITSSITESALIAS2=""
-		DDKITSSITESALIAS3=""
+  if [[ "$DDKITSSITESALIAS" == "" ]]
+    then
+    DDKITSSITESALIAS=""
+    DDKITSSITESALIAS2=""
+    DDKITSSITESALIAS3=""
     #  create ddkits conf file for the custom site
     echo -e "NameVirtualHost *:80
 
@@ -87,14 +98,14 @@ read DDKITSSITESALIAS
 </VirtualHost>
 
     " >> ddkits-files/ddkits/sites/ddkitscust.conf
-	else
-	echo -e "\033[33;31m"
-	echo -e ' domain alias 2 (ex. www.ddkits.site) if there is no alias just leave this blank'
-		read DDKITSSITESALIAS2
-			if [[ "$DDKITSSITESALIAS2" == "" ]]
-				then
-				DDKITSSITESALIAS2=""
-				DDKITSSITESALIAS3=""
+  else
+  echo -e "\033[33;31m"
+  echo -e ' domain alias 2 (ex. www.ddkits.site) if there is no alias just leave this blank'
+    read DDKITSSITESALIAS2
+      if [[ "$DDKITSSITESALIAS2" == "" ]]
+        then
+        DDKITSSITESALIAS2=""
+        DDKITSSITESALIAS3=""
         #  create ddkits conf file for the custom site
 
         echo -e "NameVirtualHost *:80
@@ -129,13 +140,13 @@ read DDKITSSITESALIAS
 </VirtualHost>
 
         " >> ddkits-files/ddkits/sites/ddkitscust.conf
-			else
-			echo -e "\033[33;31m"
-			echo -e ' domain alias 3 (ex. www.ddkits.site) if there is no alias just leave this blank'
-				read DDKITSSITESALIAS3
-			if [[ "$DDKITSSITESALIAS3" == "" ]]
-				then
-					DDKITSSITESALIAS3=""
+      else
+      echo -e "\033[33;31m"
+      echo -e ' domain alias 3 (ex. www.ddkits.site) if there is no alias just leave this blank'
+        read DDKITSSITESALIAS3
+      if [[ "$DDKITSSITESALIAS3" == "" ]]
+        then
+          DDKITSSITESALIAS3=""
           #  create ddkits conf file for the custom site
           echo -e "NameVirtualHost *:80
 
@@ -182,26 +193,26 @@ read DDKITSSITESALIAS
 </VirtualHost>
 
           " >> ddkits-files/ddkits/sites/ddkitscust.conf
-			fi
-		fi
-	fi
-	echo -e "\033[33;31m"
-	echo -e 'Enter your Sudo Password: \033[33;32m '
-	
+      fi
+    fi
+  fi
+  echo -e "\033[33;31m"
+  echo -e 'Enter your Sudo Password: \033[33;32m '
+  
 read SUDOPASS
-	echo -e "\033[33;31m"
-	echo -e 'Enter your MYSQL ROOT USER: \033[33;32m '
-	
+  echo -e "\033[33;31m"
+  echo -e 'Enter your MYSQL ROOT USER: \033[33;32m '
+  
 read MYSQL_USER
-	echo -e "\033[33;31m"
-	echo -e 'Enter your MYSQL ROOT USER Password: \033[33;32m '
-	
+  echo -e "\033[33;31m"
+  echo -e 'Enter your MYSQL ROOT USER Password: \033[33;32m '
+  
 read MYSQL_ROOT_PASSWORD
-	echo -e "\033[33;31m"
-	echo -e 'Enter your MYSQL DataBase: \033[33;32m '
-	
+  echo -e "\033[33;31m"
+  echo -e 'Enter your MYSQL DataBase: \033[33;32m '
+  
 read MYSQL_DATABASE
-	
+  
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
           PLATFORM='linux-gnu'
           echo 'This machine is '$PLATFORM' Docker setup will start now'
@@ -225,6 +236,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
         else
           break
 fi
+# make user the main owner of the files
+# echo $SUDOPASS | sudo -S chown $(echo "$USER") ./
+echo $SUDOPASS | sudo -S chmod -R 777 ./
+
   echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to fully function)'"
 DDKITS_DOCKER='Do you have docker'
 options=("Yes" "No" "Quit")
@@ -285,9 +300,12 @@ MYSQL_ROOT_PASSWORD='"$MYSQL_ROOT_PASSWORD"'\n
 MYSQL_DATABASE='"$MYSQL_DATABASE"'\n
 MYSQL_PASSWORD='"$MYSQL_PASSWORD"'\n
 MAIL_ADDRESS='"$MAIL_ADDRESS"'\n" >> ./ddkits-files/drupal/ddkitscli.sh
-cat ddkits-drupal.sh >> ./ddkits-files/drupal/ddkitscli.sh
+cat ./ddkits-files/drupal/ddkits-drupal.sh >> ./ddkits-files/drupal/ddkitscli.sh
 DDKITS_PLATFORM='Please pick which platform you want to install: '
-options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Quit")
+# 
+# Setup options Please make sure of all options before publish
+# 
+options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Umbraco" "Magento" "DreamFactory" "Contao" "Silverstripe" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -304,20 +322,27 @@ if [[ $DDKITSDRUPALV == '7' ]]; then
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
         fi
-
-# delete the old environment yml file
+        # delete the old environment yml file
         if [[ -f "ddkitsnew.yml" ]]; then
           rm ddkitsnew.yml
         fi
-        
-if [[ -f "ddkits-files/drupal/Dockerfile" ]]; then
-  rm ./ddkits-files/drupal/Dockerfile
-fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/drupal/Dockerfile" ]]; then
+          rm ddkits-files/drupal/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf
+        fi
 if [[ $DDKITSSITESALIAS != "" ]]; then
   DDKITSSERVERS='ServerAlias '$DDKITSSITESALIAS' '$DDKITSSITESALIAS2' '$DDKITSSITESALIAS3''
 else
   DDKITSSERVERS=''
 fi
+
 
 
 # create different containers files for conf
@@ -411,7 +436,8 @@ if [[ ! -d "deploy" ]]; then
   chmod -R 755 ./deploy/public
   mkdir ./deploy/public/sites/default/files
   chmod -R 777 ./deploy/public/sites/default/files
-fi        
+fi  
+echo $SUDOPASS | sudo -S chmod -R 777 ./deploy   
 
 #  Drush setup for this enviroment
 
@@ -430,7 +456,11 @@ fi
 # } 
 
 alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
 echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
 echo $ddkd-$DDKITSSITES >> ~/.bashrc
 
 ln -sfn ./deploy/sites ./deploy/public/sites/default
@@ -442,15 +472,21 @@ elif [[  $DDKITSDRUPALV == '8'  ]]; then
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
         fi
-
-# delete the old environment yml file
+        # delete the old environment yml file
         if [[ -f "ddkitsnew.yml" ]]; then
           rm ddkitsnew.yml
         fi
-        
-if [[ -f "ddkits-files/drupal/Dockerfile" ]]; then
-  rm ./ddkits-files/drupal/Dockerfile
-fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/drupal/Dockerfile" ]]; then
+          rm ddkits-files/drupal/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf
+        fi
 if [[ $DDKITSSITESALIAS != "" ]]; then
   DDKITSSERVERS='ServerAlias '$DDKITSSITESALIAS' '$DDKITSSITESALIAS2' '$DDKITSSITESALIAS3''
 else
@@ -518,7 +554,22 @@ RUN apt-get update \
                    ufw \
                    sudo \
                    gufw \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw
+                   git \
+                   libapache2-mod-php7.0 \
+                   php7.0 \
+                   php7.0-common \
+                   php7.0-gd \
+                   php7.0-mysql \
+                   php7.0-mcrypt \
+                   php7.0-curl \
+                   php7.0-intl \
+                   php7.0-xsl \
+                   php7.0-mbstring \
+                   php7.0-zip \
+                   php7.0-bcmath \
+                   php7.0-iconv \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html
 
 RUN chmod -R 777 /var/www/html/ddkitscli.sh ' >> ./ddkits-files/drupal/Dockerfile
 
@@ -568,7 +619,9 @@ else
   cd $DDKITSFL
   chmod -R 777 ./deploy/public/sites/default/files
   # chown $(echo "$USER") ./deploy
-fi                  
+fi        
+
+echo $SUDOPASS | sudo -S chmod -R 777 ./deploy 
 
  else
   echo -e 'Not a valid version please try again.'
@@ -590,7 +643,12 @@ fi
 #   fi
 # } 
 alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
 echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
+
 echo $ddkd-$DDKITSSITES >> ~/.bashrc
 
 
@@ -605,6 +663,17 @@ echo $ddkd-$DDKITSSITES >> ~/.bashrc
         # delete the old environment yml file
         if [[ -f "ddkitsnew.yml" ]]; then
           rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/wordpress/Dockerfile" ]]; then
+          rm ddkits-files/wordpress/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/wordpress/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/wordpress/sites/$DDKITSHOSTNAME.conf
         fi
   
 DOCUMENTROOT='public'
@@ -638,7 +707,23 @@ RUN apt-get update \
                    ufw \
                    sudo \
                    gufw \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw ' >> ./ddkits-files/wordpress/Dockerfile
+                   git \
+                   libapache2-mod-php7.0 \
+                   php7.0 \
+                   php7.0-common \
+                   php7.0-gd \
+                   php7.0-mysql \
+                   php7.0-mcrypt \
+                   php7.0-curl \
+                   php7.0-intl \
+                   php7.0-xsl \
+                   php7.0-mbstring \
+                   php7.0-zip \
+                   php7.0-bcmath \
+                   php7.0-iconv \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html 
+  ' >> ./ddkits-files/wordpress/Dockerfile
 
 
 # create different containers files for conf
@@ -698,6 +783,13 @@ mkdir ./wp-deploy/public
 mv wordpress/* ./wp-deploy/public
 rmdir ./wordpress/
 rm -f latest.tar.gz
+echo $SUDOPASS | sudo -S chmod -R 777 ./wp-deploy  
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_wp_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
+
 
              break
             ;;
@@ -711,11 +803,21 @@ rm -f latest.tar.gz
         if [[ -f "ddkitsnew.yml" ]]; then
           rm ddkitsnew.yml
         fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/joomla/Dockerfile" ]]; then
+          rm ddkits-files/joomla/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/joomla/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/joomla/sites/$DDKITSHOSTNAME.conf
+        fi
 DOCUMENTROOT='public'
 
 # Build out docker file to start our install
-echo -e '
-FROM ddkits/lamp:latest
+echo -e 'FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -742,7 +844,9 @@ RUN apt-get update \
                    ufw \
                    sudo \
                    gufw \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw ' >> ./ddkits-files/joomla/Dockerfile
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html 
+  ' >> ./ddkits-files/joomla/Dockerfile
 
 
 # create different containers files for conf
@@ -783,7 +887,7 @@ services:
       - "mariadb"
     stdin_open: true
     tty: true
-    container_name: '$DDKITSHOSTNAME'_ddkits_wp_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_jom_web
     volumes:
       - ./jom-deploy:/var/www/html
     networks:
@@ -798,6 +902,14 @@ services:
 mkdir ./jom-deploy
 mkdir ./jom-deploy/public
 git clone https://github.com/ddkits/Joomla.git ./jom-deploy/public
+
+echo $SUDOPASS | sudo -S chmod -R 777 ./jom-deploy  
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_jom_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
+
 
              break
             ;;
@@ -873,8 +985,21 @@ RUN apt-get update \
                    sudo \
                    gufw \
                    git \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw \
-  && chmod -Rv 755 /var/www/html 
+                   libapache2-mod-php7.0 \
+                   php7.0 \
+                   php7.0-common \
+                   php7.0-gd \
+                   php7.0-mysql \
+                   php7.0-mcrypt \
+                   php7.0-curl \
+                   php7.0-intl \
+                   php7.0-xsl \
+                   php7.0-mbstring \
+                   php7.0-zip \
+                   php7.0-bcmath \
+                   php7.0-iconv \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/Laravel/Dockerfile
@@ -899,6 +1024,11 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_laravel_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
 
 if [[ ! -f "composer.phar" ]]; then
   wget https://getcomposer.org/composer.phar
@@ -962,15 +1092,92 @@ PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 ' >> ./ll-deploy/.env
 
+echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy
 alias ddklf="docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web bash ddkits.fix.sh"
             break
             ;;
         "LAMP/PHP5")
+    # delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/lamp5/Dockerfile" ]]; then
+          rm ddkits-files/lamp5/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/lamp5/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/lamp5/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  LAMP PHP 5
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/lamp5/sites/$DDKITSHOSTNAME.conf
+
+echo -e 'FROM ddkits/lamp:latest
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+RUN export TERM=xterm
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
+
+# Set the default command to execute
+
+RUN chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite 
+
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html 
+  ' >> ./ddkits-files/lamp5/Dockerfile
+
 echo -e 'version: "2"
 
 services:
   web:
-    image: ddkits/lamp:latest
+    build: ./ddkits-files/lamp5
+    image: ddkits/lamp5:latest
     depends_on:
       # Link the Solr container:
       - "solr"
@@ -985,14 +1192,105 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_lamp5_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
+echo $SUDOPASS | sudo -S chmod -R 777 ./lamp5-deploy
+
         break
         ;;
         "LAMP/PHP7")
+
+    # delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/lamp7/Dockerfile" ]]; then
+          rm ddkits-files/lamp7/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/lamp7/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/lamp7/sites/$DDKITSHOSTNAME.conf
+        fi
+#  LAMP PHP 7
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/lamp7/sites/$DDKITSHOSTNAME.conf
+
+echo -e 'FROM ddkits/lamp:7
+
+RUN ln -sf ./logs /var/log/nginx/access.log \
+    && ln -sf ./logs /var/log/nginx/error.log \
+    && chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite \
+    && rm /etc/apache2/sites-enabled/000-default.conf
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+                   git \
+                   libapache2-mod-php7.0 \
+                   php7.0 \
+                   php7.0-common \
+                   php7.0-gd \
+                   php7.0-mysql \
+                   php7.0-mcrypt \
+                   php7.0-curl \
+                   php7.0-intl \
+                   php7.0-xsl \
+                   php7.0-mbstring \
+                   php7.0-zip \
+                   php7.0-bcmath \
+                   php7.0-iconv \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html
+
+COPY php.ini /etc/php/7.0/fpm/php.ini
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/lamp7/Dockerfile
+
 echo -e 'version: "2"
 
 services:
   web:
-    image: ddkits/lamp:7
+    build: ./ddkits-files/lamp7
+    image: ddkits/lamp7:latest
     depends_on:
       # Link the Solr container:
       - "solr"
@@ -1007,8 +1305,496 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_lamp7_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
+echo $SUDOPASS | sudo -S chmod -R 777 ./lamp7-deploy
+
+
+
         break
         ;;
+
+        "Umbraco")
+
+# delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/umbraco/Dockerfile" ]]; then
+          rm ddkits-files/umbraco/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/umbraco/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/umbraco/sites/$DDKITSHOSTNAME.conf
+        fi
+
+# Umbraco with ASPNET server
+
+
+echo -e 'FROM kevinobee/umbraco:latest ' >> ./ddkits-files/umbraco/Dockerfile
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/umbraco
+    image: ddkits/umbraco:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./um-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_umbraco_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+echo $SUDOPASS | sudo -S chmod -R 777 ./um-deploy
+
+            break
+            ;;
+      "Magento")
+# delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/magento/Dockerfile" ]]; then
+          rm ddkits-files/magento/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/magento/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/magento/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  Magento setup 
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Options Indexes FollowSymLinks MultiViews
+      AllowOverride All
+      Require all granted
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/magento/sites/$DDKITSHOSTNAME.conf
+
+echo -e 'FROM ddkits/lamp:7
+
+RUN ln -sf ./logs /var/log/nginx/access.log \
+    && ln -sf ./logs /var/log/nginx/error.log \
+    && chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite \
+    && rm /etc/apache2/sites-enabled/000-default.conf
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+                   git \
+                   libapache2-mod-php7.0 \
+                   php7.0 \
+                   php7.0-common \
+                   php7.0-gd \
+                   php7.0-mysql \
+                   php7.0-mcrypt \
+                   php7.0-curl \
+                   php7.0-intl \
+                   php7.0-xsl \
+                   php7.0-mbstring \
+                   php7.0-zip \
+                   php7.0-bcmath \
+                   php7.0-iconv \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html
+
+COPY php.ini /etc/php/7.0/fpm/php.ini
+RUN chmod o+rw /var/www/html
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/magento/Dockerfile
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/magento
+    image: ddkits/magento:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./mag-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_magento_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+if [[ ! -d "mag-deploy/public" ]]; then
+  mkdir ./mag-deploy
+  git clone https://github.com/ddkits/magento.git ./mag-deploy/public
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+  cp -f ./composer.phar ./mag-deploy/public/ddkits.phar
+  cp ./composer.phar ./mag-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 ./mag-deploy/public/ddkits.phar
+  cd ./mag-deploy/public && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install -n
+  cd $DDKITSFL
+else
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+  cp ./composer.phar ./mag-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 ./mag-deploy/public/ddkits.phar
+  cd ./mag-deploy/public && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install -n
+  cd $DDKITSFL
+fi        
+echo $SUDOPASS | sudo -S chmod -R 777 ./mag-deploy
+
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_magento_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
+
+
+        break
+        ;;
+
+
+"DreamFactory")
+# delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/dreamf/Dockerfile" ]]; then
+          rm ddkits-files/dreamf/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/dreamf/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/dreamf/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  DreamFactory setup 
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/dreamf/sites/$DDKITSHOSTNAME.conf
+
+echo -e 'FROM ddkits/lamp:7
+
+RUN ln -sf ./logs /var/log/nginx/access.log \
+    && ln -sf ./logs /var/log/nginx/error.log \
+    && chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite \
+    && rm /etc/apache2/sites-enabled/000-default.conf
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+                   git \
+                   libapache2-mod-php7.0 \
+                   php7.0 \
+                   php7.0-common \
+                   php7.0-gd \
+                   php7.0-mysql \
+                   php7.0-mcrypt \
+                   php7.0-curl \
+                   php7.0-intl \
+                   php7.0-xsl \
+                   php7.0-mbstring \
+                   php7.0-zip \
+                   php7.0-bcmath \
+                   php7.0-iconv \
+                   php7.0-mongodb \
+                   php7.0-ssh2 \
+                   php7.0-json \
+                   memcached \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html
+
+COPY php.ini /etc/php/7.0/fpm/php.ini
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/dreamf/Dockerfile
+
+echo -e '
+composer install --no-dev
+chmod -R 777 /var/www/html/storage /var/www/html/vendor /var/www/html/public
+php artisan key:generate
+php artisan cache:clear
+php artisan config:clear
+chmod -R 777 storage
+ ' > ./ll-deploy/ddkits.fix.sh
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/dreamf
+    image: ddkits/dreamf:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./dreamf-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_dreamf_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_dreamf_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
+
+
+
+if [[ ! -d "dreamf-deploy" ]]; then
+  git clone https://github.com/dreamfactorysoftware/dreamfactory.git ./dreamf-deploy
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+  cp ./composer.phar ./dreamf-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 ./dreamf-deploy/public/ddkits.phar
+  cd ./dreamf-deploy/public && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install --no-dev -n
+  php artisan df:setup
+  echo $SUDOPASS | sudo -S chmod -R 2775 storage/ bootstrap/cache/
+  cd $DDKITSFL
+# create database variables for dreamfactory
+  rm -rf ./dreamf-deploy/.env
+  cat ./ddkits-files/dreamf/env >> ./dreamf-deploy/.env
+  chmod -R 777 ./dreamf-deploy/storage/ ./dreamf-deploy/public/ ./dreamf-deploy/public/ bootstrap/cache/
+else
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+  cp ./composer.phar ./dreamf-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 ./dreamf-deploy/public/ddkits.phar
+  cd ./dreamf-deploy/public && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install --no-dev -n
+  cd $DDKITSFL
+fi     
+echo $SUDOPASS | sudo -S chmod -R 777 ./dreamf-deploy
+
+
+            break
+            ;;
+
+"Contao")
+
+#  Contao setup 
+echo -e ' Comming soon!!'
+
+            break
+            ;;
+
+"Silverstripe")
+
+#  Silverstripe setup 
+# delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ss/Dockerfile" ]]; then
+          rm ddkits-files/ss/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/ss/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/ss/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  DreamFactory setup 
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/ss/sites/$DDKITSHOSTNAME.conf
+
+echo -e 'FROM ddkits/lamp:7
+
+RUN ln -sf ./logs /var/log/nginx/access.log \
+    && ln -sf ./logs /var/log/nginx/error.log \
+    && chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite \
+    && rm /etc/apache2/sites-enabled/000-default.conf
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+                   git \
+                   libapache2-mod-php7.0 \
+                   php7.0 \
+                   php7.0-common \
+                   php7.0-gd \
+                   php7.0-mysql \
+                   php7.0-mcrypt \
+                   php7.0-curl \
+                   php7.0-intl \
+                   php7.0-xsl \
+                   php7.0-mbstring \
+                   php7.0-zip \
+                   php7.0-bcmath \
+                   php7.0-iconv \
+                   php7.0-mongodb \
+                   php7.0-ssh2 \
+                   php7.0-json \
+                   memcached \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+RUN chmod -R 777 /var/www/html
+
+COPY php.ini /etc/php/7.0/fpm/php.ini
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/ss/Dockerfile
+
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/ss
+    image: ddkits/ss:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./ss-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_ss_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_ss_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
+
+if [[ ! -d "ss-deploy/public" ]]; then
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+mkdir ./ss-deploy
+mkdir ./ss-deploy/public
+cd ./ss-deploy/public
+wget https://silverstripe-ssorg-releases.s3.amazonaws.com/sssites-ssorg-prod/assets/releases/SilverStripe-cms-v3.6.1.tar.gz
+tar -xvzf SilverStripe-cms-v3.6.1.tar.gz 
+rm -rf SilverStripe-cms-v3.6.1.tar.gz
+cd $DDKITSFL
+cp ./composer.phar ./ss-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 ./ss-deploy/public/ddkits.phar
+fi
+
+            break
+            ;;
 
         "Quit")
             break
@@ -1134,7 +1920,7 @@ services:
   jenkins:
     image: whywebs/jenkins:latest
     ports:
-      - "'$DDKITSJENKINSPORT':4040"
+      - "'$DDKITSJENKINSPORT':50000"
     volumes:
       - ./jenkins:/var/jenkins_home 
     stdin_open: true
@@ -1148,7 +1934,16 @@ networks:
 
   ' >> ddkitsnew.yml
 
+# create get into ddkits container
+alias ddkc-$DDKITSSITES-cache='docker exec -it '$DDKITSHOSTNAME'_ddkits_cache /bin/bash'
+alias ddkc-$DDKITSSITES-jen='docker exec -it '$DDKITSHOSTNAME'_ddkits_jenkins /bin/bash'
+alias ddkc-$DDKITSSITES-solr='docker exec -it '$DDKITSHOSTNAME'_ddkits_solr /bin/bash'
+alias ddkc-$DDKITSSITES-admin='docker exec -it '$DDKITSHOSTNAME'_ddkits_admin /bin/bash'
 
+
+
+echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
+echo $ddkc-$DDKITSSITES >> ~/.bashrc
 
 #  prepare ddkits container for the new websites
 echo -e 'copying conf files into ddkits and restart'
@@ -1157,3 +1952,24 @@ docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-
 
 docker restart ddkits
 
+#<html><head><!--
+
+# Your Bash script goes here
+
+<<HTML_CONTENT 
+-->
+<body style="background-color:white; margin-top:-1em">
+<center><h3>Your DDKits information:</h3></center>
+
+MAIL_ADDRESS = $MAIL_ADDRESS
+Website = $DDKITSSITES
+DDKits ip = $DDKITSIP ==> Port = $DDKITSWEBPORT
+Mysql User = $MYSQL_USER
+Mysql User Password = $MYSQL_ROOT_PASSWORD
+Database name = $MYSQL_DATABASE
+Mysql $MYSQL_USER Password =$MYSQL_PASSWORD
+Website Alias = $DDKITSSITESALIAS $DDKITSSITESALIAS2 $DDKITSSITESALIAS3
+
+<!--
+HTML_CONTENT
+# --></body></html>
