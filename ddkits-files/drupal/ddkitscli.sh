@@ -1,6 +1,6 @@
-DDKITSSITES='d8.dev'
+DDKITSSITES='ss.dev'
 
-DDKITSIP='192.168.99.100'
+DDKITSIP='192.168.99.101'
 
 MYSQL_USER='ddk'
 
@@ -10,7 +10,7 @@ MYSQL_DATABASE='ddk'
 
 MYSQL_PASSWORD='ddk'
 
-MAIL_ADDRESS='melayyoub@outlook.com'
+MAIL_ADDRESS='m@m.com'
 
 #!/bin/sh
 
