@@ -32,16 +32,6 @@
     "post-install-cmd": [
       "composer config --global process-timeout 9999",
       "rm -rf ~/.composer/cache/*"
-    ],
-    "lint": [
-      "./vendor/bin/phplint",
-      "./vendor/bin/phpcs --config-set installed_paths ./../../drupal/coder/coder_sniffer",
-      "./vendor/bin/phpcs -n --report=full --standard=Drupal --ignore=*.tpl.php --extensions=install,module,php,inc"
-    ],
-    "test": [
-      "./vendor/bin/phplint --no-cache",
-      "./vendor/bin/phpcs --config-set installed_paths ./../../drupal/coder/coder_sniffer",
-      "./vendor/bin/phpcs -n --report=full --standard=Drupal --ignore=*.tpl.php --extensions=php,inc themes || true"
     ]
   }  
 }
