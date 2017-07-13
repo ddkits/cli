@@ -1,13 +1,11 @@
-# Doctor Development Kit
-DDKits
- 
+# DDKits v1.12 Built by Mutasem Elayyoub melayyoub@outlook.com
+
 
 Doctor Development Kit is a free and open source local development environment and workflow tool based on Docker. DDKits allows users to build more than one container under the same port with domains DNS control, super-fast development environments and to integrate those environments with their hosting provider or continuous integration workflows.
 
 With DDKits you can easily mimic your production environment on local plus the ability to setup, develop, pull and deploy your sites super fast. Dockerize your teams dev environments and tools on OSX, Windows and Linux. Free yourself from the hard times of building new products or environments.
 
  
-
 # Getting Started
  
 
@@ -27,6 +25,21 @@ Jenkins with an easy access domain http://jenkins.YOUR_DOMAIN.
 Solr with an easy access domain http://solr.YOUR_DOMAIN.
 Redis fully cache system can be used by your application.
 
+
+# includes 
+
+1) Drupal v7 & v8
+2) Wordpress	
+3) Joomla   
+4) Laravel	
+5) LAMP/PHP5     
+6) LAMP/PHP7 
+7) Umbraco
+8) Magento
+9) DreamFactory	
+10) Contao
+11) Silverstripe	  
+12) Cloud
 
 # For more information:
 
