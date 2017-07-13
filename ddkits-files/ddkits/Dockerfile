@@ -1,4 +1,5 @@
 FROM ddkits/lamp:latest
+
 MAINTAINER  Mutasem Elayyoub <melayyoub@outlook.com>
 
 RUN apt-get update \
@@ -40,10 +41,6 @@ RUN a2enmod proxy \
 	&& a2enmod proxy_balancer \
 	&& a2enmod proxy_connect \
 	&& a2enmod proxy_html
-
-# Proxy SSL certificates for ssl connections
-
-# COPY ./ssl/ /etc/ssl/certs/
 
 RUN apachectl configtest
 RUN apachectl restart
