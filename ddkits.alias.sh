@@ -2,17 +2,16 @@
 ddk(){ 
 
   if [[ $1 == "install" ]]; then
-      cp ddkits.alias.sh ddkits_alias 
-      cp ddkits_alias ~/.ddkits_alias 
+       
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
-      if [[ $DDKITSVER == 1 ]]; then
-         docker-compose -f ddkits.yml up -d --build
-      fi
       if [[ $DDKITSVER == 2 ]]; then
+        clear
            echo -e 'Enter your Sudo/Root Password:'
               read SUDOPASS
               docker-machine ip ddkits
+              echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias 
+              echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
               if [ $? -eq 0 ]; then
                   echo 'DDKits saying it is fine no need to reinstall'
               else
@@ -46,6 +45,7 @@ ddk(){
           fi
         fi
         if [[ -f  ~/.ddkits_alias ]]; then
+          clear
                 docker-compose -f ddkits.yml up -d --build
           cp ddkits.alias.sh ddkits_alias 
           cp ddkits_alias ~/.ddkits_alias 
@@ -63,7 +63,8 @@ ddk(){
           echo 'command source ~/.ddkits_alias 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
         fi
-      fi
+      docker-compose -f ddkits.yml up -d --build
+  fi
         
     
   elif [[ $1 == "ip" ]]; then
@@ -98,15 +99,16 @@ ddk(){
         docker images
     elif [[ $1 == "go" ]]; then
         echo -e ''
-        echo ':---)) Welcome Back ' && echo "$USER"
+        echo ':---)) Welcome back ' && echo "$USER"
         echo -e ''
+        source ~/.ddkits_alias
         docker-machine start ddkits
         eval $(docker-machine env ddkits)
     elif [[ $1 == "del" ]]; then
         echo -e ''
         echo ':---(( Bye ' && echo "$USER"
         echo -e ''
-        docker-machine stop ddkits
+        docker-machine rm ddkits
         eval $(docker-machine env default)
     elif [[ $1 == "stop" ]]; then
         echo -e ''
@@ -140,6 +142,7 @@ ddk(){
       docker-compose -f ddkits.yml -f ddkits.env.yml rm
        fi
      elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
+      clear
       echo -e "\033[33;31m "
         echo -e 'DDkits built by Mutasem Elayyoub www.DDKits.com
     List of commands after "ddk <option>":
@@ -176,7 +179,7 @@ ddk(){
     PhpMyAdmin     http://admin.YOUR_WEBSITE
 
 
-    DDKits v1.1
+    DDKits v1.12
         '
      else
       echo 'DDkits build by Mutasem Elayyoub and ready to use.  www.DDKits.com
@@ -186,5 +189,3 @@ ddk(){
 }
 alias ddkrc='docker rm -f '
 alias ddkri='docker rmi -f '
-
-

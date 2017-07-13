@@ -14,6 +14,7 @@ echo -e 'Please make sure that you installed your DDKits at the same environment
   DDKITSIP='127.0.0.1'
     else
   DDKITSIP=$(docker-machine ip ddkits)
+  ddk go
 fi
   
 
@@ -37,29 +38,29 @@ Your DDKits IP is : '$DDKITSIP'\n
 in case of using your localhost then please ignore this ip and use your localhost ip (127.0.0.1)\n
 to cancel anytime use the regular system command ==> ctrl+c
 "
-
-  echo -e "Enter your E-mail address that you want to use in your website as an admin: \033[33;32m"
+  clear
+  echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 read MAIL_ADDRESS 
-  
-  echo -e ' Ports info **IMPORTANT** \033[33;32m
+clear
+  echo -e ' Ports info **IMPORTANT** 
   '
   DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e " \033[33;32m Your new Web port is \033[33;31m ${DDKITSWEBPORT}  \033[33;32m"
+  echo -e "  Your new Web port is  ${DDKITSWEBPORT}  "
   DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new DB port is \033[33;31m ${DDKITSDBPORT}  \033[33;32m"
+  echo -e "Your new DB port is  ${DDKITSDBPORT}  "
   DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new Jenkins port is \033[33;31m ${DDKITSJENKINSPORT} \033[33;32m"
+  echo -e "Your new Jenkins port is  ${DDKITSJENKINSPORT} "
   DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new Solr port is \033[33;31m ${DDKITSSOLRPORT} \033[33;32m"
+  echo -e "Your new Solr port is  ${DDKITSSOLRPORT} "
   DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new PhpMyAdmin port is \033[33;31m ${DDKITSADMINPORT} \033[33;32m"
+  echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
   DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-  echo -e "Your new Radis port is \033[33;31m ${DDKITSREDISPORT} \033[33;32m"
-  echo -e "\033[33;31m"
-  echo -e 'Enter your Domain Name: \033[33;32m '
+  echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
+  echo -e ""
+  echo -e 'Enter your Domain Name:  '
 read DDKITSSITES
-  echo -e "\033[33;31m"
-  echo -e ' domain alias (ex. www.ddkits.site) if there is no alias just leave this blank \033[33;32m'
+  echo -e ""
+  echo -e ' domain alias (ex. www.ddkits.site) if there is no alias just leave this blank '
 read DDKITSSITESALIAS
   if [[ "$DDKITSSITESALIAS" == "" ]]
     then
@@ -99,7 +100,7 @@ read DDKITSSITESALIAS
 
     " >> ddkits-files/ddkits/sites/ddkitscust.conf
   else
-  echo -e "\033[33;31m"
+  echo -e ""
   echo -e ' domain alias 2 (ex. www.ddkits.site) if there is no alias just leave this blank'
     read DDKITSSITESALIAS2
       if [[ "$DDKITSSITESALIAS2" == "" ]]
@@ -141,7 +142,7 @@ read DDKITSSITESALIAS
 
         " >> ddkits-files/ddkits/sites/ddkitscust.conf
       else
-      echo -e "\033[33;31m"
+      echo -e ""
       echo -e ' domain alias 3 (ex. www.ddkits.site) if there is no alias just leave this blank'
         read DDKITSSITESALIAS3
       if [[ "$DDKITSSITESALIAS3" == "" ]]
@@ -196,20 +197,20 @@ read DDKITSSITESALIAS
       fi
     fi
   fi
-  echo -e "\033[33;31m"
-  echo -e 'Enter your Sudo Password: \033[33;32m '
+  echo -e ""
+  echo -e 'Enter your Sudo Password:  '
   
 read SUDOPASS
-  echo -e "\033[33;31m"
-  echo -e 'Enter your MYSQL ROOT USER: \033[33;32m '
+  echo -e ""
+  echo -e 'Enter your MYSQL ROOT USER:  '
   
 read MYSQL_USER
-  echo -e "\033[33;31m"
-  echo -e 'Enter your MYSQL ROOT USER Password: \033[33;32m '
+  echo -e ""
+  echo -e 'Enter your MYSQL ROOT USER Password:  '
   
 read MYSQL_ROOT_PASSWORD
-  echo -e "\033[33;31m"
-  echo -e 'Enter your MYSQL DataBase: \033[33;32m '
+  echo -e ""
+  echo -e 'Enter your MYSQL DataBase:  '
   
 read MYSQL_DATABASE
   
@@ -239,7 +240,7 @@ fi
 # make user the main owner of the files
 # echo $SUDOPASS | sudo -S chown $(echo "$USER") ./
 echo $SUDOPASS | sudo -S chmod -R 777 ./
-
+clear
   echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to fully function)'"
 DDKITS_DOCKER='Do you have docker'
 options=("Yes" "No" "Quit")
@@ -291,7 +292,7 @@ done
 # echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 #   
 # read MAIL_ADDRESS 
-#   echo -e "\033[33;31m"
+#   echo -e ""
 DDKITSHOSTNAME=${DDKITSSITES//./_}
 echo -e "DDKITSSITES='"$DDKITSSITES"'\n
 DDKITSIP='"$DDKITSIP"'\n
@@ -305,14 +306,14 @@ DDKITS_PLATFORM='Please pick which platform you want to install: '
 # 
 # Setup options Please make sure of all options before publish
 # 
-options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Umbraco" "Magento" "DreamFactory" "Contao" "Silverstripe" "Quit")
+options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Umbraco" "Magento" "DreamFactory" "Contao" "Silverstripe" "Cloud" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
         # case of drupal
         "Drupal")
 
-  echo -e "\033[33;31m"
+  echo -e ""
   echo -e 'What Drupal Version you want to start with: 7 or 8 ?'
 read DDKITSDRUPALV
 
@@ -402,7 +403,12 @@ RUN apt-get update \
                    gufw \
   && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw
 
-RUN chmod -R 777 /var/www/html/ddkitscli.sh ' >> ./ddkits-files/drupal/Dockerfile
+RUN chmod -R 777 /var/www/html/ddkitscli.sh 
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+
+' >> ./ddkits-files/drupal/Dockerfile
 
 #  create ddkits compose file for the new website
 echo -e 'version: "2"
@@ -459,9 +465,10 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web dru
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
-echo $ddkd-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web drush'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
 
 ln -sfn ./deploy/sites ./deploy/public/sites/default
 
@@ -571,7 +578,12 @@ RUN apt-get update \
   && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
 RUN chmod -R 777 /var/www/html
 
-RUN chmod -R 777 /var/www/html/ddkitscli.sh ' >> ./ddkits-files/drupal/Dockerfile
+RUN chmod -R 777 /var/www/html/ddkitscli.sh 
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+
+' >> ./ddkits-files/drupal/Dockerfile
 
 #  create ddkits compose file for the new website
 echo -e 'version: "2"
@@ -646,10 +658,10 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web dru
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
-
-echo $ddkd-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web drush'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
 
 
              break
@@ -723,6 +735,10 @@ RUN apt-get update \
                    php7.0-iconv \
   && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
 RUN chmod -R 777 /var/www/html 
+
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
   ' >> ./ddkits-files/wordpress/Dockerfile
 
 
@@ -787,8 +803,9 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./wp-deploy
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_wp_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_wp_web /bin/bash'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./wp-deploy
 
 
              break
@@ -846,6 +863,10 @@ RUN apt-get update \
                    gufw \
   && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
 RUN chmod -R 777 /var/www/html 
+
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
   ' >> ./ddkits-files/joomla/Dockerfile
 
 
@@ -907,8 +928,9 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./jom-deploy
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_jom_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jom_web /bin/bash'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./jom-deploy
 
 
              break
@@ -967,6 +989,8 @@ echo -e '
 
 echo -e 'FROM ddkits/lamp:7
 
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
@@ -1002,7 +1026,12 @@ RUN apt-get update \
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
-COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/Laravel/Dockerfile
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+
+ ' >> ./ddkits-files/Laravel/Dockerfile
 
 echo -e 'version: "2"
 
@@ -1027,8 +1056,9 @@ services:
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_laravel_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./laravel-deploy
 
 if [[ ! -f "composer.phar" ]]; then
   wget https://getcomposer.org/composer.phar
@@ -1170,6 +1200,10 @@ RUN apt-get update \
                    gufw \
   && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
 RUN chmod -R 777 /var/www/html 
+
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
   ' >> ./ddkits-files/lamp5/Dockerfile
 
 echo -e 'version: "2"
@@ -1195,8 +1229,8 @@ services:
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_lamp5_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_lamp5_web /bin/bash'" >> ~/.ddkits_alias
 echo $SUDOPASS | sudo -S chmod -R 777 ./lamp5-deploy
 
         break
@@ -1283,7 +1317,12 @@ RUN apt-get update \
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
-COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/lamp7/Dockerfile
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+
+' >> ./ddkits-files/lamp7/Dockerfile
 
 echo -e 'version: "2"
 
@@ -1308,8 +1347,8 @@ services:
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_lamp7_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_lamp7_web /bin/bash'" >> ~/.ddkits_alias
 echo $SUDOPASS | sudo -S chmod -R 777 ./lamp7-deploy
 
 
@@ -1452,7 +1491,12 @@ RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 RUN chmod o+rw /var/www/html
-COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/magento/Dockerfile
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+
+' >> ./ddkits-files/magento/Dockerfile
 
 echo -e 'version: "2"
 
@@ -1496,8 +1540,9 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./mag-deploy
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_magento_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_magento_web /bin/bash'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./magento-deploy
 
 
         break
@@ -1590,7 +1635,12 @@ RUN apt-get update \
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
-COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/dreamf/Dockerfile
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+
+' >> ./ddkits-files/dreamf/Dockerfile
 
 echo -e '
 composer install --no-dev
@@ -1624,9 +1674,9 @@ services:
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_dreamf_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
-
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_dreamf_web /bin/bash'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./dreamf-deploy
 
 
 if [[ ! -d "dreamf-deploy" ]]; then
@@ -1751,7 +1801,12 @@ RUN apt-get update \
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
-COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf ' >> ./ddkits-files/ss/Dockerfile
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+' >> ./ddkits-files/ss/Dockerfile
 
 
 echo -e 'version: "2"
@@ -1773,12 +1828,13 @@ services:
     networks:
       - ddkits
     ports:
-      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+      - "'$DDKITSWEBPORT':80" ' > ddkits.env.yml
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_ss_web /bin/bash'
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_ss_web /bin/bash'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./ss-deploy
 
 if [[ ! -d "ss-deploy/public" ]]; then
   DDKITSFL=$(pwd)
@@ -1791,6 +1847,218 @@ tar -xvzf SilverStripe-cms-v3.6.1.tar.gz
 rm -rf SilverStripe-cms-v3.6.1.tar.gz
 cd $DDKITSFL
 cp ./composer.phar ./ss-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 ./ss-deploy/public/ddkits.phar
+fi
+
+            break
+            ;;
+
+"Cloud")
+
+#  Contao setup 
+# delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/cloud/Dockerfile" ]]; then
+          rm ddkits-files/cloud/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
+        fi
+        if [[ -f "ddkits-files/cloud/ddkits-check.sh" ]]; then
+          rm ddkits-files/cloud/ddkits-check.sh
+        fi
+
+
+# create entrypoints
+# echo -e '
+# chown -R $USER:$USER $VOLUME_ROOT
+# su -s /bin/bash - $USER -c "cd $repo/build; $@"
+# ' > ./ddkits-files/cloud/entrypoints.sh
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+  <IfModule mod_dav.c>
+  Dav off
+ </IfModule>
+
+ SetEnv HOME /var/www/html/public
+ SetEnv HTTP_HOME /var/www/html/public
+</VirtualHost> ' > ./ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
+
+
+echo -e '#!/bin/bash
+ocpath="/var/www/html/public"
+htuser="www-data"
+htgroup="www-data"
+rootuser="www-data"
+
+printf "Creating possible missing Directories\n"
+mkdir -p $ocpath/data
+mkdir -p $ocpath/assets
+
+printf "chmod Files and Directories\n"
+find ${ocpath}/ -type f -print0 | xargs -0 chmod 0640
+find ${ocpath}/ -type d -print0 | xargs -0 chmod 0750
+chmod -R 0770 /var/www/html/public/data
+
+printf "chown Directories\n"
+chown -R ${rootuser}:${htgroup} ${ocpath}/
+chown -R ${htuser}:${htgroup} ${ocpath}/apps/
+chown -R ${htuser}:${htgroup} ${ocpath}/config/
+chown -R ${htuser}:${htgroup} ${ocpath}/data/
+chown -R ${htuser}:${htgroup} ${ocpath}/themes/
+chown -R ${htuser}:${htgroup} ${ocpath}/assets/
+
+chmod +x ${ocpath}/occ
+
+printf "chmod/chown .htaccess\n"
+if [ -f ${ocpath}/.htaccess ]
+ then
+  chmod 0644 ${ocpath}/.htaccess
+  chown ${rootuser}:${htgroup} ${ocpath}/.htaccess
+fi
+if [ -f ${ocpath}/data/.htaccess ]
+ then
+  chmod 0644 ${ocpath}/data/.htaccess
+  chown ${rootuser}:${htgroup} ${ocpath}/data/.htaccess
+fi' > ./ddkits-files/cloud/ddkits-check.sh
+
+
+
+echo -e 'FROM ddkits/lamp:latest
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+RUN export TERM=xterm
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
+COPY get-pip.py /var/www/html/get-pip.py
+COPY ddkits-check.sh /var/www/html/ddkits-check.sh
+
+
+# Set the default command to execute
+
+RUN chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite 
+
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+                   snap \
+                   python \
+                   python-dev \
+                   pacman \
+                   python-software-properties \
+                   apt-file \
+                   software-properties-common \
+  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw 
+
+RUN chmod -R 777 /var/www/html 
+RUN chmod u+x /var/www/html/ddkits-check.sh
+RUN apt-get -f install -y 
+RUN a2enmod headers \
+  && a2enmod env \
+  && a2enmod dir \
+  && a2enmod mime \
+  && service apache2 reload 
+  # Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+
+  ' > ./ddkits-files/cloud/Dockerfile
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/cloud
+    image: ddkits/cloud:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./cloud-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_cloud_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_cloud_web /bin/bash'
+alias ddkc-$DDKITSSITES-fix='docker exec -it '$DDKITSHOSTNAME'_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./cloud-deploy
+echo $SUDOPASS | sudo -S chmod -R 0770 ./cloud-deploy/public/data
+
+
+
+# Installing ownCloud9 on local host 
+
+   
+if [[ ! -d "/var/www/html/public" ]]; then
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+mkdir ./cloud-deploy
+chmod -R 777 ./cloud-deploy/public
+cd ./cloud-deploy
+wget https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2
+wget https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2.sha256
+wget https://owncloud.org/owncloud.asc
+wget https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2.asc
+sha256sum -c owncloud-9.0.0.tar.bz2.sha256
+gpg --import owncloud.asc
+gpg --verify owncloud-9.0.0.tar.bz2.asc
+tar xjvf owncloud-9.0.0.tar.bz2 
+cp -r owncloud public
+rm -rf owncloud
+cd $DDKITSFL
+chmod -R 777 ./cloud-deploy/public
 fi
 
             break
@@ -1851,7 +2119,7 @@ export DDKITSIP=$DDKITSIP
 export MYSQL_USER=$MYSQL_USER
 export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 export MYSQL_DATABASE=$MYSQL_DATABASE
-export MYSQL_PASSWORD=$MYSQL_PASSWORD
+export MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD
 export DDKITSSITESALIAS=$DDKITSSITESALIAS
 export DDKITSWEBPORT=$DDKITSWEBPORT
 export DDKITSSITESALIAS2=$DDKITSSITESALIAS2
@@ -1940,7 +2208,48 @@ alias ddkc-$DDKITSSITES-jen='docker exec -it '$DDKITSHOSTNAME'_ddkits_jenkins /b
 alias ddkc-$DDKITSSITES-solr='docker exec -it '$DDKITSHOSTNAME'_ddkits_solr /bin/bash'
 alias ddkc-$DDKITSSITES-admin='docker exec -it '$DDKITSHOSTNAME'_ddkits_admin /bin/bash'
 
+echo "alias ddkc-"$DDKITSSITES"-cache='docker exec -it "$DDKITSHOSTNAME"_ddkits_cache /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"-jen='docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"-solr='docker exec -it "$DDKITSHOSTNAME"_ddkits_solr /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"-admin='docker exec -it "$DDKITSHOSTNAME"_ddkits_admin /bin/bash'" >> ~/.ddkits_alias
 
+
+
+#  All information in one file html as a referance
+
+echo -e '#<html><head><!--
+
+# Your Bash script goes here
+
+<<HTML_CONTENT 
+-->
+<body style="background-color:white; margin-top:-1em">
+<center><h3>Your DDKits information:</h3></center><br />
+<br /><br /><br /><br />
+<br />
+MAIL_ADDRESS = '$MAIL_ADDRESS'<br />
+Website = '$DDKITSSITES'<br />
+DDKits ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORT'<br />
+Mysql User = '$MYSQL_USER'<br />
+Mysql User Password = '$MYSQL_ROOT_PASSWORD'<br />
+Database name =' $MYSQL_DATABASE'<br />
+Mysql $MYSQL_USER Password = '$MYSQL_PASSWORD'<br />
+Website Alias = '$DDKITSSITESALIAS' '$DDKITSSITESALIAS2' '$DDKITSSITESALIAS3'<br />
+<br />
+Ports:<br />
+<br />
+- Your new '$DDKITSSITES' port is: '$DDKITSWEBPORT'<br />
+- Your new DB port is: '$DDKITSDBPORT'<br />
+- Your new Jenkins port is: '$DDKITSJENKINSPORT'<br />
+- Your new Solr port is: '$DDKITSSOLRPORT'<br />
+- Your new PhpMyAdmin port is: '$DDKITSADMINPORT'<br />
+- Your new Radis port is: '$DDKITSREDISPORT'<br />
+<br /><br /><br /><br />
+<center>Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com <br />
+Copyright @2017 <a href="http://ddkits.com/">DDKits.com</a></center> 
+<!--
+HTML_CONTENT
+# --></body></html>' > ./ddkits-$DDKITSHOSTNAME.html
 
 echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
 echo $ddkc-$DDKITSSITES >> ~/.bashrc
@@ -1951,25 +2260,6 @@ docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-
 # docker cp ./ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
 
 docker restart ddkits
+ddk go
 
-#<html><head><!--
 
-# Your Bash script goes here
-
-<<HTML_CONTENT 
--->
-<body style="background-color:white; margin-top:-1em">
-<center><h3>Your DDKits information:</h3></center>
-
-MAIL_ADDRESS = $MAIL_ADDRESS
-Website = $DDKITSSITES
-DDKits ip = $DDKITSIP ==> Port = $DDKITSWEBPORT
-Mysql User = $MYSQL_USER
-Mysql User Password = $MYSQL_ROOT_PASSWORD
-Database name = $MYSQL_DATABASE
-Mysql $MYSQL_USER Password =$MYSQL_PASSWORD
-Website Alias = $DDKITSSITESALIAS $DDKITSSITESALIAS2 $DDKITSSITESALIAS3
-
-<!--
-HTML_CONTENT
-# --></body></html>
