@@ -4,7 +4,7 @@ ddk(){
   if [[ $1 == "install" ]]; then
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
-      if [[ $DDKITSVER == 1]]; then
+      if [[ $DDKITSVER == 1 ]]; then
             docker-compose -f ddkits.yml up -d --build
       elif [[ $DDKITSVER == 2 ]]; then
         clear
