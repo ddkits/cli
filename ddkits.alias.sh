@@ -1,8 +1,7 @@
 
-ddk(){ 
+ddk(){
 
   if [[ $1 == "install" ]]; then
-       
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
       if [[ $DDKITSVER == 2 ]]; then
@@ -10,12 +9,11 @@ ddk(){
            echo -e 'Enter your Sudo/Root Password:'
               read SUDOPASS
               docker-machine ip ddkits
-              echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias 
+              echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
               echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
               if [ $? -eq 0 ]; then
                   echo 'DDKits saying it is fine no need to reinstall'
               else
-           
             if [[ "$OSTYPE" == "linux-gnu" ]]; then
               PLATFORM='linux-gnu'
               echo 'This machine is '$PLATFORM' Docker setup will start now'
@@ -47,16 +45,16 @@ ddk(){
         if [[ -f  ~/.ddkits_alias ]]; then
           clear
                 docker-compose -f ddkits.yml up -d --build
-          cp ddkits.alias.sh ddkits_alias 
-          cp ddkits_alias ~/.ddkits_alias 
+          cp ddkits.alias.sh ddkits_alias
+          cp ddkits_alias ~/.ddkits_alias
                 docker-machine create --driver virtualbox ddkits
                 docker-machine start ddkits
                 eval $(docker-machine env ddkits)
           echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
           else
                 docker-compose -f ddkits.yml up -d --build
-          cp ddkits.alias.sh ddkits_alias 
-          cp ddkits_alias ~/.ddkits_alias 
+          cp ddkits.alias.sh ddkits_alias
+          cp ddkits_alias ~/.ddkits_alias
                 docker-machine create --driver virtualbox ddkits
                 docker-machine start ddkits
                 eval $(docker-machine env ddkits)
@@ -65,8 +63,6 @@ ddk(){
         fi
       docker-compose -f ddkits.yml up -d --build
   fi
-        
-    
   elif [[ $1 == "ip" ]]; then
         docker-machine ip ddkits
   elif [[ $1 == "fix" ]]; then
@@ -79,7 +75,7 @@ ddk(){
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
   elif [[ $1 == "start" ]]; then
         if [[ $2 == "com" ]]; then
-         . ddkitsLocal.sh && composer install 
+         . ddkitsLocal.sh && composer install
         else
          . ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
     fi
@@ -130,7 +126,7 @@ ddk(){
         composer global require drush/drush:dev-master
     fi
     elif [[ $1 == "rm" ]]; then
-        if [[ $2 == "all" ]]; then   
+        if [[ $2 == "all" ]]; then
         . $(pwd)/ddkits.rm.sh
         elif [[ $2 == "c" ]]; then
            # Delete all containers
@@ -143,7 +139,6 @@ ddk(){
        fi
      elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
       clear
-      echo -e "\033[33;31m "
         echo -e 'DDkits built by Mutasem Elayyoub www.DDKits.com
     List of commands after "ddk <option>":
 
@@ -156,12 +151,12 @@ ddk(){
         fix     - Fix DDKits containers in full for any problem
         start   - Start new your ddkits setup process "this command must be in your project folder"
           com   - Start installation with compsoer before docker "you need to modify your composer"
-            **************************        
+            **************************
         update  - Update your ddkits setup process "this command must be in your project folder"
             **************************
         rebuild - Update your ddkits rebuild and build your project images and containers
                 process "this command must be in your project folder"
-            **************************     
+            **************************
         i       - Show all your docker images
         c       - Show all your docker containers
         r       - Docker run\n
