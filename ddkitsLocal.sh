@@ -1,5 +1,9 @@
-#!/bin/sh"
+#!/bin/sh
 
+#  Script.sh
+#
+#
+#
 # This system built by Mutasem Elayyoub DDKits.com
 # insert DDKits alias into anyh system command lines
 . ddkits.alias.sh
@@ -16,9 +20,6 @@ echo -e 'Please make sure that you installed your DDKits at the same environment
   DDKITSIP=$(docker-machine ip ddkits)
   ddk go
 fi
-  
-
-
 #  delete ddkits conf file for the custom site if available
 if [ -f "ddkits-files/ddkits/sites/ddkitscust.conf" ]
   then 
@@ -31,8 +32,6 @@ if [ -f "ddkits-files/drupal/ddkitscli.sh" ]; then
 else 
     echo "there is no old file we will create new file for you ==> "
 fi
-
-
 echo -e "DDKits required field are all required please make sure to write them correct. \n
 Your DDKits IP is : '$DDKITSIP'\n
 in case of using your localhost then please ignore this ip and use your localhost ip (127.0.0.1)\n
@@ -69,35 +68,30 @@ read DDKITSSITESALIAS
     DDKITSSITESALIAS3=""
     #  create ddkits conf file for the custom site
     echo -e "NameVirtualHost *:80
-
     <VirtualHost *:80>
       ServerName "$DDKITSSITES"
       ProxyPreserveHost on
       ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/
       ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
     </VirtualHost>
-
 <VirtualHost *:80>
   ServerName solr."$DDKITSSITES"
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
 </VirtualHost>
-
 <VirtualHost *:80>
   ServerName jenkins."$DDKITSSITES"
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
 </VirtualHost>
-
 <VirtualHost *:80>
   ServerName admin."$DDKITSSITES"
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSADMINPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSADMINPORT"/
 </VirtualHost>
-
     " >> ddkits-files/ddkits/sites/ddkitscust.conf
   else
   echo -e ""
@@ -118,7 +112,6 @@ read DDKITSSITESALIAS
           ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/
           ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
         </VirtualHost>
-
 <VirtualHost *:80>
   ServerName solr."$DDKITSSITES"
   ProxyPreserveHost on
@@ -373,6 +366,16 @@ NameVirtualHost *:80
 
 # Build out docker file to start our install
 echo -e '
+
+
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -533,6 +536,16 @@ NameVirtualHost *:80
 
 # Build out docker file to start our install
 echo -e '
+
+
+#!/bin/s#!/bin/s#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 FROM ddkits/lamp:7
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -692,6 +705,14 @@ DOCUMENTROOT='public'
 
 # Build out docker file to start our install
 echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 FROM ddkits/lamp:7
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -834,7 +855,16 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./wp-deploy
 DOCUMENTROOT='public'
 
 # Build out docker file to start our install
-echo -e 'FROM ddkits/lamp:latest
+echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -987,7 +1017,17 @@ echo -e '
   </Directory>
 </VirtualHost> ' > ./ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
 
-echo -e 'FROM ddkits/lamp:7
+echo -e '
+
+#  Script.s#  Script.s#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:7
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -1171,7 +1211,16 @@ echo -e '
   </Directory>
 </VirtualHost> ' > ./ddkits-files/lamp5/sites/$DDKITSHOSTNAME.conf
 
-echo -e 'FROM ddkits/lamp:latest
+echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -1280,7 +1329,17 @@ echo -e '
   </Directory>
 </VirtualHost> ' > ./ddkits-files/lamp7/sites/$DDKITSHOSTNAME.conf
 
-echo -e 'FROM ddkits/lamp:7
+echo -e '
+
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:7
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
@@ -1453,7 +1512,17 @@ echo -e '
   </Directory>
 </VirtualHost> ' > ./ddkits-files/magento/sites/$DDKITSHOSTNAME.conf
 
-echo -e 'FROM ddkits/lamp:7
+echo -e '
+
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:7
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
@@ -1594,7 +1663,17 @@ echo -e '
   </Directory>
 </VirtualHost> ' > ./ddkits-files/dreamf/sites/$DDKITSHOSTNAME.conf
 
-echo -e 'FROM ddkits/lamp:7
+echo -e '
+
+#  Created by mutasem elayyoub ddkits.co#  Created by mutasem elayyoub ddkits.co#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:7
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
@@ -1760,7 +1839,17 @@ echo -e '
   </Directory>
 </VirtualHost> ' > ./ddkits-files/ss/sites/$DDKITSHOSTNAME.conf
 
-echo -e 'FROM ddkits/lamp:7
+echo -e '
+
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:7
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
@@ -1953,7 +2042,16 @@ fi' > ./ddkits-files/cloud/ddkits-check.sh
 
 
 
-echo -e 'FROM ddkits/lamp:latest
+echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
