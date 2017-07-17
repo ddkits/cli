@@ -1,10 +1,18 @@
 #!/bin/sh
 
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 ddk(){
       if [[ $1 == "install" ]]; then
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
-      if [[ $DDKITSVER == 2 ]]; then
+      if [[ $DDKITSVER == 1 ]]; then
+        docker-compose -f ddkits.yml up -d --build
+      elif [[ $DDKITSVER == 2 ]]; then
         clear
            echo -e 'Enter your Sudo/Root Password:'
               read SUDOPASS
@@ -41,6 +49,7 @@ ddk(){
             else
               break
           fi
+          docker-compose -f ddkits.yml up -d --build
         fi
         if [[ -f  ~/.ddkits_alias ]]; then
           clear
@@ -61,13 +70,24 @@ ddk(){
           echo 'command source ~/.ddkits_alias 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
         fi
-      docker-compose -f ddkits.yml up -d --build
   fi
   elif [[ $1 == "ip" ]]; then
         docker-machine ip ddkits
-  elif [[ $1 == "fix" ]]; then
-        docker restart $(docker ps -q)
-  elif [[ $1 == "com" ]]; then
+elif [[ $1 == "fix" ]]; then
+if [[ -f "~/.ddkits_alias" ]]; then
+sudo rm ~/.ddkits_alias
+cp ddkits.alias.sh ddkits_alias
+sudo cp ddkits_alias ~/.ddkits_alias
+sudo chmod u+x ~/.ddkits_alias
+source ~/.ddkits_alias
+else
+cp ddkits.alias.sh ddkits_alias
+sudo cp ddkits_alias ~/.ddkits_alias
+sudo chmod u+x ~/.ddkits_alias
+source ~/.ddkits_alias
+fi
+docker restart $(docker ps -q)
+elif [[ $1 == "com" ]]; then
         php ddkits.phar install
   elif [[ $1 == "update" ]]; then
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d
@@ -173,8 +193,7 @@ ddk(){
     SOLR     http://solr.YOUR_WEBSITE
     PhpMyAdmin     http://admin.YOUR_WEBSITE
 
-
-    DDKits v1.12
+    DDKits v1.13
         '
      else
       echo 'DDkits build by Mutasem Elayyoub and ready to use.  www.DDKits.com
