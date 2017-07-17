@@ -1,5 +1,7 @@
+#!/bin/sh
 
-ddk(){if [[ $1 == "install" ]]; then
+ddk(){
+      if [[ $1 == "install" ]]; then
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
       if [[ $DDKITSVER == 2 ]]; then
