@@ -1,12 +1,8 @@
 
-ddk(){
-
-  if [[ $1 == "install" ]]; then
+ddk(){if [[ $1 == "install" ]]; then
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
-      if [[ $DDKITSVER == 1 ]]; then
-            docker-compose -f ddkits.yml up -d --build
-      elif [[ $DDKITSVER == 2 ]]; then
+      if [[ $DDKITSVER == 2 ]]; then
         clear
            echo -e 'Enter your Sudo/Root Password:'
               read SUDOPASS
@@ -47,23 +43,23 @@ ddk(){
         if [[ -f  ~/.ddkits_alias ]]; then
           clear
                 docker-compose -f ddkits.yml up -d --build
-          cp ddkits.alias.sh ddkits_alias
-          cp ddkits_alias ~/.ddkits_alias
+          cp ddkits.alias.sh ddkits_alias 
+          cp ddkits_alias ~/.ddkits_alias 
                 docker-machine create --driver virtualbox ddkits
                 docker-machine start ddkits
                 eval $(docker-machine env ddkits)
           echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
           else
                 docker-compose -f ddkits.yml up -d --build
-          cp ddkits.alias.sh ddkits_alias
-          cp ddkits_alias ~/.ddkits_alias
+          cp ddkits.alias.sh ddkits_alias 
+          cp ddkits_alias ~/.ddkits_alias 
                 docker-machine create --driver virtualbox ddkits
                 docker-machine start ddkits
                 eval $(docker-machine env ddkits)
           echo 'command source ~/.ddkits_alias 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
-        
-      fi
+        fi
+      docker-compose -f ddkits.yml up -d --build
   fi
   elif [[ $1 == "ip" ]]; then
         docker-machine ip ddkits
