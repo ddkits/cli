@@ -297,9 +297,9 @@ MAIL_ADDRESS='"$MAIL_ADDRESS"'\n" >> ./ddkits-files/drupal/ddkitscli.sh
 cat ./ddkits-files/drupal/ddkits-drupal.sh >> ./ddkits-files/drupal/ddkitscli.sh
 DDKITS_PLATFORM='Please pick which platform you want to install: '
 # 
-# Setup options Please make sure of all options before publish
+# Setup options Please make sure of all options before publish pick list 
 # 
-options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Umbraco" "Magento" "DreamFactory" "Contao" "Silverstripe" "Cloud" "Quit")
+options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Umbraco" "Magento" "DreamFactory" "Contao" "Silverstripe" "Cloud" "Symfony" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -404,7 +404,7 @@ RUN apt-get update \
                    ufw \
                    sudo \
                    gufw \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw
+  && apt-get install -y --force-yes apt-transport-https
 
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
 # Fixing permissions 
@@ -588,7 +588,7 @@ RUN apt-get update \
                    php7.0-zip \
                    php7.0-bcmath \
                    php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html
 
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
@@ -754,7 +754,7 @@ RUN apt-get update \
                    php7.0-zip \
                    php7.0-bcmath \
                    php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html 
 
 # Fixing permissions 
@@ -891,7 +891,7 @@ RUN apt-get update \
                    ufw \
                    sudo \
                    gufw \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html 
 
 # Fixing permissions 
@@ -1062,7 +1062,7 @@ RUN apt-get update \
                    php7.0-zip \
                    php7.0-bcmath \
                    php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
@@ -1247,7 +1247,7 @@ RUN apt-get update \
                    ufw \
                    sudo \
                    gufw \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html 
 
 # Fixing permissions 
@@ -1372,7 +1372,7 @@ RUN apt-get update \
                    php7.0-zip \
                    php7.0-bcmath \
                    php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
@@ -1555,7 +1555,7 @@ RUN apt-get update \
                    php7.0-zip \
                    php7.0-bcmath \
                    php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
@@ -1710,7 +1710,7 @@ RUN apt-get update \
                    php7.0-ssh2 \
                    php7.0-json \
                    memcached \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
@@ -1886,7 +1886,7 @@ RUN apt-get update \
                    php7.0-ssh2 \
                    php7.0-json \
                    memcached \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw  
+  && apt-get install -y --force-yes apt-transport-https  
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
@@ -2088,8 +2088,10 @@ RUN apt-get update \
                    python-software-properties \
                    apt-file \
                    software-properties-common \
-  && apt-get install -y --force-yes apt-transport-https lxc-docker ufw sudo gufw 
-
+  && apt-get install -y --force-yes apt-transport-https 
+RUN add-apt-repository ppa:ondrej/php \
+  && apt-get update \
+  && apt-get install php5.6-intl
 RUN chmod -R 777 /var/www/html 
 RUN chmod u+x /var/www/html/ddkits-check.sh
 RUN apt-get -f install -y 
@@ -2139,7 +2141,7 @@ echo $SUDOPASS | sudo -S chmod -R 0770 ./cloud-deploy/public/data
 # Installing ownCloud9 on local host 
 
    
-if [[ ! -d "/var/www/html/public" ]]; then
+if [[ ! -d "cloud-deploy/public" ]]; then
   DDKITSFL=$(pwd)
   echo $DDKITSFL
 mkdir ./cloud-deploy
@@ -2161,6 +2163,152 @@ fi
 
             break
             ;;
+"Symfony")
+    # delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/symfony/Dockerfile" ]]; then
+          rm ddkits-files/symfony/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/symfony/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/symfony/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  Symfony setup
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/symfony/sites/$DDKITSHOSTNAME.conf
+
+echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+FROM ddkits/lamp:latest
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+RUN export TERM=xterm
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
+
+# Set the default command to execute
+
+RUN chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite 
+
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+                   python-software-properties \
+                   software-properties-common \
+                   libapache2-mod-php5 \
+    && apt-get install -y --force-yes apt-transport-https 
+
+RUN add-apt-repository ppa:ondrej/php \
+  && apt-get update \
+  && apt-get install php5.6-intl
+RUN chmod -R 777 /var/www/html 
+
+
+# installing Symfony on server 
+sudo curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
+sudo chmod a+x /usr/local/bin/symfony
+
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+  ' >> ./ddkits-files/symfony/Dockerfile
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/symfony
+    image: ddkits/symfony:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./symfony-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_symfony_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+# create get into ddkits container
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_symfony_web /bin/bash'
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_symfony_web /bin/bash'" >> ~/.ddkits_alias
+echo $SUDOPASS | sudo -S chmod -R 777 ./symfony-deploy
+
+
+if [[ ! -d "symfony-deploy/public" ]]; then
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+git clone https://github.com/ddkits/symfony.git ./symfony-deploy
+cd ./symfony-deploy
+git pull origin master
+git checkout
+cd $DDKITSFL
+chmod -R 777 ./symfony-deploy/public
+fi
+
+
+        break
+        ;;
+
+
+
 
         "Quit")
             break
