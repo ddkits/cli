@@ -11,7 +11,9 @@ ddk(){
       if [[ $1 == "install" ]]; then
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
-      if [[ $DDKITSVER == 2 ]]; then
+      if [[ $DDKITSVER == 1 ]]; then
+        docker-compose -f ddkits.yml up -d --build
+      elif [[ $DDKITSVER == 2 ]]; then
         clear
            echo -e 'Enter your Sudo/Root Password:'
               read SUDOPASS
@@ -48,6 +50,7 @@ ddk(){
             else
               break
           fi
+          docker-compose -f ddkits.yml up -d --build
         fi
         if [[ -f  ~/.ddkits_alias ]]; then
           clear
@@ -68,7 +71,6 @@ ddk(){
           echo 'command source ~/.ddkits_alias 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
         fi
-      docker-compose -f ddkits.yml up -d --build
   fi
   elif [[ $1 == "ip" ]]; then
         docker-machine ip ddkits
