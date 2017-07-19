@@ -1,4 +1,4 @@
-DDKITSSITES='cloud.dev'
+DDKITSSITES='sym.dev'
 
 DDKITSIP='192.168.99.100'
 
@@ -10,7 +10,7 @@ MYSQL_DATABASE='ddk'
 
 MYSQL_PASSWORD='ddk'
 
-MAIL_ADDRESS='melayyoub@outlook.com'
+MAIL_ADDRESS='m@m.com'
 
 #!/bin/sh
 

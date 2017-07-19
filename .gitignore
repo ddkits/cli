@@ -5,9 +5,6 @@ public/sites/*/default.settings.php
 # Ignore paths that contain user-generated content.
 public/*
 deploy/*
-ll-deploy/*
-wp-deploy/*
-jm-deploy/*
 sites/*
 vendor/*
 pre_installation_whywebs/*
@@ -20,5 +17,8 @@ cache/*
 
 # DDKits special items
 ddkits.env.yml
+ddkitsnew.yml
 ddkits-files/*/sites/*.conf
 ddkits_alias
+*.html
+*-deploy

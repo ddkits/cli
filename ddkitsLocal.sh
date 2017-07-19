@@ -2246,7 +2246,7 @@ RUN apt-get update \
                    gufw \
                    python-software-properties \
                    software-properties-common \
-                   libapache2-mod-php5 \
+                   libapache2-mod-php5.6 \
     && apt-get install -y --force-yes apt-transport-https 
 
 RUN add-apt-repository ppa:ondrej/php \
@@ -2254,10 +2254,9 @@ RUN add-apt-repository ppa:ondrej/php \
   && apt-get install php5.6-intl
 RUN chmod -R 777 /var/www/html 
 
-
 # installing Symfony on server 
-sudo curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
-sudo chmod a+x /usr/local/bin/symfony
+RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony \
+  && chmod a+x /usr/local/bin/symfony
 
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
