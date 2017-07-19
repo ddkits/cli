@@ -16,3 +16,9 @@ nginx/*
 cache/*
 
 *.DS_Store*
+
+
+# DDKits special items
+ddkits.env.yml
+ddkits-files/*/sites/*.conf
+ddkits_alias
