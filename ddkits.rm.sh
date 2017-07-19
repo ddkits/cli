@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 # Delete all containers
 docker rm $(docker ps -a -q) -f
 # Delete all images
