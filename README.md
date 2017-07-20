@@ -40,6 +40,7 @@ Redis fully cache system can be used by your application.
 10) Contao
 11) Silverstripe	  
 12) Cloud
+13) Symfony
 
 # For more information:
 
