@@ -76,7 +76,6 @@ ddk(){
         docker-machine ip ddkits
   elif [[ $1 == "fix" ]]; then
     if [[ -f "~/.ddkits_alias" ]]; then
-      git checkout && git pull > /dev/null
       sudo rm ~/.ddkits_alias
       cp ddkits.alias.sh ddkits_alias
       sudo cp ddkits_alias ~/.ddkits_alias
@@ -84,7 +83,6 @@ ddk(){
       source ~/.ddkits_alias
       source ~/.ddkits_alias_web
     else
-      git checkout && git pull > /dev/null
       cp ddkits.alias.sh ddkits_alias
       sudo cp ddkits_alias ~/.ddkits_alias
       sudo chmod u+x ~/.ddkits_alias
