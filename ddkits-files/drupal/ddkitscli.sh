@@ -1,3 +1,12 @@
+
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 DDKITSSITES='sym.dev'
 
 DDKITSIP='192.168.99.100'

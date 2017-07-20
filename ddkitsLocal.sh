@@ -12,6 +12,7 @@
 # docker-machine create --driver virtualbox ddkits
 # docker-machine start ddkits
 # eval $(docker-machine env ddkits)
+clear
 echo -e 'Please make sure that you installed your DDKits at the same environment \n(1) Localhost \n(2) virtualbox'
           read DDKITSVER
     if [[ $DDKITSVER == 1 ]]; then
@@ -37,10 +38,8 @@ Your DDKits IP is : '$DDKITSIP'\n
 in case of using your localhost then please ignore this ip and use your localhost ip (127.0.0.1)\n
 to cancel anytime use the regular system command ==> ctrl+c
 "
-  clear
   echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 read MAIL_ADDRESS 
-clear
   echo -e ' Ports info **IMPORTANT** 
   '
   DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
@@ -67,31 +66,43 @@ read DDKITSSITESALIAS
     DDKITSSITESALIAS2=""
     DDKITSSITESALIAS3=""
     #  create ddkits conf file for the custom site
-    echo -e "NameVirtualHost *:80
+    echo -e "
     <VirtualHost *:80>
       ServerName "$DDKITSSITES"
       ProxyPreserveHost on
-      ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/
+      ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/ 
       ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
     </VirtualHost>
-<VirtualHost *:80>
-  ServerName solr."$DDKITSSITES"
-  ProxyPreserveHost on
-  ProxyPass / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
-  ProxyPassReverse / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
-</VirtualHost>
-<VirtualHost *:80>
-  ServerName jenkins."$DDKITSSITES"
-  ProxyPreserveHost on
-  ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
-  ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
-</VirtualHost>
-<VirtualHost *:80>
-  ServerName admin."$DDKITSSITES"
-  ProxyPreserveHost on
-  ProxyPass / http://"$DDKITSIP":"$DDKITSADMINPORT"/
-  ProxyPassReverse / http://"$DDKITSIP":"$DDKITSADMINPORT"/
-</VirtualHost>
+    <VirtualHost *:80>
+      ServerName solr."$DDKITSSITES"
+      ProxyPreserveHost on
+      ProxyPass / http://"$DDKITSIP":"$DDKITSSOLRPORT"/ 
+      ProxyPassReverse / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
+    </VirtualHost>
+    <VirtualHost *:80>
+      ServerName jenkins.ddkits.site
+      ProxyPreserveHost on
+      ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/ 
+      ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
+    </VirtualHost>
+    <VirtualHost *:80>
+      ServerName admin."$DDKITSSITES"
+      ProxyPreserveHost on
+      ProxyPass / http://"$DDKITSIP":"$DDKITSADMINPORT"/ 
+      ProxyPassReverse / http://"$DDKITSIP":"$DDKITSADMINPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
+    </VirtualHost>
     " >> ddkits-files/ddkits/sites/ddkitscust.conf
   else
   echo -e ""
@@ -103,7 +114,7 @@ read DDKITSSITESALIAS
         DDKITSSITESALIAS3=""
         #  create ddkits conf file for the custom site
 
-        echo -e "NameVirtualHost *:80
+        echo -e "
 
         <VirtualHost *:80>
           ServerName "$DDKITSSITES"
@@ -111,19 +122,28 @@ read DDKITSSITESALIAS
           ProxyPreserveHost on
           ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/
           ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
         </VirtualHost>
 <VirtualHost *:80>
   ServerName solr."$DDKITSSITES"
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
 </VirtualHost>
 
 <VirtualHost *:80>
-  ServerName jenkins."$DDKITSSITES"
+  ServerName jenkins.ddkits.site
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
 </VirtualHost>
 
 <VirtualHost *:80>
@@ -131,6 +151,9 @@ read DDKITSSITESALIAS
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSADMINPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSADMINPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
 </VirtualHost>
 
         " >> ddkits-files/ddkits/sites/ddkitscust.conf
@@ -142,13 +165,16 @@ read DDKITSSITESALIAS
         then
           DDKITSSITESALIAS3=""
           #  create ddkits conf file for the custom site
-          echo -e "NameVirtualHost *:80
+          echo -e "
 
           <VirtualHost *:80>
             ServerName "$DDKITSSITES"
             ProxyPreserveHost on
             ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/
             ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
           </VirtualHost>
 
           <VirtualHost *:80>
@@ -156,6 +182,9 @@ read DDKITSSITESALIAS
             ProxyPreserveHost on
             ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/
             ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
           </VirtualHost>
 
           <VirtualHost *:80>
@@ -163,6 +192,9 @@ read DDKITSSITESALIAS
             ProxyPreserveHost on
             ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/
             ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
           </VirtualHost>
 
 <VirtualHost *:80>
@@ -170,13 +202,19 @@ read DDKITSSITESALIAS
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
 </VirtualHost>
 
 <VirtualHost *:80>
-  ServerName jenkins."$DDKITSSITES"
+  ServerName jenkins.ddkits.site
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
 </VirtualHost>
 
 <VirtualHost *:80>
@@ -184,6 +222,9 @@ read DDKITSSITESALIAS
   ProxyPreserveHost on
   ProxyPass / http://"$DDKITSIP":"$DDKITSADMINPORT"/
   ProxyPassReverse / http://"$DDKITSIP":"$DDKITSADMINPORT"/
+      Timeout 2400
+      ProxyTimeout 2400
+      ProxyBadHeader Ignore 
 </VirtualHost>
 
           " >> ddkits-files/ddkits/sites/ddkitscust.conf
@@ -281,13 +322,23 @@ do
     esac
 done
 
+clear
 
 # echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 #   
 # read MAIL_ADDRESS 
 #   echo -e ""
 DDKITSHOSTNAME=${DDKITSSITES//./_}
-echo -e "DDKITSSITES='"$DDKITSSITES"'\n
+echo -e "
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+DDKITSSITES='"$DDKITSSITES"'\n
 DDKITSIP='"$DDKITSIP"'\n
 MYSQL_USER='"$MYSQL_USER"'\n
 MYSQL_ROOT_PASSWORD='"$MYSQL_ROOT_PASSWORD"'\n
@@ -341,8 +392,6 @@ fi
 
 # create different containers files for conf
 echo -e '
-NameVirtualHost *:80
-
 <VirtualHost *:80>
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
@@ -367,14 +416,6 @@ NameVirtualHost *:80
 # Build out docker file to start our install
 echo -e '
 
-
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
 
 FROM ddkits/lamp:latest
 
@@ -467,10 +508,11 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./deploy
 alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias
-echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web drush'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web drush'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
 
 ln -sfn ./deploy/sites ./deploy/public/sites/default
@@ -506,8 +548,6 @@ fi
      
 # create different containers files for conf
 echo -e '
-NameVirtualHost *:80
-
 <VirtualHost *:80>
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
@@ -536,15 +576,6 @@ NameVirtualHost *:80
 
 # Build out docker file to start our install
 echo -e '
-
-
-#!/bin/s#!/bin/s#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
 
 FROM ddkits/lamp:7
 
@@ -670,10 +701,11 @@ fi
 alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias
-echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web drush'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web drush'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
 
 
@@ -705,14 +737,6 @@ DOCUMENTROOT='public'
 
 # Build out docker file to start our install
 echo -e '
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
-
 FROM ddkits/lamp:7
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -765,8 +789,6 @@ RUN usermod -u 1000 www-data
 
 # create different containers files for conf
 echo -e '
-NameVirtualHost *:80
-
 <VirtualHost *:80>
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
@@ -823,9 +845,10 @@ rm -f latest.tar.gz
 echo $SUDOPASS | sudo -S chmod -R 777 ./wp-deploy  
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_wp_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_wp_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_wp_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./wp-deploy
 
 
@@ -856,14 +879,6 @@ DOCUMENTROOT='public'
 
 # Build out docker file to start our install
 echo -e '
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
-
 FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -902,8 +917,6 @@ RUN usermod -u 1000 www-data
 
 # create different containers files for conf
 echo -e '
-NameVirtualHost *:80
-
 <VirtualHost *:80>
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
@@ -957,9 +970,10 @@ git clone https://github.com/ddkits/Joomla.git ./jom-deploy/public
 echo $SUDOPASS | sudo -S chmod -R 777 ./jom-deploy  
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_jom_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jom_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jom_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./jom-deploy
 
 
@@ -988,6 +1002,14 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./jom-deploy
           rm ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
         fi
 echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 php artisan key:generate
 php artisan cache:clear
 php artisan config:clear
@@ -1019,13 +1041,7 @@ echo -e '
 
 echo -e '
 
-#  Script.s#  Script.s#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
+#  Script.s#  Script.s
 
 FROM ddkits/lamp:7
 
@@ -1095,9 +1111,10 @@ services:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_laravel_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./laravel-deploy
 
 if [[ ! -f "composer.phar" ]]; then
@@ -1212,14 +1229,6 @@ echo -e '
 </VirtualHost> ' > ./ddkits-files/lamp5/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
-
 FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -1277,9 +1286,10 @@ services:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_lamp5_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_lamp5_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_lamp5_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./lamp5-deploy
 
         break
@@ -1330,14 +1340,6 @@ echo -e '
 </VirtualHost> ' > ./ddkits-files/lamp7/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
-
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
 
 FROM ddkits/lamp:7
 
@@ -1405,9 +1407,10 @@ services:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_lamp7_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_lamp7_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_lamp7_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./lamp7-deploy
 
 
@@ -1514,14 +1517,6 @@ echo -e '
 
 echo -e '
 
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
-
 FROM ddkits/lamp:7
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
@@ -1608,9 +1603,10 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./mag-deploy
 
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_magento_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_magento_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_magento_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./magento-deploy
 
 
@@ -1665,13 +1661,7 @@ echo -e '
 
 echo -e '
 
-#  Created by mutasem elayyoub ddkits.co#  Created by mutasem elayyoub ddkits.co#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
+#  Created by mutasem elayyoub ddkits.co#  Created by mutasem elayyoub ddkits.co
 
 FROM ddkits/lamp:7
 
@@ -1722,6 +1712,14 @@ RUN usermod -u 1000 www-data
 ' >> ./ddkits-files/dreamf/Dockerfile
 
 echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 composer install --no-dev
 chmod -R 777 /var/www/html/storage /var/www/html/vendor /var/www/html/public
 php artisan key:generate
@@ -1752,9 +1750,10 @@ services:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_dreamf_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_dreamf_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_dreamf_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./dreamf-deploy
 
 
@@ -1841,14 +1840,6 @@ echo -e '
 
 echo -e '
 
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
-
 FROM ddkits/lamp:7
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
@@ -1920,9 +1911,10 @@ services:
       - "'$DDKITSWEBPORT':80" ' > ddkits.env.yml
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_ss_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_ss_web /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_ss_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./ss-deploy
 
 if [[ ! -d "ss-deploy/public" ]]; then
@@ -2003,7 +1995,15 @@ echo -e '
 </VirtualHost> ' > ./ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
 
 
-echo -e '#!/bin/bash
+echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
 ocpath="/var/www/html/public"
 htuser="www-data"
 htgroup="www-data"
@@ -2043,14 +2043,6 @@ fi' > ./ddkits-files/cloud/ddkits-check.sh
 
 
 echo -e '
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
-
 FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -2128,11 +2120,12 @@ services:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
 
 # create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_cloud_web /bin/bash'
 alias ddkc-$DDKITSSITES-fix='docker exec -it '$DDKITSHOSTNAME'_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash'" >> ~/.ddkits_alias
-echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./cloud-deploy
 echo $SUDOPASS | sudo -S chmod -R 0770 ./cloud-deploy/public/data
 
@@ -2191,7 +2184,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
+     DocumentRoot /var/www/html/public/web
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -2209,14 +2202,6 @@ echo -e '
 </VirtualHost> ' > ./ddkits-files/symfony/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
-#!/bin/sh
-
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
-
 FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -2246,13 +2231,7 @@ RUN apt-get update \
                    gufw \
                    python-software-properties \
                    software-properties-common \
-                   libapache2-mod-php5.6 \
     && apt-get install -y --force-yes apt-transport-https 
-
-RUN add-apt-repository ppa:ondrej/php \
-  && apt-get update \
-  && apt-get install php5.6-intl
-RUN chmod -R 777 /var/www/html 
 
 # installing Symfony on server 
 RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony \
@@ -2284,30 +2263,36 @@ services:
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
 
-# create get into ddkits container
-alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_symfony_web /bin/bash'
-#  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_symfony_web /bin/bash'" >> ~/.ddkits_alias
-echo $SUDOPASS | sudo -S chmod -R 777 ./symfony-deploy
 
 
 if [[ ! -d "symfony-deploy/public" ]]; then
   DDKITSFL=$(pwd)
   echo $DDKITSFL
-git clone https://github.com/ddkits/symfony.git ./symfony-deploy
-cd ./symfony-deploy
-git pull origin master
-git checkout
-cd $DDKITSFL
-chmod -R 777 ./symfony-deploy/public
+  echo $SUDOPASS | sudo -S curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
+  echo $SUDOPASS | sudo -S chmod a+x /usr/local/bin/symfony
+  mkdir symfony-deploy
+  echo $SUDOPASS | sudo -S chmod -R 777 public ./symfony-deploy
+  symfony new symfony-deploy/public
+  cp ./composer.phar ./symfony-deploy/public/ddkits.phar
+  cd ./symfony-deploy
+  cd public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $DDKITSFL
+  echo $SUDOPASS | sudo -S chmod -R 777 ./symfony-deploy/public
 fi
 
 
+# create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_symfony_web /bin/bash'
+alias ddkc-$DDKITSSITES-run='docker exec -it '$DDKITSHOSTNAME'_ddkits_symfony_web /bin/bash php public/bin/console server:run 127.0.0.1:8000'
+
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_symfony_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-run='docker exec -it "$DDKITSHOSTNAME"_ddkits_symfony_web /bin/bash php public/bin/console server:run 127.0.0.1:8000'" >> ~/.ddkits_alias_web
+echo $SUDOPASS | sudo -S chmod -R 777 ./symfony-deploy
+
         break
         ;;
-
-
-
 
         "Quit")
             break
@@ -2321,10 +2306,10 @@ MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
 # echo $SUDOPASS | sudo -S gem install autoprefixer-rails sass compass breakpoint singularitygs toolkit bower
 # echo $SUDOPASS | sudo -S gem install breakpoint
 # find existing instances in the host file and save the line numbers
-matches_in_hosts="$(grep -n $DDKITSSITES /etc/hosts | cut -f1 -d:)"
-ddkits_matches_in_hosts="$(grep -n jenkins.${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
-host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3}"
-ddkits_host_entry="${DDKITSIP} jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES}"
+matches_in_hosts="$(grep -n ${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} admin.${DDKITSSITES} solr.${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
+ddkits_matches_in_hosts="$(grep -n jenkins.ddkits.site ddkits.site /etc/hosts | cut -f1 -d:)"
+host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} admin.${DDKITSSITES} solr.${DDKITSSITES}"
+ddkits_host_entry="${DDKITSIP} jenkins.ddkits.site ddkits.site "
 
 # echo "Please enter your password if requested."
 
@@ -2421,7 +2406,6 @@ services:
       - '$DDKITSADMINPORT':80
     networks:
       - ddkits
-
   cache:
     image: redis:latest
     container_name: '$DDKITSHOSTNAME'_ddkits_cache
@@ -2429,16 +2413,16 @@ services:
       - ddkits
     ports:
       - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
-
   jenkins:
-    image: whywebs/jenkins:latest
+    build: ./ddkits-files/jenkins
+    image: ddkits/jenkins:latest
     ports:
-      - "'$DDKITSJENKINSPORT':50000"
+      - "'$DDKITSJENKINSPORT':8080"
     volumes:
       - ./jenkins:/var/jenkins_home 
     stdin_open: true
     tty: true
-    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
+    container_name: ddkits_jenkins
     networks:
       - ddkits
 
@@ -2449,14 +2433,15 @@ networks:
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES-cache='docker exec -it '$DDKITSHOSTNAME'_ddkits_cache /bin/bash'
-alias ddkc-$DDKITSSITES-jen='docker exec -it '$DDKITSHOSTNAME'_ddkits_jenkins /bin/bash'
+alias ddkc-$DDKITSSITES-jen='docker exec -it ddkits_jenkins /bin/bash'
 alias ddkc-$DDKITSSITES-solr='docker exec -it '$DDKITSHOSTNAME'_ddkits_solr /bin/bash'
 alias ddkc-$DDKITSSITES-admin='docker exec -it '$DDKITSHOSTNAME'_ddkits_admin /bin/bash'
+alias ddkc-ddkits='docker exec -it ddkits /bin/bash'
 
-echo "alias ddkc-"$DDKITSSITES"-cache='docker exec -it "$DDKITSHOSTNAME"_ddkits_cache /bin/bash'" >> ~/.ddkits_alias
-echo "alias ddkc-"$DDKITSSITES"-jen='docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins /bin/bash'" >> ~/.ddkits_alias
-echo "alias ddkc-"$DDKITSSITES"-solr='docker exec -it "$DDKITSHOSTNAME"_ddkits_solr /bin/bash'" >> ~/.ddkits_alias
-echo "alias ddkc-"$DDKITSSITES"-admin='docker exec -it "$DDKITSHOSTNAME"_ddkits_admin /bin/bash'" >> ~/.ddkits_alias
+echo "alias ddkc-"$DDKITSSITES"-cache='docker exec -it "$DDKITSHOSTNAME"_ddkits_cache /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-jen='docker exec -it ddkits_jenkins /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-solr='docker exec -it "$DDKITSHOSTNAME"_ddkits_solr /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-admin='docker exec -it "$DDKITSHOSTNAME"_ddkits_admin /bin/bash'" >> ~/.ddkits_alias_web
 
 
 
@@ -2496,8 +2481,10 @@ Copyright @2017 <a href="http://ddkits.com/">DDKits.com</a></center>
 HTML_CONTENT
 # --></body></html>' > ./ddkits-$DDKITSHOSTNAME.html
 
-echo $SUDOPASS | sudo -S cat ~/.bashrc_profile
-echo $ddkc-$DDKITSSITES >> ~/.bashrc
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
+echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
+source ~/.ddkits_alias_web
+source ~/.ddkits_alias
 
 #  prepare ddkits container for the new websites
 echo -e 'copying conf files into ddkits and restart'
