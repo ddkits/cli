@@ -74,21 +74,25 @@ ddk(){
   fi
   elif [[ $1 == "ip" ]]; then
         docker-machine ip ddkits
-elif [[ $1 == "fix" ]]; then
-if [[ -f "~/.ddkits_alias" ]]; then
-sudo rm ~/.ddkits_alias
-cp ddkits.alias.sh ddkits_alias
-sudo cp ddkits_alias ~/.ddkits_alias
-sudo chmod u+x ~/.ddkits_alias
-source ~/.ddkits_alias
-else
-cp ddkits.alias.sh ddkits_alias
-sudo cp ddkits_alias ~/.ddkits_alias
-sudo chmod u+x ~/.ddkits_alias
-source ~/.ddkits_alias
-fi
-docker restart $(docker ps -q)
-elif [[ $1 == "com" ]]; then
+  elif [[ $1 == "fix" ]]; then
+    if [[ -f "~/.ddkits_alias" ]]; then
+      git checkout && git pull > /dev/null
+      sudo rm ~/.ddkits_alias
+      cp ddkits.alias.sh ddkits_alias
+      sudo cp ddkits_alias ~/.ddkits_alias
+      sudo chmod u+x ~/.ddkits_alias
+      source ~/.ddkits_alias
+      source ~/.ddkits_alias_web
+    else
+      git checkout && git pull > /dev/null
+      cp ddkits.alias.sh ddkits_alias
+      sudo cp ddkits_alias ~/.ddkits_alias
+      sudo chmod u+x ~/.ddkits_alias
+      source ~/.ddkits_alias
+      source ~/.ddkits_alias_web
+  fi
+  docker restart $(docker ps -q)
+  elif [[ $1 == "com" ]]; then
         php ddkits.phar install
   elif [[ $1 == "update" ]]; then
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d

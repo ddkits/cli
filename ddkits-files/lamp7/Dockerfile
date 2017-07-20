@@ -1,1 +1,0 @@
-FROM microsoft/aspnet:latest 
