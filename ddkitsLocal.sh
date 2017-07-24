@@ -86,7 +86,7 @@ read DDKITSSITESALIAS
       ProxyBadHeader Ignore 
     </VirtualHost>
     <VirtualHost *:80>
-      ServerName jenkins.ddkits.site
+      ServerName jenkins."$DDKITSSITES"
       ProxyPreserveHost on
       ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/ 
       ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
@@ -361,6 +361,10 @@ do
   echo -e 'What Drupal Version you want to start with: 7 or 8 ?'
 read DDKITSDRUPALV
 
+if [[ ! -d "ddkits-files/drupal/sites" ]]; then
+  mkdir ddkits-files/drupal/sites
+  chmod -R 777 ddkits-files/drupal/sites
+fi
 if [[ $DDKITSDRUPALV == '7' ]]; then
   DOCUMENTROOT="public"
 # delete the old environment yml file
@@ -713,6 +717,11 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
             ;;
             # case of wordpress 
         "Wordpress")
+
+if [[ ! -d "ddkits-files/wp/sites" ]]; then
+  mkdir ddkits-files/wp/sites
+  chmod -R 777 ddkits-files/wp/sites
+fi
         # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -856,6 +865,13 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./wp-deploy
             ;;
             # case of joomla
         "Joomla")
+
+if [[ ! -d "ddkits-files/joomla/sites" ]]; then
+  mkdir ddkits-files/joomla/sites
+  chmod -R 777 ddkits-files/joomla/sites
+fi
+
+
         # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -980,6 +996,13 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./jom-deploy
              break
             ;;
         "Laravel")
+
+if [[ ! -d "ddkits-files/laravel/sites" ]]; then
+  mkdir ddkits-files/laravel/sites
+  chmod -R 777 ddkits-files/laravel/sites
+fi
+
+
         DOCUMENTROOT=$DDKITSHOSTNAME
   # create different containers files for conf
    # delete the old environment yml file
@@ -1184,6 +1207,13 @@ alias ddklf="docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web bash ddkits.fix
             break
             ;;
         "LAMP/PHP5")
+
+if [[ ! -d "ddkits-files/lamp5/sites" ]]; then
+  mkdir ddkits-files/lamp5/sites
+  chmod -R 777 ddkits-files/lamp5/sites
+fi
+
+
     # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -1295,6 +1325,12 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./lamp5-deploy
         break
         ;;
         "LAMP/PHP7")
+
+if [[ ! -d "ddkits-files/lamp7/sites" ]]; then
+  mkdir ddkits-files/lamp7/sites
+  chmod -R 777 ddkits-files/lamp7/sites
+fi
+
 
     # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
@@ -1420,6 +1456,11 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./lamp7-deploy
 
         "Umbraco")
 
+if [[ ! -d "ddkits-files/umbracco/sites" ]]; then
+  mkdir ddkits-files/umbracco/sites
+  chmod -R 777 ddkits-files/umbracco/sites
+fi
+
 # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -1471,6 +1512,12 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./um-deploy
             break
             ;;
       "Magento")
+
+if [[ ! -d "ddkits-files/magento/sites" ]]; then
+  mkdir ddkits-files/magento/sites
+  chmod -R 777 ddkits-files/magento/sites
+fi
+
 # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -1615,6 +1662,12 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./magento-deploy
 
 
 "DreamFactory")
+
+if [[ ! -d "ddkits-files/dreamf/sites" ]]; then
+  mkdir ddkits-files/dreamf/sites
+  chmod -R 777 ddkits-files/dreamf/sites
+fi
+
 # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -1785,6 +1838,12 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./dreamf-deploy
 
 "Contao")
 
+if [[ ! -d "ddkits-files/contao/sites" ]]; then
+  mkdir ddkits-files/contao/sites
+  chmod -R 777 ddkits-files/contao/sites
+fi
+
+
 #  Contao setup 
 echo -e ' Comming soon!!'
 
@@ -1792,6 +1851,11 @@ echo -e ' Comming soon!!'
             ;;
 
 "Silverstripe")
+
+if [[ ! -d "ddkits-files/ss/sites" ]]; then
+  mkdir ddkits-files/ss/sites
+  chmod -R 777 ddkits-files/ss/sites
+fi
 
 #  Silverstripe setup 
 # delete the old environment yml file
@@ -1934,6 +1998,11 @@ fi
             ;;
 
 "Cloud")
+
+if [[ ! -d "ddkits-files/cloud/sites" ]]; then
+  mkdir ddkits-files/cloud/sites
+  chmod -R 777 ddkits-files/cloud/sites
+fi
 
 #  Contao setup 
 # delete the old environment yml file
@@ -2157,6 +2226,13 @@ fi
             break
             ;;
 "Symfony")
+
+
+if [[ ! -d "ddkits-files/symfony/sites" ]]; then
+  mkdir ddkits-files/symfony/sites
+  chmod -R 777 ddkits-files/symfony/sites
+fi
+
     # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -2306,10 +2382,10 @@ MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
 # echo $SUDOPASS | sudo -S gem install autoprefixer-rails sass compass breakpoint singularitygs toolkit bower
 # echo $SUDOPASS | sudo -S gem install breakpoint
 # find existing instances in the host file and save the line numbers
-matches_in_hosts="$(grep -n ${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} admin.${DDKITSSITES} solr.${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
-ddkits_matches_in_hosts="$(grep -n jenkins.ddkits.site ddkits.site /etc/hosts | cut -f1 -d:)"
-host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} admin.${DDKITSSITES} solr.${DDKITSSITES}"
-ddkits_host_entry="${DDKITSIP} jenkins.ddkits.site ddkits.site "
+matches_in_hosts="$(grep -n ${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
+ddkits_matches_in_hosts="$(grep -n ddkits.site /etc/hosts | cut -f1 -d:)"
+host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES}"
+ddkits_host_entry="${DDKITSIP}  ddkits.site "
 
 # echo "Please enter your password if requested."
 
@@ -2422,7 +2498,7 @@ services:
       - ./jenkins:/var/jenkins_home 
     stdin_open: true
     tty: true
-    container_name: ddkits_jenkins
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
     networks:
       - ddkits
 
