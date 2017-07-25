@@ -1,4 +1,4 @@
-; Basic Drupal core by Mutasem Elayyoub Whywebs.com
+; Basic Drupal core by Mutasem Elayyoub ddkits.com
 core = 7.x
 api = 2
 
@@ -166,6 +166,12 @@ projects[og][subdir] = "contrib"
 
 projects[r4032login][type] = "module"
 projects[r4032login][subdir] = "contrib"
+
+projects[metatag][type] = "module"
+projects[metatag][subdir] = "contrib"
+
+projects[refresh][type] = "module"
+projects[refresh][subdir] = "contrib"
 
 projects[realname][type] = "module"
 projects[realname][subdir] = "contrib"
