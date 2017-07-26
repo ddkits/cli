@@ -2150,9 +2150,7 @@ RUN apt-get update \
                    apt-file \
                    software-properties-common \
   && apt-get install -y --force-yes apt-transport-https 
-RUN add-apt-repository ppa:ondrej/php \
-  && apt-get update \
-  && apt-get install php5.6-intl
+
 RUN chmod -R 777 /var/www/html 
 RUN chmod u+x /var/www/html/ddkits-check.sh
 RUN apt-get -f install -y 
