@@ -1,0 +1,36 @@
+{
+  "name": "ddkits",
+  "version": "1.0.0",
+  "description": "base",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "find node_modules/ -name '*.info' -type f -delete"
+  },
+  "author": "ddkits <melayyoub@outlook.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.11.2",
+    "connect-livereload": "^0.5.4",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sass": "^2.3.1",
+    "gulp-sourcemaps": "^1.6.0"
+  },
+  "dependencies": {
+    "gulp-notify": "^2.2.0",
+    "gulp-sourcemap": "^1.0.1"
+  },
+  "keywords": [
+    "ddkits"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ddkits/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/ddkits/cli/issues"
+  }
+}
