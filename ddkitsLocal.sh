@@ -2186,15 +2186,6 @@ services:
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
 
-# create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
-alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_cloud_web /bin/bash'
-alias ddkc-$DDKITSSITES-fix='docker exec -it '$DDKITSHOSTNAME'_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'
-#  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash'" >> ~/.ddkits_alias_web
-echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'" >> ~/.ddkits_alias_web
-echo $SUDOPASS | sudo -S chmod -R 777 ./cloud-deploy
-echo $SUDOPASS | sudo -S chmod -R 0770 ./cloud-deploy/public/data
 
 
 
@@ -2220,6 +2211,16 @@ rm -rf owncloud
 cd $DDKITSFL
 chmod -R 777 ./cloud-deploy/public
 fi
+
+# create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_cloud_web /bin/bash'
+alias ddkc-$DDKITSSITES-fix='docker exec -it '$DDKITSHOSTNAME'_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'" >> ~/.ddkits_alias_web
+echo $SUDOPASS | sudo -S chmod -R 777 ./cloud-deploy
+echo $SUDOPASS | sudo -S chmod -R 0770 ./cloud-deploy/public/data
 
             break
             ;;
@@ -2380,10 +2381,13 @@ MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
 # echo $SUDOPASS | sudo -S gem install autoprefixer-rails sass compass breakpoint singularitygs toolkit bower
 # echo $SUDOPASS | sudo -S gem install breakpoint
 # find existing instances in the host file and save the line numbers
-matches_in_hosts="$(grep -n ${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
-ddkits_matches_in_hosts="$(grep -n ddkits.site /etc/hosts | cut -f1 -d:)"
-host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES}"
-ddkits_host_entry="${DDKITSIP}  ddkits.site "
+# find existing instances in the host file and save the line numbers
+
+
+matches_in_hosts="$(grep -n ${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
+ddkits_matches_in_hosts="$(grep -n ddkits.site jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
+host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3}"
+ddkits_host_entry="${DDKITSIP}  ddkits.site jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES}"
 
 # echo "Please enter your password if requested."
 
@@ -2402,6 +2406,7 @@ else
     echo "Adding new hosts entry."
     echo "$host_entry" | sudo tee -a /etc/hosts > /dev/null
 fi
+echo ${SUDOPASS} | sudo -S cat /etc/hosts
 
 if [ ! -z "$ddkits_matches_in_hosts" ]
 then
@@ -2559,6 +2564,8 @@ echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
 source ~/.ddkits_alias_web
 source ~/.ddkits_alias
+echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias' >> ~/.bashrc_profile
+echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias_web' >> ~/.bashrc_profile
 
 #  prepare ddkits container for the new websites
 echo -e 'copying conf files into ddkits and restart'
