@@ -2198,14 +2198,14 @@ if [[ ! -d "cloud-deploy/public" ]]; then
 mkdir ./cloud-deploy
 chmod -R 777 ./cloud-deploy/public
 cd ./cloud-deploy
-wget https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2
-wget https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2.sha256
+wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2
+wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2.sha256
 wget https://owncloud.org/owncloud.asc
-wget https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2.asc
-sha256sum -c owncloud-9.0.0.tar.bz2.sha256
+wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2.asc
+sha256sum -c owncloud-9.0.4.tar.bz2.sha256
 gpg --import owncloud.asc
-gpg --verify owncloud-9.0.0.tar.bz2.asc
-tar xjvf owncloud-9.0.0.tar.bz2 
+gpg --verify owncloud-9.0.4.tar.bz2.asc
+tar xjvf owncloud-9.0.4.tar.bz2 
 cp -r owncloud public
 rm -rf owncloud
 cd $DDKITSFL
