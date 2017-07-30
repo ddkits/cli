@@ -482,7 +482,7 @@ services:
       - ddkits      
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
-if [[ ! -d "deploy" ]]; then
+if [[ ! -d "deploy/public" ]]; then
   git clone https://github.com/ddkits/drupal-7.git ./deploy
   DDKITSFL=$(pwd)
   echo $DDKITSFL
@@ -490,6 +490,8 @@ if [[ ! -d "deploy" ]]; then
   chmod -R 755 ./deploy/public
   mkdir ./deploy/public/sites/default/files
   chmod -R 777 ./deploy/public/sites/default/files
+elif [[ -d "deploy/public" ]]; then
+  echo 'if you need a new drupal7 installation please make sure to remove deploy/public folder and restart this step again.'
 fi  
 echo $SUDOPASS | sudo -S chmod -R 777 ./deploy   
 
@@ -657,7 +659,7 @@ services:
       - ddkits      
     ports:
       - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
-if [[ ! -d "deploy" ]]; then
+if [[ ! -d "deploy/public" ]]; then
   git clone https://github.com/ddkits/drupal-8.git ./deploy
   DDKITSFL=$(pwd)
   echo $DDKITSFL
@@ -672,6 +674,7 @@ if [[ ! -d "deploy" ]]; then
   cd ./deploy/public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
   cd $DDKITSFL
 else
+    echo 'if you need a new drupal 8 installation please make sure to remove deploy/public folder and restart this step again.'
   DDKITSFL=$(pwd)
   echo $DDKITSFL
   rm -rf ./deploy/public/vendor
