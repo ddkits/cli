@@ -1,5 +1,6 @@
 # DDKits v1.13 Built by Mutasem Elayyoub melayyoub@outlook.com
 
+<img src="https://travis-ci.org/ddkits/cli.svg?branch=master" />
 
 Doctor Development Kit is a free and open source local development environment and workflow tool based on Docker. DDKits allows users to build more than one container under the same port with domains DNS control, super-fast development environments and to integrate those environments with their hosting provider or continuous integration workflows.
 
@@ -41,7 +42,9 @@ Redis fully cache system can be used by your application.
 11) Silverstripe	  
 12) Cloud
 13) Symfony
+14) Expression Engine
+15) Elgg
 
 # For more information:
 
-# http://www.DDKits.com by Mutasem Elayyoub
+ http://www.DDKits.com by Mutasem Elayyoub
