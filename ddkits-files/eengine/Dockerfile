@@ -1,6 +1,4 @@
 
-
-
 FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -8,9 +6,8 @@ MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 RUN export TERM=xterm
 
 RUN rm /etc/apache2/sites-enabled/000-default.conf
-COPY sites/home_mawcom_dev.conf /etc/apache2/sites-enabled/home_mawcom_dev.conf
-COPY ddkitscli.sh /var/www/html/ddkitscli.sh
-COPY php5.ini /usr/local/etc/php/conf.d/php.ini
+COPY sites/ee_dev.conf /etc/apache2/sites-enabled/ee_dev.conf
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 # Set the default command to execute
 
@@ -29,11 +26,10 @@ RUN apt-get update \
                    ufw \
                    sudo \
                    gufw \
-  && apt-get install -y --force-yes apt-transport-https
+  && apt-get install -y --force-yes apt-transport-https  
+RUN chmod -R 777 /var/www/html 
 
-RUN chmod -R 777 /var/www/html/ddkitscli.sh 
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
-
-
+  

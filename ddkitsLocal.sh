@@ -350,7 +350,7 @@ DDKITS_PLATFORM='Please pick which platform you want to install: '
 # 
 # Setup options Please make sure of all options before publish pick list 
 # 
-options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Umbraco" "Magento" "DreamFactory" "Contao" "Silverstripe" "Cloud" "Symfony" "Quit")
+options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Umbraco" "Magento" "DreamFactory" "Contao" "Silverstripe" "Cloud" "Symfony" "Expression Engine" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -511,7 +511,7 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./deploy
 #   fi
 # } 
 
-alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web public/drush '
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
@@ -2371,7 +2371,136 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./symfony-deploy
 
         break
         ;;
+"Expression Engine")
 
+if [[ ! -d "ddkits-files/eengine/sites" ]]; then
+  mkdir ddkits-files/eengine/sites
+  chmod -R 777 ddkits-files/eengine/sites
+fi
+
+
+    # delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/eengine/Dockerfile" ]]; then
+          rm ddkits-files/eengine/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/eengine/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/eengine/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  EE PHP 5
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/eengine/sites/$DDKITSHOSTNAME.conf
+
+echo -e '
+FROM ddkits/lamp:latest
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+RUN export TERM=xterm
+
+RUN rm /etc/apache2/sites-enabled/000-default.conf
+COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+COPY php.ini /usr/local/etc/php/conf.d/php.ini
+
+# Set the default command to execute
+
+RUN chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite 
+
+RUN apt-get update \
+  && apt-get install build-essential apt-transport-https  -y --force-yes\
+  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
+  && apt-get update \
+  && apt-get install -y --force-yes nano \
+                   wget \
+                   dialog \
+                   net-tools \
+                   lxc-docker \
+                   ufw \
+                   sudo \
+                   gufw \
+  && apt-get install -y --force-yes apt-transport-https  
+RUN chmod -R 777 /var/www/html 
+
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+  ' >> ./ddkits-files/eengine/Dockerfile
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/eengine
+    image: ddkits/eengine:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./eengine-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_eengine_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+if [[ ! -d "eengine-deploy/public" ]]; then
+  DDKITSFL=$(pwd)
+  echo $DDKITSFL
+  cp ./composer.phar ./eengine-deploy/public/ddkits.phar
+  git clone https://github.com/ddkits/eengine eengine-deploy
+  echo $SUDOPASS | sudo -S chmod -R 777 public ./eengine-deploy
+  cd ./eengine-deploy
+  cd public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $DDKITSFL
+  echo $SUDOPASS | sudo -S chmod -R 777 ./eengine-deploy/public
+fi
+
+# create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_eengine_web /bin/bash'
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_eengine_web /bin/bash'" >> ~/.ddkits_alias_web
+echo $SUDOPASS | sudo -S chmod -R 777 ./eengine-deploy
+
+        break
+            ;;
         "Quit")
             break
             ;;
