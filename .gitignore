@@ -12,15 +12,14 @@ nginx/*
 cache/*
 composer.lock
 
-*.DS_Store*
-
-
 # DDKits special items
+.DS_Store
 ddkits.env.yml
 ddkitsnew.yml
 ddkits-files/*/sites/*.conf
 ddkits_alias
 *.html
+deploy
 *-deploy
 ddkits-files/drupal/ddkitscli.sh
 ddkits-files/ddkits/sites/ddkitscust.conf
