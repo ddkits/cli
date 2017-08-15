@@ -437,21 +437,10 @@ COPY php5.ini /usr/local/etc/php/conf.d/php.ini
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
 
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-  && apt-get install -y --force-yes apt-transport-https
 
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -495,30 +484,18 @@ elif [[ -d "deploy/public" ]]; then
 fi  
 echo $SUDOPASS | sudo -S chmod -R 777 ./deploy   
 
-#  Drush setup for this enviroment
 
-# ddkd(){
-#   if [[ $1 == $DDKITSSITES ]]; then
-#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush 
-#   elif [[ $1 == "-h" ]]; then
-#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush
-#   elif [[ $1 == "rsync" ]]; then
-#     rsync -rLcpzv --exclude=.git --exclude=.idea --exclude=settings.php --exclude=**/bower_components --exclude=**/node_modules --exclude=**/.sass-cache --exclude=/sites/*/files  ./deploy/public/ ./public/
-#   else
-#     # echo -e 'Please make sure to specify the domain you want to use drush with
-#     # ex. ddkd ddkits.dev cc all # to clear cache from ddkits drupal site' 
-#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush
-#   fi
-# } 
 
 alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web public/drush '
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public && drush"'
+
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
-echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web drush'" >> ~/.ddkits_alias_web
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public && drush'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
 
 ln -sfn ./deploy/sites ./deploy/public/sites/default
@@ -598,37 +575,12 @@ COPY php7.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
-
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-                   git \
-                   libapache2-mod-php7.0 \
-                   php7.0 \
-                   php7.0-common \
-                   php7.0-gd \
-                   php7.0-mysql \
-                   php7.0-mcrypt \
-                   php7.0-curl \
-                   php7.0-intl \
-                   php7.0-xsl \
-                   php7.0-mbstring \
-                   php7.0-zip \
-                   php7.0-bcmath \
-                   php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https  
+RUN echo "alias drush=/var/www/html/drush/drush" >> ~/.bashrc
 RUN chmod -R 777 /var/www/html
-
+RUN apt-get install drush -y --force-yes 
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -682,7 +634,17 @@ else
   cd $DDKITSFL
   chmod -R 777 ./deploy/public/sites/default/files
   # chown $(echo "$USER") ./deploy
-fi        
+fi   
+
+if [[ ! -d "deploy/drush" ]]; then
+       wget https://github.com/drush-ops/drush/archive/8.x.zip
+        unzip 8.x.zip
+        rm 8.x.zip
+        mv drush-8.x drush
+        cd drush
+        composer install
+       cd $DDKITSFL
+fi     
 
 echo $SUDOPASS | sudo -S chmod -R 777 ./deploy 
 
@@ -690,32 +652,17 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./deploy
   echo -e 'Not a valid version please try again.'
 fi
 
-#  Drush setup for this enviroment
-
-# ddkd(){
-#   if [[ $1 == $DDKITSSITES ]]; then
-#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush 
-#   elif [[ $1 == "-h" ]]; then
-#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush
-#   elif [[ $1 == "rsync" ]]; then
-#     rsync -rLcpzv --exclude=.git --exclude=.idea --exclude=settings.php --exclude=**/bower_components --exclude=**/node_modules --exclude=**/.sass-cache --exclude=/sites/*/files  ./deploy/public/ ./public/
-#   else
-#     # echo -e 'Please make sure to specify the domain you want to use drush with
-#     # ex. ddkd ddkits.dev cc all # to clear cache from ddkits drupal site' 
-#     docker exec -it $DDKITSHOSTNAME'_ddkits_drupal_web' drush
-#   fi
-# } 
 alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web drush'
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public"'
+
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
-echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web drush'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash" >> ~/.ddkits_alias_web
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
-
-
              break
             ;;
             # case of wordpress 
@@ -763,36 +710,11 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
-
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-                   git \
-                   libapache2-mod-php7.0 \
-                   php7.0 \
-                   php7.0-common \
-                   php7.0-gd \
-                   php7.0-mysql \
-                   php7.0-mcrypt \
-                   php7.0-curl \
-                   php7.0-intl \
-                   php7.0-xsl \
-                   php7.0-mbstring \
-                   php7.0-zip \
-                   php7.0-bcmath \
-                   php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https  
+ 
 RUN chmod -R 777 /var/www/html 
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -912,22 +834,11 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
-
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-  && apt-get install -y --force-yes apt-transport-https  
+  
 RUN chmod -R 777 /var/www/html 
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1077,38 +988,13 @@ RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite \
-    && rm /etc/apache2/sites-enabled/000-default.conf
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-                   git \
-                   libapache2-mod-php7.0 \
-                   php7.0 \
-                   php7.0-common \
-                   php7.0-gd \
-                   php7.0-mysql \
-                   php7.0-mcrypt \
-                   php7.0-curl \
-                   php7.0-intl \
-                   php7.0-xsl \
-                   php7.0-mbstring \
-                   php7.0-zip \
-                   php7.0-bcmath \
-                   php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https  
+    && rm /etc/apache2/sites-enabled/000-default.conf 
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1276,22 +1162,11 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
-
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-  && apt-get install -y --force-yes apt-transport-https  
+  
 RUN chmod -R 777 /var/www/html 
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1386,38 +1261,13 @@ RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite \
-    && rm /etc/apache2/sites-enabled/000-default.conf
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-                   git \
-                   libapache2-mod-php7.0 \
-                   php7.0 \
-                   php7.0-common \
-                   php7.0-gd \
-                   php7.0-mysql \
-                   php7.0-mcrypt \
-                   php7.0-curl \
-                   php7.0-intl \
-                   php7.0-xsl \
-                   php7.0-mbstring \
-                   php7.0-zip \
-                   php7.0-bcmath \
-                   php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https  
+    && rm /etc/apache2/sites-enabled/000-default.conf 
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1573,39 +1423,14 @@ RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite \
-    && rm /etc/apache2/sites-enabled/000-default.conf
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-                   git \
-                   libapache2-mod-php7.0 \
-                   php7.0 \
-                   php7.0-common \
-                   php7.0-gd \
-                   php7.0-mysql \
-                   php7.0-mcrypt \
-                   php7.0-curl \
-                   php7.0-intl \
-                   php7.0-xsl \
-                   php7.0-mbstring \
-                   php7.0-zip \
-                   php7.0-bcmath \
-                   php7.0-iconv \
-  && apt-get install -y --force-yes apt-transport-https  
+    && rm /etc/apache2/sites-enabled/000-default.conf 
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 RUN chmod o+rw /var/www/html
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1725,42 +1550,13 @@ RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite \
-    && rm /etc/apache2/sites-enabled/000-default.conf
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-                   git \
-                   libapache2-mod-php7.0 \
-                   php7.0 \
-                   php7.0-common \
-                   php7.0-gd \
-                   php7.0-mysql \
-                   php7.0-mcrypt \
-                   php7.0-curl \
-                   php7.0-intl \
-                   php7.0-xsl \
-                   php7.0-mbstring \
-                   php7.0-zip \
-                   php7.0-bcmath \
-                   php7.0-iconv \
-                   php7.0-mongodb \
-                   php7.0-ssh2 \
-                   php7.0-json \
-                   memcached \
-  && apt-get install -y --force-yes apt-transport-https  
+    && rm /etc/apache2/sites-enabled/000-default.conf  
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1906,22 +1702,11 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
-
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-  && apt-get install -y --force-yes apt-transport-https  
+  
 RUN chmod -R 777 /var/www/html 
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2036,22 +1821,11 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
-
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-  && apt-get install -y --force-yes apt-transport-https  
+  
 RUN chmod -R 777 /var/www/html 
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2160,43 +1934,14 @@ RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite \
-    && rm /etc/apache2/sites-enabled/000-default.conf
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-                   git \
-                   libapache2-mod-php7.0 \
-                   php7.0 \
-                   php7.0-common \
-                   php7.0-gd \
-                   php7.0-mysql \
-                   php7.0-mcrypt \
-                   php7.0-curl \
-                   php7.0-intl \
-                   php7.0-xsl \
-                   php7.0-mbstring \
-                   php7.0-zip \
-                   php7.0-bcmath \
-                   php7.0-iconv \
-                   php7.0-mongodb \
-                   php7.0-ssh2 \
-                   php7.0-json \
-                   memcached \
-  && apt-get install -y --force-yes apt-transport-https  
+    && rm /etc/apache2/sites-enabled/000-default.conf  
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2409,6 +2154,8 @@ RUN a2enmod headers \
   && a2enmod dir \
   && a2enmod mime \
   && service apache2 reload 
+  RUN apt-get update \
+    && apt-get upgrade
   # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2541,22 +2288,11 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
-
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-  && apt-get install -y --force-yes apt-transport-https  
+  
 RUN chmod -R 777 /var/www/html 
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2693,6 +2429,8 @@ RUN apt-get update \
 RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony \
   && chmod a+x /usr/local/bin/symfony
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2816,22 +2554,11 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
-
-RUN apt-get update \
-  && apt-get install build-essential apt-transport-https  -y --force-yes\
-  && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-  && apt-get update \
-  && apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-  && apt-get install -y --force-yes apt-transport-https  
+  
 RUN chmod -R 777 /var/www/html 
 
+RUN apt-get update \
+  && apt-get upgrade
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
