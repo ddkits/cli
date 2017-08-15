@@ -4,7 +4,6 @@ public/sites/*/default.settings.php
 
 # Ignore paths that contain user-generated content.
 public/*
-deploy/*
 sites/*
 vendor/*
 pre_installation_whywebs/*
@@ -23,6 +22,5 @@ ddkits-files/*/sites/*.conf
 ddkits_alias
 *.html
 *-deploy
-deploy
 ddkits-files/drupal/ddkitscli.sh
 ddkits-files/ddkits/sites/ddkitscust.conf
