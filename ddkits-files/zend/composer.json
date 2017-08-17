@@ -1,3 +1,4 @@
+
 {
   "name": "elayyoub/DDKits",
   "description": "DDKits.com",
@@ -11,7 +12,6 @@
   "require": {
     "overtrue/phplint": "^0.2.1",
     "squizlabs/php_codesniffer": "2.*",
-    "drupal/coder" : "dev-8.x-2.x",
     "ext-xml": "*",
     "ext-json": "*",
     "ext-openssl": "*",
@@ -36,3 +36,5 @@
     ]
   }  
 }
+
+

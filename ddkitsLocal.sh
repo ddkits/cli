@@ -350,7 +350,7 @@ DDKITS_PLATFORM='Please pick which platform you want to install: '
 # 
 # Setup options Please make sure of all options before publish pick list 
 # 
-options=("Drupal" "Wordpress" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Umbraco" "Magento" "DreamFactory" "Contao" "Silverstripe" "Cloud" "Symfony" "Expression Engine" "Elgg" "ZenCart" "Quit")
+options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony"  "ZenCart" "Zend" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -657,11 +657,11 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web dru
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public"'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public & drush "'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash" >> ~/.ddkits_alias_web
-echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush'" >> ~/.ddkits_alias_web
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush " >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
              break
             ;;
@@ -1095,6 +1095,7 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy
 alias ddklf="docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web bash ddkits.fix.sh"
             break
             ;;
+
         "LAMP/PHP5")
 
 if [[ ! -d "ddkits-files/lamp5/sites" ]]; then
@@ -1256,6 +1257,8 @@ echo -e '
 echo -e '
 
 FROM ddkits/lamp:7
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
@@ -1419,6 +1422,8 @@ echo -e '
 
 FROM ddkits/lamp:7
 
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
@@ -1545,6 +1550,8 @@ echo -e '
 #  Created by mutasem elayyoub ddkits.co#  Created by mutasem elayyoub ddkits.co
 
 FROM ddkits/lamp:7
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
@@ -1754,6 +1761,7 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./contao-deploy
 
             break
             ;;
+
 "Elgg")
 
 if [[ ! -d "ddkits-files/elgg/sites" ]]; then
@@ -1929,6 +1937,8 @@ echo -e '
 echo -e '
 
 FROM ddkits/lamp:7
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
@@ -2606,6 +2616,174 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./eengine-deploy
 
         break
             ;;
+
+
+"Zend")
+
+if [[ ! -d "ddkits-files/zend/sites" ]]; then
+  mkdir ddkits-files/zend/sites
+  chmod -R 777 ddkits-files/zend/sites
+fi
+
+
+    # delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/zend/Dockerfile" ]]; then
+          rm ddkits-files/zend/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/zend/composer.json" ]]; then
+          rm ddkits-files/zend/composer.json
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/zend/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/zend/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  EE PHP 5
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/zend/sites/$DDKITSHOSTNAME.conf
+
+echo -e '
+
+FROM ddkits/lamp:7
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+RUN ln -sf ./logs /var/log/nginx/access.log \
+    && ln -sf ./logs /var/log/nginx/error.log \
+    && chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite \
+    && rm /etc/apache2/sites-enabled/000-default.conf  
+RUN chmod -R 777 /var/www/html
+
+COPY php.ini /etc/php/7.0/fpm/php.ini
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+
+RUN apt-get update \
+  && apt-get upgrade
+# Fixing permissions 
+RUN chown -R www-data:www-data /var/www/html
+RUN usermod -u 1000 www-data
+' >> ./ddkits-files/zend/Dockerfile
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/zend
+    image: ddkits/zend:latest
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+    volumes:
+      - ./zend-deploy:/var/www/html
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_zend_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80" ' >> ddkits.env.yml
+
+
+echo '
+{
+  "name": "elayyoub/DDKits",
+  "description": "DDKits.com",
+  "license": "proprietary",
+    "authors": [
+        {
+            "name": "Mutasem Elayyoub",
+            "email": "melayyoub@outlook.com"
+        }
+    ],
+  "require": {
+    "overtrue/phplint": "^0.2.1",
+    "squizlabs/php_codesniffer": "2.*",
+    "ext-xml": "*",
+    "ext-json": "*",
+    "ext-openssl": "*",
+    "ext-curl": "*",
+    "drush/drush": "~8.0",
+    "phing/phing": "^2.16",
+    "psy/psysh": "^0.8.5",
+    "pear/http_request2": "^2.3"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "lint": [
+      "./vendor/bin/phplint",
+      "./vendor/bin/phpcs --config-set installed_paths ./../../drupal/coder/coder_sniffer",
+      "./vendor/bin/phpcs -n --report=full --standard=Drupal --ignore=*.tpl.php --extensions=install,module,php,inc"
+    ],
+    "test": [
+      "./vendor/bin/phplint --no-cache",
+      "./vendor/bin/phpcs --config-set installed_paths ./../../drupal/coder/coder_sniffer",
+      "./vendor/bin/phpcs -n --report=full --standard=Drupal --ignore=*.tpl.php --extensions=php,inc themes || true"
+    ]
+  }  
+}
+
+' >> ./ddkits-files/zend/composer.json
+
+
+
+if [[ ! -d "zend-deploy/public" ]]; then
+  DDKITSFL=$(pwd)
+  cp -R ddkits-files/zend/composer.json ./
+  cp composer.phar ./ddkits.phar
+  php ddkits.phar config --global discard-changes true
+  php ddkits.phar require zendframework/zendframework && php ddkits.phar install -n
+  php ddkits.phar create-project zendframework/skeleton-application zend-deploy/
+  cd $DDKITSFL
+  echo $SUDOPASS | sudo -S chmod -R 777 public ./zend-deploy
+  echo $SUDOPASS | sudo -S chmod -R 777 ./zend-deploy/public
+fi
+
+# create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_zend_web /bin/bash'
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_zend_web /bin/bash'" >> ~/.ddkits_alias_web
+echo $SUDOPASS | sudo -S chmod -R 777 ./zend-deploy
+
+            break
+            ;;
+
         "Quit")
             break
             ;;
