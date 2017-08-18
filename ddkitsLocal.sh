@@ -472,8 +472,9 @@ services:
 if [[ ! -d "deploy/public" ]]; then
   git clone https://github.com/ddkits/drupal-7.git ./deploy
   DDKITSFL=$(pwd)
+  cp -R deploy/deploy/* deploy
+  rm -rf deploy/deploy
   echo $DDKITSFL
-  mv -f ./deploy/deploy/* ./deploy
   chmod -R 755 ./deploy/public
   mkdir ./deploy/public/sites/default/files
   chmod -R 777 ./deploy/public/sites/default/files
