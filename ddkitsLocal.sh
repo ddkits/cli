@@ -437,10 +437,8 @@ COPY php5.ini /usr/local/etc/php/conf.d/php.ini
 RUN chmod 600 /etc/mysql/my.cnf \
     && a2enmod rewrite 
 
-
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -491,11 +489,11 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web pub
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public && drush"'
+# alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public && drush"'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
-echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public && drush'" >> ~/.ddkits_alias_web
+# echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public && drush''" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
 
 ln -sfn ./deploy/sites ./deploy/public/sites/default
@@ -579,8 +577,7 @@ RUN echo "alias drush=/var/www/html/drush/drush" >> ~/.bashrc
 RUN chmod -R 777 /var/www/html
 RUN apt-get install drush -y --force-yes 
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -657,11 +654,11 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web dru
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public & drush "'
+# alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public & drush "'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash" >> ~/.ddkits_alias_web
-echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush " >> ~/.ddkits_alias_web
+# echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush " >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
              break
             ;;
@@ -713,8 +710,7 @@ RUN chmod 600 /etc/mysql/my.cnf \
  
 RUN chmod -R 777 /var/www/html 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -837,8 +833,7 @@ RUN chmod 600 /etc/mysql/my.cnf \
   
 RUN chmod -R 777 /var/www/html 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -993,8 +988,7 @@ RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1166,8 +1160,7 @@ RUN chmod 600 /etc/mysql/my.cnf \
   
 RUN chmod -R 777 /var/www/html 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1269,8 +1262,7 @@ RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1434,8 +1426,7 @@ RUN chmod -R 777 /var/www/html
 COPY php.ini /etc/php/7.0/fpm/php.ini
 RUN chmod o+rw /var/www/html
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1562,8 +1553,7 @@ RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1712,8 +1702,7 @@ RUN chmod 600 /etc/mysql/my.cnf \
   
 RUN chmod -R 777 /var/www/html 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1832,8 +1821,7 @@ RUN chmod 600 /etc/mysql/my.cnf \
   
 RUN chmod -R 777 /var/www/html 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -1950,8 +1938,7 @@ RUN chmod -R 777 /var/www/html
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2301,8 +2288,7 @@ RUN chmod 600 /etc/mysql/my.cnf \
   
 RUN chmod -R 777 /var/www/html 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2439,8 +2425,7 @@ RUN apt-get update \
 RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony \
   && chmod a+x /usr/local/bin/symfony
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2567,8 +2552,7 @@ RUN chmod 600 /etc/mysql/my.cnf \
   
 RUN chmod -R 777 /var/www/html 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
@@ -2690,8 +2674,7 @@ RUN chmod -R 777 /var/www/html
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
 
-RUN apt-get update \
-  && apt-get upgrade
+
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
