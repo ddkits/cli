@@ -2784,7 +2784,7 @@ MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
 
 matches_in_hosts="$(grep -n ${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
-ddkits_matches_in_hosts="$(grep -n ddkits.site jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
+ddkits_matches_in_hosts="$(grep -n jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
 host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3}"
 ddkits_host_entry="${DDKITSIP}  ddkits.site jenkins.${DDKITSSITES} admin.${DDKITSSITES} solr.${DDKITSSITES}"
 
