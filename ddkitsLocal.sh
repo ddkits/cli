@@ -55,6 +55,10 @@ read MAIL_ADDRESS
   DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
   echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
   echo -e ""
+    echo -e "Do you need JENKINS with this Installation? (y/n)"
+  read JENKINS_ANSWER
+  echo -e "Do you need SOLR with this Installation? (y/n)"
+  read SOLR_ANSWER
   echo -e 'Enter your Domain Name:  '
 read DDKITSSITES
   echo -e ""
@@ -106,6 +110,7 @@ read DDKITSSITESALIAS
     " >> ddkits-files/ddkits/sites/ddkitscust.conf
   else
   echo -e ""
+
   echo -e ' domain alias 2 (ex. www.ddkits.site) if there is no alias just leave this blank'
     read DDKITSSITESALIAS2
       if [[ "$DDKITSSITESALIAS2" == "" ]]
@@ -455,11 +460,7 @@ services:
     volumes:
       # Mount the local drupal directory in the container
       - ./deploy:/var/www/html
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     stdin_open: true
     tty: true
     environment:
@@ -595,11 +596,7 @@ services:
     volumes:
       # Mount the local drupal directory in the container
       - ./deploy:/var/www/html
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     stdin_open: true
     tty: true
     environment:
@@ -747,11 +744,7 @@ services:
   web:
     build: ./ddkits-files/wordpress
     image: ddkits/wordpress:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     stdin_open: true
     tty: true
     container_name: '$DDKITSHOSTNAME'_ddkits_wp_web
@@ -870,11 +863,7 @@ services:
   web:
     build: ./ddkits-files/joomla
     image: ddkits/joomla:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     stdin_open: true
     tty: true
     container_name: '$DDKITSHOSTNAME'_ddkits_jom_web
@@ -1002,11 +991,7 @@ services:
   web:
     build: ./ddkits-files/Laravel
     image: ddkits/laravel:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./ll-deploy:/var/www/html
     stdin_open: true
@@ -1173,11 +1158,7 @@ services:
   web:
     build: ./ddkits-files/lamp5
     image: ddkits/lamp5:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./lamp5-deploy:/var/www/html
     stdin_open: true
@@ -1276,11 +1257,7 @@ services:
   web:
     build: ./ddkits-files/lamp7
     image: ddkits/lamp7:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./lamp7-deploy:/var/www/html
     stdin_open: true
@@ -1341,11 +1318,7 @@ services:
   web:
     build: ./ddkits-files/umbraco
     image: ddkits/umbraco:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./um-deploy:/var/www/html
     stdin_open: true
@@ -1440,11 +1413,7 @@ services:
   web:
     build: ./ddkits-files/magento
     image: ddkits/magento:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./mag-deploy:/var/www/html
     stdin_open: true
@@ -1584,11 +1553,7 @@ services:
   web:
     build: ./ddkits-files/dreamf
     image: ddkits/dreamf:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./dreamf-deploy:/var/www/html
     stdin_open: true
@@ -1715,11 +1680,7 @@ services:
   web:
     build: ./ddkits-files/contao
     image: ddkits/contao:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./contao-deploy:/var/www/html
     stdin_open: true
@@ -1834,11 +1795,7 @@ services:
   web:
     build: ./ddkits-files/elgg
     image: ddkits/elgg:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./elgg-deploy:/var/www/html
     stdin_open: true
@@ -1952,11 +1909,7 @@ services:
   web:
     build: ./ddkits-files/ss
     image: ddkits/ss:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./ss-deploy:/var/www/html
     stdin_open: true
@@ -2166,11 +2119,7 @@ services:
   web:
     build: ./ddkits-files/cloud
     image: ddkits/cloud:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./cloud-deploy:/var/www/html
     stdin_open: true
@@ -2301,11 +2250,7 @@ services:
   web:
     build: ./ddkits-files/zenc
     image: ddkits/zenc:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./zenc-deploy:/var/www/html
     stdin_open: true
@@ -2438,11 +2383,7 @@ services:
   web:
     build: ./ddkits-files/symfony
     image: ddkits/symfony:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./symfony-deploy:/var/www/html
     stdin_open: true
@@ -2565,11 +2506,7 @@ services:
   web:
     build: ./ddkits-files/eengine
     image: ddkits/eengine:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./eengine-deploy:/var/www/html
     stdin_open: true
@@ -2687,11 +2624,7 @@ services:
   web:
     build: ./ddkits-files/zend
     image: ddkits/zend:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./zend-deploy:/var/www/html
     stdin_open: true
@@ -2836,7 +2769,9 @@ export DDKITSHOSTNAME=$DDKITSHOSTNAME
 
 
 # Create our system ddkits enviroment
-echo -e 'version: "2"
+
+if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "y" ]]; then
+  echo -e 'version: "2"
 
 services:
   mariadb:
@@ -2908,6 +2843,200 @@ networks:
     ddkits:
 
   ' >> ddkitsnew.yml
+
+fi
+
+# Create our system ddkits enviroment
+
+if [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "y" ]]; then
+  echo -e 'version: "2"
+
+services:
+  mariadb:
+    build: ./ddkits-files/db
+    image: ddkits/mariadb:latest
+    volumes:
+      - /var/lib/mysql
+    container_name: '$DDKITSHOSTNAME'_ddkits_db
+    ports:
+        - '$DDKITSDBPORT':3306
+    networks:
+      - ddkits
+    environment:
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+
+  solr:
+    build: ./ddkits-files/solr
+    image: ddkits/solr:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_solr
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSSOLRPORT':8983"
+
+  phpmyadmin:
+    build: ./ddkits-files/phpmyadmin
+    image: ddkits/phpmyadmin
+    container_name: '$DDKITSHOSTNAME'_ddkits_phpadmin
+    environment:
+     - PMA_ARBITRARY=1
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+    volumes:
+     - ./deploy/phpmyadmin:/etc/phpmyadmin
+    links:
+      - mariadb
+    ports:
+      - '$DDKITSADMINPORT':80
+    networks:
+      - ddkits
+  cache:
+    image: redis:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_cache
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+  
+networks:
+    ddkits:
+
+  ' >> ddkitsnew.yml
+
+fi
+
+# Create our system ddkits enviroment
+
+if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "n" ]]; then
+  echo -e 'version: "2"
+
+services:
+  mariadb:
+    build: ./ddkits-files/db
+    image: ddkits/mariadb:latest
+    volumes:
+      - /var/lib/mysql
+    container_name: '$DDKITSHOSTNAME'_ddkits_db
+    ports:
+        - '$DDKITSDBPORT':3306
+    networks:
+      - ddkits
+    environment:
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+
+  phpmyadmin:
+    build: ./ddkits-files/phpmyadmin
+    image: ddkits/phpmyadmin
+    container_name: '$DDKITSHOSTNAME'_ddkits_phpadmin
+    environment:
+     - PMA_ARBITRARY=1
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+    volumes:
+     - ./deploy/phpmyadmin:/etc/phpmyadmin
+    links:
+      - mariadb
+    ports:
+      - '$DDKITSADMINPORT':80
+    networks:
+      - ddkits
+  cache:
+    image: redis:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_cache
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+  jenkins:
+    build: ./ddkits-files/jenkins
+    image: ddkits/jenkins:latest
+    ports:
+      - "'$DDKITSJENKINSPORT':8080"
+    volumes:
+      - ./jenkins:/var/jenkins_home 
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
+    networks:
+      - ddkits
+
+networks:
+    ddkits:
+
+  ' >> ddkitsnew.yml
+
+fi
+
+# Create our system ddkits enviroment
+
+if [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "n" ]]; then
+  echo -e 'version: "2"
+
+services:
+  mariadb:
+    build: ./ddkits-files/db
+    image: ddkits/mariadb:latest
+    volumes:
+      - /var/lib/mysql
+    container_name: '$DDKITSHOSTNAME'_ddkits_db
+    ports:
+        - '$DDKITSDBPORT':3306
+    networks:
+      - ddkits
+    environment:
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+
+  phpmyadmin:
+    build: ./ddkits-files/phpmyadmin
+    image: ddkits/phpmyadmin
+    container_name: '$DDKITSHOSTNAME'_ddkits_phpadmin
+    environment:
+     - PMA_ARBITRARY=1
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+    volumes:
+     - ./deploy/phpmyadmin:/etc/phpmyadmin
+    links:
+      - mariadb
+    ports:
+      - '$DDKITSADMINPORT':80
+    networks:
+      - ddkits
+  cache:
+    image: redis:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_cache
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+
+networks:
+    ddkits:
+
+  ' >> ddkitsnew.yml
+
+fi
 
 # create get into ddkits container
 alias ddkc-$DDKITSSITES-cache='docker exec -it '$DDKITSHOSTNAME'_ddkits_cache /bin/bash'
