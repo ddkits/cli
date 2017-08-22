@@ -196,7 +196,7 @@ ddk(){
     SOLR     http://solr.YOUR_WEBSITE
     PhpMyAdmin     http://admin.YOUR_WEBSITE
 
-    DDKits v1.13
+    DDKits v1.14
         '
      else
       echo 'DDkits build by Mutasem Elayyoub and ready to use.  www.DDKits.com

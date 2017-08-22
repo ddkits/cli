@@ -55,10 +55,6 @@ read MAIL_ADDRESS
   DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
   echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
   echo -e ""
-    echo -e "Do you need JENKINS with this Installation? (y/n)"
-  read JENKINS_ANSWER
-  echo -e "Do you need SOLR with this Installation? (y/n)"
-  read SOLR_ANSWER
   echo -e 'Enter your Domain Name:  '
 read DDKITSSITES
   echo -e ""
@@ -280,7 +276,12 @@ fi
 # echo $SUDOPASS | sudo -S chown $(echo "$USER") ./
 echo $SUDOPASS | sudo -S chmod -R 777 ./
 clear
-  echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to fully function)'"
+  echo -e ""
+    echo -e "Do you need extra JENKINS with this Installation? 'pick 'n' in case of installing Jenkins version only.' (y/n)"
+  read JENKINS_ANSWER
+  echo -e "Do you need extra SOLR with this Installation? (y/n)"
+  read SOLR_ANSWER
+echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to make sure they are working fine.)'"
 DDKITS_DOCKER='Do you have docker'
 options=("Yes" "No" "Quit")
 select opt in "${options[@]}"
@@ -333,6 +334,7 @@ clear
 #   
 # read MAIL_ADDRESS 
 #   echo -e ""
+JENKINS_ONLY='false'
 DDKITSHOSTNAME=${DDKITSSITES//./_}
 echo -e "
 #!/bin/sh
@@ -355,7 +357,7 @@ DDKITS_PLATFORM='Please pick which platform you want to install: '
 # 
 # Setup options Please make sure of all options before publish pick list 
 # 
-options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony"  "ZenCart" "Zend" "Quit")
+options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony"  "ZenCart" "Zend" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -423,10 +425,7 @@ echo -e '
 </VirtualHost> ' > ./ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf
 
 # Build out docker file to start our install
-echo -e '
-
-
-FROM ddkits/lamp:latest
+echo -e 'FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -2701,6 +2700,70 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./zend-deploy
             break
             ;;
 
+"Jenkins")
+
+JENKINS_ONLY='true'
+if [[ ! -d "ddkits-files/jenkins/sites" ]]; then
+  mkdir ddkits-files/jenkins/sites
+  chmod -R 777 ddkits-files/jenkins/sites
+fi
+    # delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  Jenkins PHP 5
+
+echo -e '
+<VirtualHost *:80>
+     ServerAdmin melayyoub@outlook.com
+     ServerName '$DDKITSSITES'
+     '$DDKITSSERVERS'
+     DocumentRoot /var/www/html/public
+      ErrorLog /var/www/html/error.log
+     CustomLog /var/www/html/access.log combined
+    <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost> ' > ./ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf
+
+
+
+if [[ ! -d "jenkins" ]]; then
+  DDKITSFL=$(pwd)
+fi
+
+# create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_jenkins_web /bin/bash'
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins_web /bin/bash'" >> ~/.ddkits_alias_web
+echo $SUDOPASS | sudo -S chmod -R 777 ./jenkins
+
+            break
+            ;;
+
+
         "Quit")
             break
             ;;
@@ -2768,9 +2831,43 @@ export DDKITSSITESALIAS3=$DDKITSSITESALIAS3
 export DDKITSHOSTNAME=$DDKITSHOSTNAME
 
 
-# Create our system ddkits enviroment
 
-if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "y" ]]; then
+
+# Create our system ddkits enviroment
+if [[ "$JENKINS_ONLY" == "true" ]]; then
+  echo -e 'version: "2"
+
+services:
+  cache:
+    image: redis:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_cache
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'" 
+
+networks:
+    ddkits:
+
+  ' >> ddkitsnew.yml
+#  create ddkits compose file for the new website
+echo -e 'version: "2"
+
+services:
+  jenkins:
+    build: ./ddkits-files/jenkins
+    image: ddkits/jenkins:latest
+    ports:
+      - "'$DDKITSJENKINSPORT':8080"
+    volumes:
+      - ./jenkins:/var/jenkins_home 
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
+    networks:
+      - ddkits ' >> ddkits.env.yml
+fi
+if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "y" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
   echo -e 'version: "2"
 
 services:
@@ -2848,7 +2945,7 @@ fi
 
 # Create our system ddkits enviroment
 
-if [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "y" ]]; then
+if [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "y" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
   echo -e 'version: "2"
 
 services:
@@ -2914,7 +3011,7 @@ fi
 
 # Create our system ddkits enviroment
 
-if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "n" ]]; then
+if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "n" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
   echo -e 'version: "2"
 
 services:
@@ -2983,7 +3080,7 @@ fi
 
 # Create our system ddkits enviroment
 
-if [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "n" ]]; then
+if [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "n" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
   echo -e 'version: "2"
 
 services:
