@@ -1,0 +1,22 @@
+
+MAIL_ADDRESS = m
+Website = jen.dev
+DDKits ip = 192.168.99.100 ==> Port = 1353
+Mysql User = ddk
+Mysql User Password = ddk
+Database name = ddk
+Mysql $MYSQL_USER Password = ddk
+Website Alias =   
+
+Ports:
+
+- Your new jen.dev port is: 1353
+- Your new DB port is: 1854
+- Your new Jenkins port is: 4111
+- Your new Solr port is: 3707
+- Your new PhpMyAdmin port is: 4736
+- Your new Radis port is: 5707
+
+Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com 
+Copyright @2017 DDKits.com. Mutasem Elayyoub 
+

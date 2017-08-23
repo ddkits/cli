@@ -104,6 +104,8 @@ ddk(){
     fi
   elif [[ $1 == "c" ]]; then
         docker ps
+  elif [[ $1 == "who" ]]; then
+        cat "./ddkits-files/ddkits/site.txt"
     elif [[ $1 == "clean" ]]; then
         docker volume rm $(docker volume ls -qf dangling=true)
     elif [[ $1 == "rmn" ]]; then 
@@ -166,6 +168,7 @@ ddk(){
     List of commands after "ddk <option>":
 
         -h      - Show comand list
+        who     - Show all details about your site
         go      - Start or check your DDKits working or not
         stop    - ACtivate default vm
         del     - Remove DDKits VM and go back to default
@@ -191,12 +194,14 @@ ddk(){
         ri      remove an image from docker images
         rc      remove a continer from docker containers
             **************************
+
+
     Containers Use:
     Jenkins     http://jenkins.YOUR_WEBSITE
     SOLR     http://solr.YOUR_WEBSITE
     PhpMyAdmin     http://admin.YOUR_WEBSITE
 
-    DDKits v1.13
+    DDKits v1.14
         '
      else
       echo 'DDkits build by Mutasem Elayyoub and ready to use.  www.DDKits.com

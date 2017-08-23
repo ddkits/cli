@@ -7,12 +7,15 @@
 # This system built by Mutasem Elayyoub DDKits.com
 # insert DDKits alias into anyh system command lines
 . ddkits.alias.sh
+DDKITSFL=$(pwd)
+cat "./ddkits-files/ddkits/ddkitslogo.text" # array
 
 #  built by  by Mutasem Elayyoub DDKits.com"
 # docker-machine create --driver virtualbox ddkits
 # docker-machine start ddkits
 # eval $(docker-machine env ddkits)
 clear
+cat "./ddkits-files/ddkits/logo.txt"
 echo -e 'Please make sure that you installed your DDKits at the same environment \n(1) Localhost \n(2) virtualbox'
           read DDKITSVER
     if [[ $DDKITSVER == 1 ]]; then
@@ -106,6 +109,7 @@ read DDKITSSITESALIAS
     " >> ddkits-files/ddkits/sites/ddkitscust.conf
   else
   echo -e ""
+
   echo -e ' domain alias 2 (ex. www.ddkits.site) if there is no alias just leave this blank'
     read DDKITSSITESALIAS2
       if [[ "$DDKITSSITESALIAS2" == "" ]]
@@ -275,7 +279,9 @@ fi
 # echo $SUDOPASS | sudo -S chown $(echo "$USER") ./
 echo $SUDOPASS | sudo -S chmod -R 777 ./
 clear
-  echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to fully function)'"
+cat "./ddkits-files/ddkits/logo.txt"
+  
+echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to make sure they are working fine.)'"
 DDKITS_DOCKER='Do you have docker'
 options=("Yes" "No" "Quit")
 select opt in "${options[@]}"
@@ -323,11 +329,13 @@ do
 done
 
 clear
+cat "./ddkits-files/ddkits/logo.txt"
 
 # echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 #   
 # read MAIL_ADDRESS 
 #   echo -e ""
+JENKINS_ONLY='false'
 DDKITSHOSTNAME=${DDKITSSITES//./_}
 echo -e "
 #!/bin/sh
@@ -350,7 +358,7 @@ DDKITS_PLATFORM='Please pick which platform you want to install: '
 # 
 # Setup options Please make sure of all options before publish pick list 
 # 
-options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Joomla" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony"  "ZenCart" "Zend" "Quit")
+options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony"  "ZenCart" "Zend" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -418,10 +426,7 @@ echo -e '
 </VirtualHost> ' > ./ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf
 
 # Build out docker file to start our install
-echo -e '
-
-
-FROM ddkits/lamp:latest
+echo -e 'FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -455,11 +460,7 @@ services:
     volumes:
       # Mount the local drupal directory in the container
       - ./deploy:/var/www/html
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     stdin_open: true
     tty: true
     environment:
@@ -490,7 +491,7 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web pub
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-# alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public && drush"'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public && drush"'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
@@ -595,11 +596,7 @@ services:
     volumes:
       # Mount the local drupal directory in the container
       - ./deploy:/var/www/html
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     stdin_open: true
     tty: true
     environment:
@@ -655,11 +652,11 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web dru
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-# alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public & drush "'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public & drush "'
 
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash" >> ~/.ddkits_alias_web
-# echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush " >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
              break
             ;;
@@ -747,11 +744,7 @@ services:
   web:
     build: ./ddkits-files/wordpress
     image: ddkits/wordpress:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     stdin_open: true
     tty: true
     container_name: '$DDKITSHOSTNAME'_ddkits_wp_web
@@ -870,11 +863,7 @@ services:
   web:
     build: ./ddkits-files/joomla
     image: ddkits/joomla:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     stdin_open: true
     tty: true
     container_name: '$DDKITSHOSTNAME'_ddkits_jom_web
@@ -945,7 +934,9 @@ echo -e '
 
 php artisan key:generate
 php artisan cache:clear
+cat "./ddkits-files/ddkits/logo.txt"
 php artisan config:clear
+cat "./ddkits-files/ddkits/logo.txt"
 chmod -R 777 storage
  ' > ./ll-deploy/ddkits.fix.sh
 
@@ -1002,11 +993,7 @@ services:
   web:
     build: ./ddkits-files/Laravel
     image: ddkits/laravel:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./ll-deploy:/var/www/html
     stdin_open: true
@@ -1041,6 +1028,7 @@ fi
 if [[ -d "ll-deploy" ]]; then
   cd ll-deploy
   php artisan cache:clear
+cat "./ddkits-files/ddkits/logo.txt"
   php artisan config:cache
   cd ..
   echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy
@@ -1173,11 +1161,7 @@ services:
   web:
     build: ./ddkits-files/lamp5
     image: ddkits/lamp5:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./lamp5-deploy:/var/www/html
     stdin_open: true
@@ -1276,11 +1260,7 @@ services:
   web:
     build: ./ddkits-files/lamp7
     image: ddkits/lamp7:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./lamp7-deploy:/var/www/html
     stdin_open: true
@@ -1341,11 +1321,7 @@ services:
   web:
     build: ./ddkits-files/umbraco
     image: ddkits/umbraco:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./um-deploy:/var/www/html
     stdin_open: true
@@ -1440,11 +1416,7 @@ services:
   web:
     build: ./ddkits-files/magento
     image: ddkits/magento:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./mag-deploy:/var/www/html
     stdin_open: true
@@ -1574,7 +1546,9 @@ composer install --no-dev
 chmod -R 777 /var/www/html/storage /var/www/html/vendor /var/www/html/public
 php artisan key:generate
 php artisan cache:clear
+cat "./ddkits-files/ddkits/logo.txt"
 php artisan config:clear
+cat "./ddkits-files/ddkits/logo.txt"
 chmod -R 777 storage
  ' > ./ll-deploy/ddkits.fix.sh
 
@@ -1584,11 +1558,7 @@ services:
   web:
     build: ./ddkits-files/dreamf
     image: ddkits/dreamf:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./dreamf-deploy:/var/www/html
     stdin_open: true
@@ -1715,11 +1685,7 @@ services:
   web:
     build: ./ddkits-files/contao
     image: ddkits/contao:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./contao-deploy:/var/www/html
     stdin_open: true
@@ -1834,11 +1800,7 @@ services:
   web:
     build: ./ddkits-files/elgg
     image: ddkits/elgg:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./elgg-deploy:/var/www/html
     stdin_open: true
@@ -1952,11 +1914,7 @@ services:
   web:
     build: ./ddkits-files/ss
     image: ddkits/ss:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./ss-deploy:/var/www/html
     stdin_open: true
@@ -2166,11 +2124,7 @@ services:
   web:
     build: ./ddkits-files/cloud
     image: ddkits/cloud:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./cloud-deploy:/var/www/html
     stdin_open: true
@@ -2301,11 +2255,7 @@ services:
   web:
     build: ./ddkits-files/zenc
     image: ddkits/zenc:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./zenc-deploy:/var/www/html
     stdin_open: true
@@ -2438,11 +2388,7 @@ services:
   web:
     build: ./ddkits-files/symfony
     image: ddkits/symfony:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./symfony-deploy:/var/www/html
     stdin_open: true
@@ -2565,11 +2511,7 @@ services:
   web:
     build: ./ddkits-files/eengine
     image: ddkits/eengine:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./eengine-deploy:/var/www/html
     stdin_open: true
@@ -2687,11 +2629,7 @@ services:
   web:
     build: ./ddkits-files/zend
     image: ddkits/zend:latest
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
+    
     volumes:
       - ./zend-deploy:/var/www/html
     stdin_open: true
@@ -2768,6 +2706,123 @@ echo $SUDOPASS | sudo -S chmod -R 777 ./zend-deploy
             break
             ;;
 
+"Jenkins")
+
+JENKINS_ONLY='true'
+if [[ ! -d "ddkits-files/jenkins/sites" ]]; then
+  mkdir ddkits-files/jenkins/sites
+  chmod -R 777 ddkits-files/jenkins/sites
+fi
+
+
+    # delete the old environment yml file
+        if [[ -f "ddkits.env.yml" ]]; then
+          rm ddkits.env.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkitsnew.yml" ]]; then
+          rm ddkitsnew.yml
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/jenkins/Dockerfile" ]]; then
+          rm ddkits-files/jenkins/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/jenkins/composer.json" ]]; then
+          rm ddkits-files/jenkins/composer.json
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
+          rm ddkits-files/ddkits.fix.sh
+        fi
+        if [[ -f "ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf" ]]; then
+          rm ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf
+        fi
+
+#  Jenkins
+
+# echo -e '
+# <VirtualHost *:80>
+#      ServerAdmin melayyoub@outlook.com
+#      ServerName '$DDKITSSITES'
+#      '$DDKITSSERVERS'
+#      DocumentRoot /var/www/html/public
+#       ErrorLog /var/www/html/error.log
+#      CustomLog /var/www/html/access.log combined
+#     <Location "/">
+#       Require all granted
+#       AllowOverride All
+#       Order allow,deny
+#       allow from all
+#   </Location>
+#   <Directory "/var/www/html">
+#       Require all granted
+#       AllowOverride All
+#       Order allow,deny
+#       allow from all
+#   </Directory>
+# </VirtualHost> ' > ./ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf
+
+# echo -e '
+# <VirtualHost *:80>
+#     ServerAdmin melayyoub@outlook.com
+#     ServerName '$DDKITSSITES'
+#      '$DDKITSSERVERS'
+#     ServerAlias ci
+#     ProxyRequests Off
+#     <Proxy *>
+#         Order deny,allow
+#         Allow from all
+#     </Proxy>
+#     ProxyPreserveHost on
+#     ProxyPass / http://127.0.0.1:8080/ nocanon
+#     AllowEncodedSlashes NoDecode
+# </VirtualHost>' > ./ddkits-files/jenkins/sites/jenkins.conf
+
+echo -e '
+
+FROM whywebs/jenkins:latest
+
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+' >> ./ddkits-files/jenkins/Dockerfile
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/jenkins
+    image: ddkits/jenkins:latest
+    
+    volumes:
+      - ./jenkins-deploy:/var/jenkins_home
+      - ./logs/jenkins.log:/var/log/jenkins/
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':8080" ' >> ddkits.env.yml
+
+if [[ ! -d "jenkins" ]]; then
+  DDKITSFL=$(pwd)
+
+fi
+
+# create get into ddkits container
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_jenkins_web /bin/bash'
+alias ddkc-$DDKITSSITES-pass='cat "$DDKITSFL/jenkins-deploy/secrets/initialAdminPassword"'
+#  fixed the alias for machine
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-pass='cat '$DDKITSFL/jenkins-deploy/secrets/initialAdminPassword''" >> ~/.ddkits_alias_web
+echo $SUDOPASS | sudo -S chmod -R 777 ./jenkins
+
+            break
+            ;;
+
+
         "Quit")
             break
             ;;
@@ -2818,7 +2873,17 @@ then
     echo "Adding new hosts entry."
     echo "$ddkits_host_entry" | sudo tee -a /etc/hosts > /dev/null
 fi
-# echo '"'${DDKITSIP}' '${DDKITSSITES}'" saved into your /etc/hosts'
+
+
+if [[ "$JENKINS_ONLY" == "false" ]]; then
+ 
+echo -e ""
+echo -e "Do you need extra JENKINS with this Installation? 'pick 'n' in case of installing Jenkins version only.' (y/n)"
+read JENKINS_ANSWER
+echo -e "Do you need extra SOLR with this Installation? (y/n)"
+read SOLR_ANSWER
+
+fi
 
 #  export all values the user insert into his bash system
 export MAIL_ADDRESS=$MAIL_ADDRESS
@@ -2835,8 +2900,29 @@ export DDKITSSITESALIAS3=$DDKITSSITESALIAS3
 export DDKITSHOSTNAME=$DDKITSHOSTNAME
 
 
+
+
 # Create our system ddkits enviroment
-echo -e 'version: "2"
+if [[ "$JENKINS_ONLY" == "true" ]]; then
+  echo -e 'version: "2"
+
+services:
+  cache:
+    image: redis:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_cache
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+
+networks:
+    ddkits:
+
+  ' >> ddkitsnew.yml
+
+fi
+if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "y" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
+  echo -e 'version: "2"
 
 services:
   mariadb:
@@ -2909,6 +2995,200 @@ networks:
 
   ' >> ddkitsnew.yml
 
+fi
+
+# Create our system ddkits enviroment
+
+if [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "y" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
+  echo -e 'version: "2"
+
+services:
+  mariadb:
+    build: ./ddkits-files/db
+    image: ddkits/mariadb:latest
+    volumes:
+      - /var/lib/mysql
+    container_name: '$DDKITSHOSTNAME'_ddkits_db
+    ports:
+        - '$DDKITSDBPORT':3306
+    networks:
+      - ddkits
+    environment:
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+
+  solr:
+    build: ./ddkits-files/solr
+    image: ddkits/solr:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_solr
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSSOLRPORT':8983"
+
+  phpmyadmin:
+    build: ./ddkits-files/phpmyadmin
+    image: ddkits/phpmyadmin
+    container_name: '$DDKITSHOSTNAME'_ddkits_phpadmin
+    environment:
+     - PMA_ARBITRARY=1
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+    volumes:
+     - ./deploy/phpmyadmin:/etc/phpmyadmin
+    links:
+      - mariadb
+    ports:
+      - '$DDKITSADMINPORT':80
+    networks:
+      - ddkits
+  cache:
+    image: redis:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_cache
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+  
+networks:
+    ddkits:
+
+  ' >> ddkitsnew.yml
+
+fi
+
+# Create our system ddkits enviroment
+
+if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "n" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
+  echo -e 'version: "2"
+
+services:
+  mariadb:
+    build: ./ddkits-files/db
+    image: ddkits/mariadb:latest
+    volumes:
+      - /var/lib/mysql
+    container_name: '$DDKITSHOSTNAME'_ddkits_db
+    ports:
+        - '$DDKITSDBPORT':3306
+    networks:
+      - ddkits
+    environment:
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+
+  phpmyadmin:
+    build: ./ddkits-files/phpmyadmin
+    image: ddkits/phpmyadmin
+    container_name: '$DDKITSHOSTNAME'_ddkits_phpadmin
+    environment:
+     - PMA_ARBITRARY=1
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+    volumes:
+     - ./deploy/phpmyadmin:/etc/phpmyadmin
+    links:
+      - mariadb
+    ports:
+      - '$DDKITSADMINPORT':80
+    networks:
+      - ddkits
+  cache:
+    image: redis:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_cache
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+  jenkins:
+    build: ./ddkits-files/jenkins
+    image: ddkits/jenkins:latest
+    ports:
+      - "'$DDKITSJENKINSPORT':8080"
+    volumes:
+      - ./jenkins:/var/jenkins_home 
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
+    networks:
+      - ddkits
+
+networks:
+    ddkits:
+
+  ' >> ddkitsnew.yml
+
+fi
+
+# Create our system ddkits enviroment
+
+if [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "n" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
+  echo -e 'version: "2"
+
+services:
+  mariadb:
+    build: ./ddkits-files/db
+    image: ddkits/mariadb:latest
+    volumes:
+      - /var/lib/mysql
+    container_name: '$DDKITSHOSTNAME'_ddkits_db
+    ports:
+        - '$DDKITSDBPORT':3306
+    networks:
+      - ddkits
+    environment:
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+
+  phpmyadmin:
+    build: ./ddkits-files/phpmyadmin
+    image: ddkits/phpmyadmin
+    container_name: '$DDKITSHOSTNAME'_ddkits_phpadmin
+    environment:
+     - PMA_ARBITRARY=1
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
+    volumes:
+     - ./deploy/phpmyadmin:/etc/phpmyadmin
+    links:
+      - mariadb
+    ports:
+      - '$DDKITSADMINPORT':80
+    networks:
+      - ddkits
+  cache:
+    image: redis:latest
+    container_name: '$DDKITSHOSTNAME'_ddkits_cache
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+
+networks:
+    ddkits:
+
+  ' >> ddkitsnew.yml
+
+fi
+
 # create get into ddkits container
 alias ddkc-$DDKITSSITES-cache='docker exec -it '$DDKITSHOSTNAME'_ddkits_cache /bin/bash'
 alias ddkc-$DDKITSSITES-jen='docker exec -it ddkits_jenkins /bin/bash'
@@ -2958,6 +3238,29 @@ Copyright @2017 <a href="http://ddkits.com/">DDKits.com</a></center>
 <!--
 HTML_CONTENT
 # --></body></html>' > ./ddkits-$DDKITSHOSTNAME.html
+
+echo -e '
+MAIL_ADDRESS = '$MAIL_ADDRESS'
+Website = '$DDKITSSITES'
+DDKits ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORT'
+Mysql User = '$MYSQL_USER'
+Mysql User Password = '$MYSQL_ROOT_PASSWORD'
+Database name =' $MYSQL_DATABASE'
+Mysql $MYSQL_USER Password = '$MYSQL_PASSWORD'
+Website Alias = '$DDKITSSITESALIAS' '$DDKITSSITESALIAS2' '$DDKITSSITESALIAS3'
+
+Ports:
+
+- Your new '$DDKITSSITES' port is: '$DDKITSWEBPORT'
+- Your new DB port is: '$DDKITSDBPORT'
+- Your new Jenkins port is: '$DDKITSJENKINSPORT'
+- Your new Solr port is: '$DDKITSSOLRPORT'
+- Your new PhpMyAdmin port is: '$DDKITSADMINPORT'
+- Your new Radis port is: '$DDKITSREDISPORT'
+
+Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com 
+Copyright @2017 DDKits.com. Mutasem Elayyoub 
+' > ./ddkits-files/ddkits/site.txt
 
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
