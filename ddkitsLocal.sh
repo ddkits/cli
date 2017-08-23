@@ -7,12 +7,15 @@
 # This system built by Mutasem Elayyoub DDKits.com
 # insert DDKits alias into anyh system command lines
 . ddkits.alias.sh
+DDKITSFL=$(pwd)
+cat "./ddkits-files/ddkits/ddkitslogo.text" # array
 
 #  built by  by Mutasem Elayyoub DDKits.com"
 # docker-machine create --driver virtualbox ddkits
 # docker-machine start ddkits
 # eval $(docker-machine env ddkits)
 clear
+cat "./ddkits-files/ddkits/logo.txt"
 echo -e 'Please make sure that you installed your DDKits at the same environment \n(1) Localhost \n(2) virtualbox'
           read DDKITSVER
     if [[ $DDKITSVER == 1 ]]; then
@@ -276,11 +279,8 @@ fi
 # echo $SUDOPASS | sudo -S chown $(echo "$USER") ./
 echo $SUDOPASS | sudo -S chmod -R 777 ./
 clear
-  echo -e ""
-    echo -e "Do you need extra JENKINS with this Installation? 'pick 'n' in case of installing Jenkins version only.' (y/n)"
-  read JENKINS_ANSWER
-  echo -e "Do you need extra SOLR with this Installation? (y/n)"
-  read SOLR_ANSWER
+cat "./ddkits-files/ddkits/logo.txt"
+  
 echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to make sure they are working fine.)'"
 DDKITS_DOCKER='Do you have docker'
 options=("Yes" "No" "Quit")
@@ -329,6 +329,7 @@ do
 done
 
 clear
+cat "./ddkits-files/ddkits/logo.txt"
 
 # echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 #   
@@ -490,7 +491,7 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web pub
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-# alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public && drush"'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public && drush"'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
@@ -651,11 +652,11 @@ alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web dru
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
-# alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public & drush "'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd public & drush "'
 
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash" >> ~/.ddkits_alias_web
-# echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush " >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./drupal-deploy
              break
             ;;
@@ -933,7 +934,9 @@ echo -e '
 
 php artisan key:generate
 php artisan cache:clear
+cat "./ddkits-files/ddkits/logo.txt"
 php artisan config:clear
+cat "./ddkits-files/ddkits/logo.txt"
 chmod -R 777 storage
  ' > ./ll-deploy/ddkits.fix.sh
 
@@ -1025,6 +1028,7 @@ fi
 if [[ -d "ll-deploy" ]]; then
   cd ll-deploy
   php artisan cache:clear
+cat "./ddkits-files/ddkits/logo.txt"
   php artisan config:cache
   cd ..
   echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy
@@ -1542,7 +1546,9 @@ composer install --no-dev
 chmod -R 777 /var/www/html/storage /var/www/html/vendor /var/www/html/public
 php artisan key:generate
 php artisan cache:clear
+cat "./ddkits-files/ddkits/logo.txt"
 php artisan config:clear
+cat "./ddkits-files/ddkits/logo.txt"
 chmod -R 777 storage
  ' > ./ll-deploy/ddkits.fix.sh
 
@@ -2707,6 +2713,8 @@ if [[ ! -d "ddkits-files/jenkins/sites" ]]; then
   mkdir ddkits-files/jenkins/sites
   chmod -R 777 ddkits-files/jenkins/sites
 fi
+
+
     # delete the old environment yml file
         if [[ -f "ddkits.env.yml" ]]; then
           rm ddkits.env.yml
@@ -2716,6 +2724,14 @@ fi
           rm ddkitsnew.yml
         fi
         # delete the old environment yml file
+        if [[ -f "ddkits-files/jenkins/Dockerfile" ]]; then
+          rm ddkits-files/jenkins/Dockerfile
+        fi
+        # delete the old environment yml file
+        if [[ -f "ddkits-files/jenkins/composer.json" ]]; then
+          rm ddkits-files/jenkins/composer.json
+        fi
+        # delete the old environment yml file
         if [[ -f "ddkits-files/ddkits.fix.sh" ]]; then
           rm ddkits-files/ddkits.fix.sh
         fi
@@ -2723,41 +2739,84 @@ fi
           rm ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf
         fi
 
-#  Jenkins PHP 5
+#  Jenkins
+
+# echo -e '
+# <VirtualHost *:80>
+#      ServerAdmin melayyoub@outlook.com
+#      ServerName '$DDKITSSITES'
+#      '$DDKITSSERVERS'
+#      DocumentRoot /var/www/html/public
+#       ErrorLog /var/www/html/error.log
+#      CustomLog /var/www/html/access.log combined
+#     <Location "/">
+#       Require all granted
+#       AllowOverride All
+#       Order allow,deny
+#       allow from all
+#   </Location>
+#   <Directory "/var/www/html">
+#       Require all granted
+#       AllowOverride All
+#       Order allow,deny
+#       allow from all
+#   </Directory>
+# </VirtualHost> ' > ./ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf
+
+# echo -e '
+# <VirtualHost *:80>
+#     ServerAdmin melayyoub@outlook.com
+#     ServerName '$DDKITSSITES'
+#      '$DDKITSSERVERS'
+#     ServerAlias ci
+#     ProxyRequests Off
+#     <Proxy *>
+#         Order deny,allow
+#         Allow from all
+#     </Proxy>
+#     ProxyPreserveHost on
+#     ProxyPass / http://127.0.0.1:8080/ nocanon
+#     AllowEncodedSlashes NoDecode
+# </VirtualHost>' > ./ddkits-files/jenkins/sites/jenkins.conf
 
 echo -e '
-<VirtualHost *:80>
-     ServerAdmin melayyoub@outlook.com
-     ServerName '$DDKITSSITES'
-     '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
-      ErrorLog /var/www/html/error.log
-     CustomLog /var/www/html/access.log combined
-    <Location "/">
-      Require all granted
-      AllowOverride All
-      Order allow,deny
-      allow from all
-  </Location>
-  <Directory "/var/www/html">
-      Require all granted
-      AllowOverride All
-      Order allow,deny
-      allow from all
-  </Directory>
-</VirtualHost> ' > ./ddkits-files/jenkins/sites/$DDKITSHOSTNAME.conf
 
+FROM whywebs/jenkins:latest
 
+MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+
+' >> ./ddkits-files/jenkins/Dockerfile
+
+echo -e 'version: "2"
+
+services:
+  web:
+    build: ./ddkits-files/jenkins
+    image: ddkits/jenkins:latest
+    
+    volumes:
+      - ./jenkins-deploy:/var/jenkins_home
+      - ./logs/jenkins.log:/var/log/jenkins/
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins_web
+    networks:
+      - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':8080" ' >> ddkits.env.yml
 
 if [[ ! -d "jenkins" ]]; then
   DDKITSFL=$(pwd)
+
 fi
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_jenkins_web /bin/bash'
+alias ddkc-$DDKITSSITES-pass='cat "$DDKITSFL/jenkins-deploy/secrets/initialAdminPassword"'
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-pass='cat '$DDKITSFL/jenkins-deploy/secrets/initialAdminPassword''" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 ./jenkins
 
             break
@@ -2814,7 +2873,17 @@ then
     echo "Adding new hosts entry."
     echo "$ddkits_host_entry" | sudo tee -a /etc/hosts > /dev/null
 fi
-# echo '"'${DDKITSIP}' '${DDKITSSITES}'" saved into your /etc/hosts'
+
+
+if [[ "$JENKINS_ONLY" == "false" ]]; then
+ 
+echo -e ""
+echo -e "Do you need extra JENKINS with this Installation? 'pick 'n' in case of installing Jenkins version only.' (y/n)"
+read JENKINS_ANSWER
+echo -e "Do you need extra SOLR with this Installation? (y/n)"
+read SOLR_ANSWER
+
+fi
 
 #  export all values the user insert into his bash system
 export MAIL_ADDRESS=$MAIL_ADDRESS
@@ -2844,28 +2913,13 @@ services:
     networks:
       - ddkits
     ports:
-      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'" 
+      - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
 
 networks:
     ddkits:
 
   ' >> ddkitsnew.yml
-#  create ddkits compose file for the new website
-echo -e 'version: "2"
 
-services:
-  jenkins:
-    build: ./ddkits-files/jenkins
-    image: ddkits/jenkins:latest
-    ports:
-      - "'$DDKITSJENKINSPORT':8080"
-    volumes:
-      - ./jenkins:/var/jenkins_home 
-    stdin_open: true
-    tty: true
-    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
-    networks:
-      - ddkits ' >> ddkits.env.yml
 fi
 if [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "y" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
   echo -e 'version: "2"
@@ -3184,6 +3238,29 @@ Copyright @2017 <a href="http://ddkits.com/">DDKits.com</a></center>
 <!--
 HTML_CONTENT
 # --></body></html>' > ./ddkits-$DDKITSHOSTNAME.html
+
+echo -e '
+MAIL_ADDRESS = '$MAIL_ADDRESS'
+Website = '$DDKITSSITES'
+DDKits ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORT'
+Mysql User = '$MYSQL_USER'
+Mysql User Password = '$MYSQL_ROOT_PASSWORD'
+Database name =' $MYSQL_DATABASE'
+Mysql $MYSQL_USER Password = '$MYSQL_PASSWORD'
+Website Alias = '$DDKITSSITESALIAS' '$DDKITSSITESALIAS2' '$DDKITSSITESALIAS3'
+
+Ports:
+
+- Your new '$DDKITSSITES' port is: '$DDKITSWEBPORT'
+- Your new DB port is: '$DDKITSDBPORT'
+- Your new Jenkins port is: '$DDKITSJENKINSPORT'
+- Your new Solr port is: '$DDKITSSOLRPORT'
+- Your new PhpMyAdmin port is: '$DDKITSADMINPORT'
+- Your new Radis port is: '$DDKITSREDISPORT'
+
+Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com 
+Copyright @2017 DDKits.com. Mutasem Elayyoub 
+' > ./ddkits-files/ddkits/site.txt
 
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
