@@ -923,22 +923,7 @@ fi
         if [[ -f "ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf" ]]; then
           rm ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
         fi
-echo -e '
-#!/bin/sh
 
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
-
-php artisan key:generate
-php artisan cache:clear
-cat "./ddkits-files/ddkits/logo.txt"
-php artisan config:clear
-cat "./ddkits-files/ddkits/logo.txt"
-chmod -R 777 storage
- ' > ./ll-deploy/ddkits.fix.sh
 
 
 echo -e '
@@ -1009,7 +994,7 @@ echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_laravel_web /bin/bash'
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash'" >> ~/.ddkits_alias_web
-echo $SUDOPASS | sudo -S chmod -R 777 ./laravel-deploy
+
 
 if [[ ! -f "composer.phar" ]]; then
   wget https://getcomposer.org/composer.phar
@@ -1019,7 +1004,7 @@ echo $SUDOPASS | sudo -S chmod 777 composer.phar
 
 echo -e 'Now installing Laravel through composer '
 php composer.phar create-project laravel/laravel --prefer-dist ll-deploy
-
+echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy
 
 if [[ -f "ll-deploy/storage/logs/laravel.logs" ]]; then
  rm -rf ./ll-deploy/storage/logs/laravel.logs
@@ -1075,7 +1060,29 @@ PUSHER_APP_SECRET=
 ' >> ./ll-deploy/.env
 
 echo $SUDOPASS | sudo -S chmod -R 777 ./ll-deploy
-alias ddklf="docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web bash ddkits.fix.sh"
+alias ddkf-$DDKITSSITES="docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash ddkits.fix.sh"
+#  fixed the alias for machine
+echo "alias ddkf-"$DDKITSSITES"='docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash ddkits.fix.sh'" >> ~/.ddkits_alias_web
+
+echo -e '
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+php artisan cache:clear
+php artisan key:generate
+php artisan make:auth
+php artisan cache:clear
+php artisan migrate
+php artisan config:clear
+php artisan cache:clear
+chmod -R 777 storage
+ ' > ./ll-deploy/ddkits.fix.sh
+
             break
             ;;
 
@@ -1533,24 +1540,23 @@ RUN usermod -u 1000 www-data
 
 ' >> ./ddkits-files/dreamf/Dockerfile
 
-echo -e '
-#!/bin/sh
+# echo -e '
+# #!/bin/sh
 
-#  Script.sh
-#
-#
-#  Created by mutasem elayyoub ddkits.com
-#
+# #  Script.sh
+# #
+# #
+# #  Created by mutasem elayyoub ddkits.com
+# #
 
-composer install --no-dev
-chmod -R 777 /var/www/html/storage /var/www/html/vendor /var/www/html/public
-php artisan key:generate
-php artisan cache:clear
-cat "./ddkits-files/ddkits/logo.txt"
-php artisan config:clear
-cat "./ddkits-files/ddkits/logo.txt"
-chmod -R 777 storage
- ' > ./ll-deploy/ddkits.fix.sh
+# composer install --no-dev
+# chmod -R 777 /var/www/html/storage /var/www/html/vendor /var/www/html/public
+# php artisan cache:clear
+# php artisan key:generate
+# php artisan cache:clear
+# php artisan config:clear
+# chmod -R 777 storage
+#  ' > ./ll-deploy/ddkits.fix.sh
 
 echo -e 'version: "2"
 
