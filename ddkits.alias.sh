@@ -8,7 +8,7 @@
 
 
 ddk(){
-      if [[ $1 == "install" ]]; then
+ if [[ $1 == "install" ]]; then
         clear
         cat "./ddkits-files/ddkits/logo.txt"
       echo -e '(1) Localhost \n(2) virtualbox'
@@ -27,12 +27,12 @@ ddk(){
               echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
               if [ $? -eq 0 ]; then
                 clear
-        cat "./ddkits-files/ddkits/logo.txt"
+              cat "./ddkits-files/ddkits/logo.txt"
                   echo 'DDKits saying it is fine no need to reinstall'
               else
             if [[ "$OSTYPE" == "linux-gnu" ]]; then
               clear
-        cat "./ddkits-files/ddkits/logo.txt"
+              cat "./ddkits-files/ddkits/logo.txt"
               PLATFORM='linux-gnu'
               echo 'This machine is '$PLATFORM' Docker setup will start now'
               echo $SUDOPASS | sudo -S apt-get install wget curl git -y
@@ -41,29 +41,29 @@ ddk(){
               echo $SUDOPASS | sudo -S cp /tmp/docker-machine /usr/local/bin/docker-machine
             elif [[ "$OSTYPE" == "darwin"* ]]; then
               clear
-        cat "./ddkits-files/ddkits/logo.txt"
+               cat "./ddkits-files/ddkits/logo.txt"
               PLATFORM='MacOS'
               echo 'This machine is '$PLATFORM' Docker setup will start now'
               curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
               echo $SUDOPASS | sudo -S chmod +x /usr/local/bin/docker-machine
             elif [[ "$OSTYPE" == "cygwin" ]]; then
               clear
-        cat "./ddkits-files/ddkits/logo.txt"
+              cat "./ddkits-files/ddkits/logo.txt"
               PLATFORM='cygwin'
               echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "Docker, compose and docker-machine" INSTALLED ON YOUR SYSTEM' 
             elif [[ "$OSTYPE" == "msys" ]]; then
               clear
-        cat "./ddkits-files/ddkits/logo.txt"
+              cat "./ddkits-files/ddkits/logo.txt"
                PLATFORM='msys'
               echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE  "Docker, compose and docker-machine"  INSTALLED ON YOUR SYSTEM'        
             elif [[ "$OSTYPE" == "win32" ]]; then
               clear
-        cat "./ddkits-files/ddkits/logo.txt"
+              cat "./ddkits-files/ddkits/logo.txt"
                 PLATFORM='win32'
               echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE  "Docker, compose and docker-machine"  INSTALLED ON YOUR SYSTEM'         
             elif [[ "$OSTYPE" == "freebsd"* ]]; then
               clear
-        cat "./ddkits-files/ddkits/logo.txt"
+              cat "./ddkits-files/ddkits/logo.txt"
                PLATFORM='freebsd'
               echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE  "Docker, compose and docker-machine"  INSTALLED ON YOUR SYSTEM'        
             else
@@ -73,7 +73,7 @@ ddk(){
         fi
         if [[ -f  ~/.ddkits_alias ]]; then
           clear
-        cat "./ddkits-files/ddkits/logo.txt"
+          cat "./ddkits-files/ddkits/logo.txt"
           clear
                 docker-compose -f ddkits.yml up -d --build
           cp ddkits.alias.sh ddkits_alias 
@@ -107,14 +107,28 @@ ddk(){
       cp ddkits.alias.sh ddkits_alias
       sudo cp ddkits_alias ~/.ddkits_alias
       sudo chmod u+x ~/.ddkits_alias
-      source ~/.ddkits_alias
-      source ~/.ddkits_alias_web
+      if [[ -f "~/.ddkits_alias" ]]; then
+        source ~/.ddkits_alias
+      fi
+      if [[ -f "~/.ddkits_alias_web" ]]; then
+        source ~/.ddkits_alias_web
+      fi
+      if [[ -f "./ddkits.private.sh" ]]; then
+        source ./ddkits.private.sh
+      fi
     else
       cp ddkits.alias.sh ddkits_alias
       sudo cp ddkits_alias ~/.ddkits_alias
       sudo chmod u+x ~/.ddkits_alias
-      source ~/.ddkits_alias
-      source ~/.ddkits_alias_web
+      if [[ -f "~/.ddkits_alias" ]]; then
+        source ~/.ddkits_alias
+      fi
+      if [[ -f "~/.ddkits_alias_web" ]]; then
+        source ~/.ddkits_alias_web
+      fi
+      if [[ -f "./ddkits.private.sh" ]]; then
+        source ./ddkits.private.sh
+      fi
   fi
   docker restart $(docker ps -q)
   elif [[ $1 == "com" ]]; then
@@ -131,13 +145,15 @@ ddk(){
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
   elif [[ $1 == "start" ]]; then
     clear
-        cat "./ddkits-files/ddkits/logo.txt"
-        if [[ $2 == "com" ]]; then
+        if [[ $2 == "prod" ]]; then
+          cat "./ddkits-files/ddkits/logo.txt"
+          source ddkitsProd.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
+        elif [[ $2 == "com" ]]; then
           clear
         cat "./ddkits-files/ddkits/logo.txt"
-         . ddkitsLocal.sh && composer install
+         source ddkitsLocal.sh && composer install
         else
-         . ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
+         source ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
     fi
   elif [[ $1 == "c" ]]; then
     clear
@@ -223,7 +239,7 @@ ddk(){
         if [[ $2 == "all" ]]; then
           clear
         cat "./ddkits-files/ddkits/logo.txt"
-        . $(pwd)/ddkits.rm.sh
+        source $(pwd)/ddkits.rm.sh
         elif [[ $2 == "c" ]]; then
           clear
         cat "./ddkits-files/ddkits/logo.txt"
@@ -254,6 +270,8 @@ ddk(){
         fix     - Fix DDKits containers in full for any problem
         start   - Start new your ddkits setup process "this command must be in your project folder"
           com   - Start installation with compsoer before docker "you need to modify your composer"
+          prod  - Start production installation
+          dev   - Start production installation
             **************************
         update  - Update your ddkits setup process "this command must be in your project folder"
             **************************
@@ -274,14 +292,14 @@ ddk(){
 
 
     Containers Use:
-    Jenkins     http://jenkins.YOUR_WEBSITE
-    SOLR     http://solr.YOUR_WEBSITE
-    PhpMyAdmin     http://admin.YOUR_WEBSITE
+    Jenkins     http://jenkins.YOUR_DOMAIN.ddkits.site
+    SOLR     http://solr.YOUR_DOMAIN.ddkits.site
+    PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v1.14
+    DDKits v1.20
         '
      else
-      echo 'DDkits build by Mutasem Elayyoub and ready to use.  www.DDKits.com
+      echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
       To see all commands write " ddk -h / ddk --help "'
       ddk -h
    fi

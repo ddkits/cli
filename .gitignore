@@ -22,3 +22,4 @@ deploy
 ddkits.phar
 ddkits-files/drupal/ddkitscli.sh
 ddkits-files/ddkits/sites/ddkitscust.conf
+ddkits-files/ddkitsInfo.*

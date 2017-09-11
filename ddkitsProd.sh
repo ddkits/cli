@@ -10,42 +10,27 @@ source 'ddkits.alias.sh'
 DDKITSFL=$(pwd)
 export $DDKITSFL
 
-if [ ! -f "${DDKITSFL}/ddkits-files/ddkitsInfo.ports.sh" ]
-  then
-    export DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-    echo -e "  Your new Web port is  ${DDKITSWEBPORT}  "
-    export DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-    echo -e "Your new DB port is  ${DDKITSDBPORT}  "
-    export DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-    echo -e "Your new Jenkins port is  ${DDKITSJENKINSPORT} "
-    export DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-    echo -e "Your new Solr port is  ${DDKITSSOLRPORT} "
-    export DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-    echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
-    export DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
-    echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
-
-    echo -e '
-    export DDKITSWEBPORT="${DDKITSWEBPORT}"
-    export DDKITSDBPORT="${DDKITSDBPORT}"
-    export DDKITSJENKINSPORT="${DDKITSJENKINSPORT}"
-    export DDKITSSOLRPORT="${DDKITSSOLRPORT}"
-    export DDKITSADMINPORT="${DDKITSADMINPORT}"
-    export DDKITSREDISPORT="${DDKITSREDISPORT}"
-      ' >> $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
-  else
-    source $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
-fi
-
-if [ ! -f "${DDKITSFL}/ddkits.prod.sh" ] 
-  then
-    source $DDKITSFL'/ddkits.dev.sh'
-  else
-    source $DDKITSFL'/ddkits.prod.sh'
-fi
-
 clear
-cat "$DDKITSFL/ddkits-files/ddkits/logo.txt"
+cat "./ddkits-files/ddkits/logo.txt"
+docker-compose -f ddkits.yml up -d --build
+
+export DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+echo -e "  Your new Web port is  ${DDKITSWEBPORT}  "
+export DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+echo -e "Your new DB port is  ${DDKITSDBPORT}  "
+export DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+echo -e "Your new Jenkins port is  ${DDKITSJENKINSPORT} "
+export DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+echo -e "Your new Solr port is  ${DDKITSSOLRPORT} "
+export DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
+export DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
+
+source 'ddkits.prod.sh'
+  
+clear
+cat "${DDKITSFL}/ddkits-files/ddkits/logo.txt"
 
 
 # Create our system ddkits enviroment
@@ -401,19 +386,6 @@ Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com
 Copyright @2017 DDKits.com. Mutasem Elayyoub 
 ' > ./ddkits-files/ddkits/site.txt
 
-
-if [ -f "ddkits.prod.sh" ]
- then
-    echo -e 'Production'
-  else
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
-echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
-source ~/.ddkits_alias_web
-source ~/.ddkits_alias
-echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias' >> ~/.bashrc_profile
-echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias_web' >> ~/.bashrc_profile
-
-fi
 
 #  prepare ddkits container for the new websites
 echo -e 'copying conf files into ddkits and restart'
