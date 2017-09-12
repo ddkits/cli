@@ -1,8 +1,8 @@
-# DDKits v1.14 Built by Mutasem Elayyoub melayyoub@outlook.com
+# DDKits v1.20 Built by Mutasem Elayyoub melayyoub@outlook.com
 
 <img src="https://travis-ci.org/ddkits/cli.svg?branch=master" />
 
-Doctor Development Kit is a free and open source local development environment and workflow tool based on Docker. DDKits allows users to build more than one container under the same port with domains DNS control, super-fast development environments and to integrate those environments with their hosting provider or continuous integration workflows.
+Doctor Development Kit is an open source local development environment and workflow tool based on Docker. DDKits allows users to build more than one container under the same port with domains DNS control, super-fast development environments and to integrate those environments with their hosting provider or continuous integration workflows.
 
 With DDKits you can easily mimic your production environment on local plus the ability to setup, develop, pull and deploy your sites super fast. Dockerize your teams dev environments and tools on OSX, Windows and Linux. Free yourself from the hard times of building new products or environments.
 
