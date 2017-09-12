@@ -24,5 +24,3 @@ before_script:
   - composer require atoum/atoum
   - source ddkits.alias.sh
   - ddk start prod
-
-script: vendor/bin/atoum
