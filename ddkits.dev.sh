@@ -6,7 +6,7 @@
 #
 # This system built by Mutasem Elayyoub DDKits.com
 # insert DDKits alias into anyh system command lines
-. ddkits.alias.sh
+source ddkits.alias.sh
 DDKITSFL=$(pwd)
 
 clear
@@ -375,89 +375,89 @@ fi
       read DDKITSDRUPALV
 
       if [[ $DDKITSDRUPALV == '7' ]]; then
-      . ./ddkits-files/ddkits/ddk-drupal7.sh
+      source ./ddkits-files/ddkits/ddk-drupal7.sh
       elif [[  $DDKITSDRUPALV == '8'  ]]; then
-      . ./ddkits-files/ddkits/ddk-drupal8.sh
+      source ./ddkits-files/ddkits/ddk-drupal8.sh
       fi
               break
               ;;
           "Wordpress")
-      . ./ddkits-files/ddkits/ddk-wordpress.sh
+      source ./ddkits-files/ddkits/ddk-wordpress.sh
                break
               ;;
           "Joomla")
-      . ./ddkits-files/ddkits/ddk-joomla.sh
+      source ./ddkits-files/ddkits/ddk-joomla.sh
                break
               ;;
           "Laravel")
-      . ./ddkits-files/ddkits/ddk-laravel.sh
+      source ./ddkits-files/ddkits/ddk-laravel.sh
               break
               ;;
 
           "LAMP/PHP5")
-      . ./ddkits-files/ddkits/ddk-php5.sh
+      source ./ddkits-files/ddkits/ddk-php5.sh
               break
               ;;
           "LAMP/PHP7")
-      . ./ddkits-files/ddkits/ddk-php7.sh
+      source ./ddkits-files/ddkits/ddk-php7.sh
               break
               ;;
 
           "Umbraco")
-      . ./ddkits-files/ddkits/ddk-umbraco.sh
+      source ./ddkits-files/ddkits/ddk-umbraco.sh
               break
               ;;
           "Magento")
-      . ./ddkits-files/ddkits/ddk-magento.sh
+      source ./ddkits-files/ddkits/ddk-magento.sh
               break
               ;;
 
           "DreamFactory")
-      . ./ddkits-files/ddkits/ddk-dreamfactory.sh
+      source ./ddkits-files/ddkits/ddk-dreamfactory.sh
               break
               ;;
 
            "Contao")
-      . ./ddkits-files/ddkits/ddk-contao.sh
+      source ./ddkits-files/ddkits/ddk-contao.sh
               break
               ;;
 
            "Elgg")
-      . ./ddkits-files/ddkits/ddk-elgg.sh
+      source ./ddkits-files/ddkits/ddk-elgg.sh
               break
               ;;
 
            "Silverstripe")
-      . ./ddkits-files/ddkits/ddk-silverstripe.sh
+      source ./ddkits-files/ddkits/ddk-silverstripe.sh
               break
               ;;
 
            "Cloud")
-      . ./ddkits-files/ddkits/ddk-cloud.sh
+      source ./ddkits-files/ddkits/ddk-cloud.sh
               break
               ;;
            "ZenCart")
-      . ./ddkits-files/ddkits/ddk-zencart.sh
+      source ./ddkits-files/ddkits/ddk-zencart.sh
               break
               ;;
 
            "Symfony")
-      . ./ddkits-files/ddkits/ddk-symfony.sh
+      source ./ddkits-files/ddkits/ddk-symfony.sh
               break
               ;;
            "Expression Engine")
-      . ./ddkits-files/ddkits/ddk-eengine.sh
+      source ./ddkits-files/ddkits/ddk-eengine.sh
               break
               ;;
 
            "Zend")
-      . ./ddkits-files/ddkits/ddk-zend.sh
+      source ./ddkits-files/ddkits/ddk-zend.sh
               break
               ;;
 
            "Jenkins")
               JENKINS_ONLY='true'
-      . ./ddkits-files/ddkits/ddk-jenkins.sh
+      source ./ddkits-files/ddkits/ddk-jenkins.sh
               break
               ;;
 
