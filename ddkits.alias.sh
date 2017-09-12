@@ -97,6 +97,8 @@ ddk(){
     clear
         cat "./ddkits-files/ddkits/logo.txt"
         docker-machine ip ddkits
+  elif [[  $1 == "check" ]]; then
+      docker ps --filter "name=ddkits"
   elif [[ $1 == "fix" ]]; then
     clear
         cat "./ddkits-files/ddkits/logo.txt"
@@ -143,8 +145,8 @@ ddk(){
       clear
         cat "./ddkits-files/ddkits/logo.txt"
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
-  elif [[ $1 == "start" ]]; then
-    clear
+          elif [[ $1 == "start" ]]; then
+         clear
         if [[ $2 == "prod" ]]; then
           cat "./ddkits-files/ddkits/logo.txt"
           source ddkitsProd.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
@@ -152,7 +154,7 @@ ddk(){
           clear
         cat "./ddkits-files/ddkits/logo.txt"
          source ddkitsLocal.sh && composer install
-        else
+        elif [[ $2 == "dev" ]]; then
          source ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
     fi
   elif [[ $1 == "c" ]]; then

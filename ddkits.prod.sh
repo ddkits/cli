@@ -21,22 +21,22 @@ echo -e "
     # ---------------------------------------------------------------------------------------------------
 
     # echo -e 'enter your E-mail address that you want to use in your website as an admin: '
-    MAIL_ADDRESS='EMAIL'
+    MAIL_ADDRESS='melayyoub@outlook.com'
 
     # echo -e 'enter your Domain Name: '
-    DDKITSSITES='DOMAIN'
+    DDKITSSITES='prod.dev'
 
     # echo -e 'enter your Sudo/Root Password if you have it:'
     SUDOPASS=''
 
     # echo -e 'enter your MYSQL ROOT USER: '
-    MYSQL_USER='MYSQL_USER'
+    MYSQL_USER='ddk'
 
     # echo -e 'enter your MYSQL ROOT USER Password: '
-    MYSQL_ROOT_PASSWORD='MYSQL_PASSWORD'
+    MYSQL_ROOT_PASSWORD='ddk'
 
     # echo -e 'enter your MYSQL DataBase: '
-    MYSQL_DATABASE='MYSQL_DATABASE_NAME'
+    MYSQL_DATABASE='ddk'
 
 
     # PICK WHICH PLATFORM

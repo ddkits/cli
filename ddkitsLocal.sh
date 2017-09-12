@@ -37,12 +37,7 @@ if [ ! -f "${DDKITSFL}/ddkits-files/ddkitsInfo.ports.sh" ]
     source $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
 fi
 
-if [ ! -f "${DDKITSFL}/ddkits.prod.sh" ] 
-  then
-    source $DDKITSFL'/ddkits.dev.sh'
-  else
-    source $DDKITSFL'/ddkits.prod.sh'
-fi
+source $DDKITSFL'/ddkits.dev.sh'
 
 clear
 cat "$DDKITSFL/ddkits-files/ddkits/logo.txt"
