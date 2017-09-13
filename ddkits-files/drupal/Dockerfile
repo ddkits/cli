@@ -1,6 +1,3 @@
-
-
-
 FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
@@ -8,7 +5,7 @@ MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 RUN export TERM=xterm
 
 RUN rm /etc/apache2/sites-enabled/000-default.conf
-COPY sites/drupal7_dev.conf /etc/apache2/sites-enabled/drupal7_dev.conf
+COPY sites/DOMAIN.conf /etc/apache2/sites-enabled/DOMAIN.conf
 COPY ddkitscli.sh /var/www/html/ddkitscli.sh
 COPY php5.ini /usr/local/etc/php/conf.d/php.ini
 
