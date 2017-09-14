@@ -6,7 +6,10 @@
 #  Created by mutasem elayyoub ddkits.com
 #
 
-
+# Copy the new Alias system and making sure of the DDKits installation
+cp ddkits.alias.sh ddkits_alias 
+cp ddkits_alias ~/.ddkits_alias
+source ~/.ddkits_alias
 ddk(){
  if [[ $1 == "install" ]]; then
         clear
@@ -102,37 +105,36 @@ ddk(){
   elif [[ $1 == "fix" ]]; then
     clear
         cat "./ddkits-files/ddkits/logo.txt"
-    if [[ -f "~/.ddkits_alias" ]]; then
-      clear
-        cat "./ddkits-files/ddkits/logo.txt"
-      sudo rm ~/.ddkits_alias
-      cp ddkits.alias.sh ddkits_alias
-      sudo cp ddkits_alias ~/.ddkits_alias
-      sudo chmod u+x ~/.ddkits_alias
-      if [[ -f "~/.ddkits_alias" ]]; then
-        source ~/.ddkits_alias
+        if [[ -f "~/.ddkits_alias" ]]; then
+          clear
+            cat "./ddkits-files/ddkits/logo.txt"
+          sudo rm ~/.ddkits_alias
+          cp ddkits.alias.sh ddkits_alias
+          sudo cp ddkits_alias ~/.ddkits_alias
+          sudo chmod u+x ~/.ddkits_alias
+          if [[ -f "~/.ddkits_alias" ]]; then
+            source ~/.ddkits_alias
+          fi
+          if [[ -f "~/.ddkits_alias_web" ]]; then
+            source ~/.ddkits_alias_web
+          fi
+          if [[ -f "./ddkits.private.sh" ]]; then
+            source ./ddkits.private.sh
+          fi
+        else
+          cp ddkits.alias.sh ddkits_alias
+          sudo cp ddkits_alias ~/.ddkits_alias
+          sudo chmod u+x ~/.ddkits_alias
+          if [[ -f "~/.ddkits_alias" ]]; then
+            source ~/.ddkits_alias
+          fi
+          if [[ -f "~/.ddkits_alias_web" ]]; then
+            source ~/.ddkits_alias_web
+          fi
+          if [[ -f "./ddkits.private.sh" ]]; then
+            source ./ddkits.private.sh
+          fi
       fi
-      if [[ -f "~/.ddkits_alias_web" ]]; then
-        source ~/.ddkits_alias_web
-      fi
-      if [[ -f "./ddkits.private.sh" ]]; then
-        source ./ddkits.private.sh
-      fi
-    else
-      cp ddkits.alias.sh ddkits_alias
-      sudo cp ddkits_alias ~/.ddkits_alias
-      sudo chmod u+x ~/.ddkits_alias
-      if [[ -f "~/.ddkits_alias" ]]; then
-        source ~/.ddkits_alias
-      fi
-      if [[ -f "~/.ddkits_alias_web" ]]; then
-        source ~/.ddkits_alias_web
-      fi
-      if [[ -f "./ddkits.private.sh" ]]; then
-        source ./ddkits.private.sh
-      fi
-  fi
-  docker restart $(docker ps -q)
   elif [[ $1 == "com" ]]; then
     clear
         cat "./ddkits-files/ddkits/logo.txt"
@@ -141,22 +143,20 @@ ddk(){
     clear
         cat "./ddkits-files/ddkits/logo.txt"
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d
-    elif [[ $1 == "rebuild" ]]; then
+  elif [[ $1 == "rebuild" ]]; then
       clear
         cat "./ddkits-files/ddkits/logo.txt"
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
-          elif [[ $1 == "start" ]]; then
-         clear
-        if [[ $2 == "prod" ]]; then
-          cat "./ddkits-files/ddkits/logo.txt"
-          echo "You must have production DDKits version 'DDKits pro'"
-        elif [[ $2 == "com" ]]; then
+  elif [[ $1 == "start" ]]; then
+      if [[ $2 == "com" ]]; then
           clear
         cat "./ddkits-files/ddkits/logo.txt"
          source ddkitsLocal.sh && composer install
-        elif [[ $2 == "dev" ]]; then
+      else
+         clear
+        cat "./ddkits-files/ddkits/logo.txt"
          source ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
-    fi
+      fi
   elif [[ $1 == "c" ]]; then
     clear
         cat "./ddkits-files/ddkits/logo.txt"
@@ -271,9 +271,7 @@ ddk(){
         rmn     - Clean <none> extra images and containers
         fix     - Fix DDKits containers in full for any problem
         start   - Start new your ddkits setup process "this command must be in your project folder"
-          com   - Start installation with compsoer before docker "you need to modify your composer"
-          prod  - Start production installation
-          dev   - Start production installation
+        prod    - Start production installation   // available with DDKits PRO only 
             **************************
         update  - Update your ddkits setup process "this command must be in your project folder"
             **************************
