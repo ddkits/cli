@@ -1,0 +1,22 @@
+
+MAIL_ADDRESS = melayyoub@outlook.com
+Website = prod.dev
+DDKits ip = 127.0.0.1 ==> Port = 1097
+Mysql User = ddk
+Mysql User Password = ddk
+Database name = ddk
+Mysql $MYSQL_USER Password = ddk
+Website Alias =   
+
+Ports:
+
+- Your new prod.dev port is: 1097
+- Your new DB port is: 1597
+- Your new Jenkins port is: 4059
+- Your new Solr port is: 3194
+- Your new PhpMyAdmin port is: 4275
+- Your new Radis port is: 5194
+
+Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com 
+Copyright @2017 DDKits.com. Mutasem Elayyoub 
+

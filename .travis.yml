@@ -23,4 +23,4 @@ before_script:
   - sudo service apache2 restart
   - composer require atoum/atoum
   - source ddkits.alias.sh
-  - ddk start prod
+  - ddk prod
