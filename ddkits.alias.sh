@@ -94,44 +94,30 @@ ddk(){
         fi
   fi
   elif [[ $1 == "ip" ]]; then
-    clear
-        cat "./ddkits-files/ddkits/logo.txt"
         docker-machine ip ddkits
   elif [[  $1 == "check" ]]; then
       docker ps --filter "name=ddkits"
   elif [[ $1 == "fix" ]]; then
-    clear
-        cat "./ddkits-files/ddkits/logo.txt"
-        if [[ -f "~/.ddkits_alias" ]]; then
-          clear
-            cat "./ddkits-files/ddkits/logo.txt"
-          sudo rm ~/.ddkits_alias
-          cp ddkits.alias.sh ddkits_alias
-          sudo cp ddkits_alias ~/.ddkits_alias
-          sudo chmod u+x ~/.ddkits_alias
-          if [[ -f "~/.ddkits_alias" ]]; then
-            source ~/.ddkits_alias
-          fi
-          if [[ -f "~/.ddkits_alias_web" ]]; then
-            source ~/.ddkits_alias_web
-          fi
-          if [[ -f "./ddkits.private.sh" ]]; then
-            source ./ddkits.private.sh
-          fi
-        else
-          cp ddkits.alias.sh ddkits_alias
-          sudo cp ddkits_alias ~/.ddkits_alias
-          sudo chmod u+x ~/.ddkits_alias
-          if [[ -f "~/.ddkits_alias" ]]; then
-            source ~/.ddkits_alias
-          fi
-          if [[ -f "~/.ddkits_alias_web" ]]; then
-            source ~/.ddkits_alias_web
-          fi
-          if [[ -f "./ddkits.private.sh" ]]; then
-            source ./ddkits.private.sh
-          fi
-      fi
+   
+    if [[ -f "~/.ddkits_alias" ]]; then
+       clear
+      cat "./ddkits-files/ddkits/logo.txt"
+      sudo rm ~/.ddkits_alias
+      cp ddkits.alias.sh ddkits_alias
+      sudo cp ddkits_alias ~/.ddkits_alias
+      sudo chmod u+x ~/.ddkits_alias
+      source ~/.ddkits_alias
+      source ~/.ddkits_alias_web
+    else
+       clear
+      cat "./ddkits-files/ddkits/logo.txt"
+      cp ddkits.alias.sh ddkits_alias
+      sudo cp ddkits_alias ~/.ddkits_alias
+      sudo chmod u+x ~/.ddkits_alias
+      source ~/.ddkits_alias
+      source ~/.ddkits_alias_web
+  fi
+  docker restart $(docker ps -q)
   elif [[ $1 == "com" ]]; then
     clear
         cat "./ddkits-files/ddkits/logo.txt"
