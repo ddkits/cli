@@ -7,10 +7,6 @@
 #
 
 # Copy the new Alias system and making sure of the DDKits installation
-cp ddkits.alias.sh ddkits_alias 
-cp ddkits_alias ~/.ddkits_alias
-chmod u+x ~/.ddkits_alias
-source ~/.ddkits_alias
 ddk(){
  if [[ $1 == "install" ]]; then
         clear
