@@ -1,7 +1,7 @@
 
 MAIL_ADDRESS = m@m.com
 Website = lara.dev
-DDKits ip = 192.168.99.100 ==> Port = 1348
+DDKits ip = 192.168.99.103 ==> Port = 1280
 Mysql User = ddk
 Mysql User Password = ddk
 Database name = ddk
@@ -10,12 +10,12 @@ Website Alias =
 
 Ports:
 
-- Your new lara.dev port is: 1348
-- Your new DB port is: 1849
-- Your new Jenkins port is: 4110
-- Your new Solr port is: 3697
-- Your new PhpMyAdmin port is: 4727
-- Your new Radis port is: 5697
+- Your new lara.dev port is: 1280
+- Your new DB port is: 1780
+- Your new Jenkins port is: 4096
+- Your new Solr port is: 3560
+- Your new PhpMyAdmin port is: 4604
+- Your new Radis port is: 5560
 
 Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com 
 Copyright @2017 DDKits.com. Mutasem Elayyoub 
