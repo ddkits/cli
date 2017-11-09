@@ -67,7 +67,7 @@ RUN ln -sf $DDKITSFL/logs /var/log/nginx/access.log \
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
-COPY $DDKITSFL/sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
+COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
 
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
