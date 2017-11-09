@@ -98,7 +98,6 @@ ddk(){
   elif [[  $1 == "check" ]]; then
       docker ps --filter "name=ddkits"
   elif [[ $1 == "fix" ]]; then
-   
     if [[ -f "~/.ddkits_alias" ]]; then
        clear
       cat "./ddkits-files/ddkits/logo.txt"
@@ -108,16 +107,18 @@ ddk(){
       sudo chmod u+x ~/.ddkits_alias
       source ~/.ddkits_alias
       source ~/.ddkits_alias_web
+      docker restart $(docker ps -q)
     else
-       clear
+      clear
       cat "./ddkits-files/ddkits/logo.txt"
       cp ddkits.alias.sh ddkits_alias
       sudo cp ddkits_alias ~/.ddkits_alias
       sudo chmod u+x ~/.ddkits_alias
       source ~/.ddkits_alias
       source ~/.ddkits_alias_web
+      docker restart $(docker ps -q)
   fi
-  docker restart $(docker ps -q)
+  
   elif [[ $1 == "com" ]]; then
     clear
         cat "./ddkits-files/ddkits/logo.txt"

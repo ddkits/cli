@@ -354,7 +354,7 @@ fi
   MYSQL_ROOT_PASSWORD='"$MYSQL_ROOT_PASSWORD"'\n
   MYSQL_DATABASE='"$MYSQL_DATABASE"'\n
   MYSQL_PASSWORD='"$MYSQL_PASSWORD"'\n
-  MAIL_ADDRESS='"$MAIL_ADDRESS"'\n" >> ./ddkits-files/ddkitscli.sh
+  MAIL_ADDRESS='"$MAIL_ADDRESS"'\n" > ./ddkits-files/ddkitscli.sh
   cat ./ddkits-files/ddkits-drupal.sh >> ./ddkits-files/ddkitscli.sh
 
 
@@ -365,7 +365,7 @@ fi
   # Setup options Please make sure of all options before publish pick list 
   # 
 
-  options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony"  "ZenCart" "Zend" "Quit")
+  options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony"  "ZenCart" "Zend" "Quit")
   select opt in "${options[@]}"
   do
       case $opt in
@@ -383,6 +383,10 @@ fi
               ;;
           "Wordpress")
       source ./ddkits-files/ddkits/ddk-wordpress.sh
+               break
+              ;;
+      "Git Server")
+      source ./ddkits-files/ddkits/ddk-git.sh
                break
               ;;
           "Joomla")
@@ -514,7 +518,7 @@ fi
   if [[ "$JENKINS_ONLY" == "false" ]]; then
    
   echo -e ""
-  echo -e "Do you need extra JENKINS with this Installation? 'pick 'n' in case of installing Jenkins version only.' (y/n)"
+  echo -e "Do you need extra JENKINS with this Installation? (y/n)"
   read JENKINS_ANSWER
   export JENKINS_ANSWER=${JENKINS_ANSWER}
   echo -e "Do you need extra SOLR with this Installation? (y/n)"
@@ -552,17 +556,17 @@ echo -e "
 
 export DDKITSFL=$DDKITSFL
 export DDKITSIP=$DDKITSIP 
-export JENKINS_ANSWER=${JENKINS_ANSWER}
-export JENKINS_ONLY=${JENKINS_ONLY}
-export JENKINS_ANSWER=${JENKINS_ANSWER}
-export SUDOPASS=${SUDOPASS}
-export MAIL_ADDRESS=${MAIL_ADDRESS}
-export DDKITSSITES=${DDKITSSITES}
-export DDKITSIP=${DDKITSIP}
-export MYSQL_USER=${MYSQL_USER}
-export MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-export MYSQL_DATABASE=${MYSQL_DATABASE}
-export MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
-export DDKITSWEBPORT=${DDKITSWEBPORT}
-export DDKITSHOSTNAME=${DDKITSHOSTNAME}
-export MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}" >> $DDKITSFL/ddkits-files/ddkitsInfo.dev.sh
+export JENKINS_ANSWER='"${JENKINS_ANSWER}"'
+export JENKINS_ONLY='"${JENKINS_ONLY}"'
+export JENKINS_ANSWER='"${JENKINS_ANSWER}"'
+export SUDOPASS='"${SUDOPASS}"'
+export MAIL_ADDRESS='"${MAIL_ADDRESS}"'
+export DDKITSSITES='"${DDKITSSITES}"'
+export DDKITSIP='"${DDKITSIP}"'
+export MYSQL_USER='"${MYSQL_USER}"'
+export MYSQL_ROOT_PASSWORD='"${MYSQL_ROOT_PASSWORD}"'
+export MYSQL_DATABASE='"${MYSQL_DATABASE}"'
+export MYSQL_PASSWORD='"${MYSQL_ROOT_PASSWORD}"'
+export DDKITSWEBPORT="${DDKITSWEBPORT}"
+export DDKITSHOSTNAME='"${DDKITSHOSTNAME}"'
+export MYSQL_PASSWORD='"${MYSQL_ROOT_PASSWORD}"'" > $DDKITSFL/ddkits-files/ddkitsInfo.dev.sh
