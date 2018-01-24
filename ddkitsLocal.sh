@@ -10,32 +10,34 @@ source 'ddkits.alias.sh'
 DDKITSFL=$(pwd)
 export $DDKITSFL
 
-if [ ! -f "${DDKITSFL}/ddkits-files/ddkitsInfo.ports.sh" ]
-  then
-    export DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+    DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
     echo -e "  Your new Web port is  ${DDKITSWEBPORT}  "
-    export DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+    DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
     echo -e "Your new DB port is  ${DDKITSDBPORT}  "
-    export DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+    DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
     echo -e "Your new Jenkins port is  ${DDKITSJENKINSPORT} "
-    export DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+    DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
     echo -e "Your new Solr port is  ${DDKITSSOLRPORT} "
-    export DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+    DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
     echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
-    export DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+    DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
     echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
 
-    echo -e '
-    export DDKITSWEBPORT="${DDKITSWEBPORT}"
-    export DDKITSDBPORT="${DDKITSDBPORT}"
-    export DDKITSJENKINSPORT="${DDKITSJENKINSPORT}"
-    export DDKITSSOLRPORT="${DDKITSSOLRPORT}"
-    export DDKITSADMINPORT="${DDKITSADMINPORT}"
-    export DDKITSREDISPORT="${DDKITSREDISPORT}"
-      ' >> $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
-  else
-    source $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
-fi
+export DDKITSDBPORT=$DDKITSDBPORT
+export DDKITSREDISPORT=$DDKITSREDISPORT
+export DDKITSSOLRPORT=$DDKITSSOLRPORT
+export DDKITSADMINPORT=$DDKITSADMINPORT
+export DDKITSWEBPORT=$DDKITSWEBPORT
+export DDKITSJENKINSPORT=$DDKITSJENKINSPORT
+
+echo -e '
+export DDKITSWEBPORT="'${DDKITSWEBPORT}'"
+export DDKITSDBPORT="'${DDKITSDBPORT}'"
+export DDKITSJENKINSPORT="'${DDKITSJENKINSPORT}'"
+export DDKITSSOLRPORT="'${DDKITSSOLRPORT}'"
+export DDKITSADMINPORT="'${DDKITSADMINPORT}'"
+export DDKITSREDISPORT="'${DDKITSREDISPORT}'"
+  ' > $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
 
 source $DDKITSFL'/ddkits.dev.sh'
 
