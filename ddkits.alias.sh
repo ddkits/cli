@@ -130,7 +130,8 @@ ddk(){
   elif [[ $1 == "rebuild" ]]; then
       clear
         cat "./ddkits-files/ddkits/logo.txt"
-        source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh ~/.ddkits_alias ~/.ddkits_alias_web
+        source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
+        source ~/.ddkits_alias ~/.ddkits_alias_web
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
   elif [[ $1 == "start" ]]; then
       if [[ $2 == "com" ]]; then
