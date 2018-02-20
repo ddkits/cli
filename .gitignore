@@ -16,6 +16,7 @@ ddkits.env.yml
 ddkitsnew.yml
 ddkits-files/*/sites/*.conf
 ddkits_alias
+app
 *.html
 deploy
 *-deploy
