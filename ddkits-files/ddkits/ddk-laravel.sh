@@ -180,11 +180,11 @@ echo -e '
 
 php artisan cache:clear
 php artisan key:generate
-php artisan make:auth
-php artisan cache:clear
+php artisan make:auth -n
 php artisan migrate
 php artisan config:clear
 php artisan cache:clear
+php artisan db:seed
 chmod -R 777 storage
  ' > $DDKITSFL/ll-deploy/ddkits.fix.sh
  

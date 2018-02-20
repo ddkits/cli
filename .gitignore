@@ -21,9 +21,9 @@ app
 deploy
 *-deploy
 ddkits.phar
-ddkits-files/drupal/ddkitscli.sh
-ddkits-files/ddkits/sites/ddkitscust.conf
-ddkits-files/ddkitsInfo.dev.sh
-ddkits-files/ddkitsInfo.ports.sh
-ddkits-files/ddkitsInfo.prod.sh
+*/drupal/ddkitscli.sh
+*/ddkits/sites/ddkitscust.conf
+*/ddkitsInfo.dev.sh
+*/ddkitsInfo.ports.sh
+*/ddkitsInfo.prod.sh
 ddkits-files/drupal/Dockerfile
