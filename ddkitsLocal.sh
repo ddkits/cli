@@ -438,3 +438,11 @@ docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-
 
 docker restart ddkits
 ddk go
+
+
+echo -e '
+###################################################################################################################
+#  make sure to restart the apachectl after fixing the hosts file
+#  sudo apachectl restart   OR sudo service apache2 restart OR by manual restart it within the UI panel
+###################################################################################################################
+'
