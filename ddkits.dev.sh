@@ -339,6 +339,14 @@ fi
   #   echo -e ""
   JENKINS_ONLY='false'
   DDKITSHOSTNAME=${DDKITSSITES//./_}
+
+
+
+  if [[ -f $DDKITSFL'/ddkits-files/ddkitscli.sh' ]]; then
+  rm -rf $DDKITSFL/ddkits-files/ddkitscli.sh
+fi
+
+
   echo -e "
   #!/bin/sh
 
@@ -348,14 +356,14 @@ fi
   #  Created by mutasem elayyoub ddkits.com
   #
 
-  DDKITSSITES='"$DDKITSSITES"'\n
-  DDKITSIP='"$DDKITSIP"'\n
-  MYSQL_USER='"$MYSQL_USER"'\n
-  MYSQL_ROOT_PASSWORD='"$MYSQL_ROOT_PASSWORD"'\n
-  MYSQL_DATABASE='"$MYSQL_DATABASE"'\n
-  MYSQL_PASSWORD='"$MYSQL_PASSWORD"'\n
-  MAIL_ADDRESS='"$MAIL_ADDRESS"'\n" > ./ddkits-files/ddkitscli.sh
-  cat ./ddkits-files/ddkits-drupal.sh >> ./ddkits-files/ddkitscli.sh
+  DDKITSSITES='"$DDKITSSITES"'
+  DDKITSIP='"$DDKITSIP"'
+  MYSQL_USER='"$MYSQL_USER"'
+  MYSQL_ROOT_PASSWORD='"$MYSQL_ROOT_PASSWORD"'
+  MYSQL_DATABASE='"$MYSQL_DATABASE"'
+  MYSQL_PASSWORD='"$MYSQL_PASSWORD"'
+  MAIL_ADDRESS='"$MAIL_ADDRESS"'" > $DDKITSFL/ddkits-files/ddkitscli.sh
+  cat $DDKITSFL/ddkits-files/ddkits-drupal.sh >> $DDKITSFL/ddkits-files/ddkitscli.sh
 
 
   DDKITSFL=$(pwd)
@@ -545,6 +553,11 @@ export DDKITSWEBPORT=${DDKITSWEBPORT}
 export DDKITSHOSTNAME=${DDKITSHOSTNAME}
 export MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
+if [[ -f $DDKITSFL'/ddkits-files/ddkitsInfo.dev.sh' ]]; then
+  rm -rf $DDKITSFL/ddkits-files/ddkitsInfo.dev.sh
+fi
+
+
 echo -e "
 #!/bin/sh
 
@@ -554,19 +567,21 @@ echo -e "
 #  Created by mutasem elayyoub ddkits.com
 #
 
-export DDKITSFL=$DDKITSFL
-export DDKITSIP=$DDKITSIP 
+# export all results
+export DDKITSFL="${DDKITSFL}"
+export DDKITSIP="${DDKITSIP} "
 export JENKINS_ANSWER='"${JENKINS_ANSWER}"'
 export JENKINS_ONLY='"${JENKINS_ONLY}"'
 export JENKINS_ANSWER='"${JENKINS_ANSWER}"'
 export SUDOPASS='"${SUDOPASS}"'
 export MAIL_ADDRESS='"${MAIL_ADDRESS}"'
 export DDKITSSITES='"${DDKITSSITES}"'
-export DDKITSIP='"${DDKITSIP}"'
+export DDKITSIP="${DDKITSIP}"
 export MYSQL_USER='"${MYSQL_USER}"'
 export MYSQL_ROOT_PASSWORD='"${MYSQL_ROOT_PASSWORD}"'
 export MYSQL_DATABASE='"${MYSQL_DATABASE}"'
 export MYSQL_PASSWORD='"${MYSQL_ROOT_PASSWORD}"'
 export DDKITSWEBPORT="${DDKITSWEBPORT}"
 export DDKITSHOSTNAME='"${DDKITSHOSTNAME}"'
-export MYSQL_PASSWORD='"${MYSQL_ROOT_PASSWORD}"'" > $DDKITSFL/ddkits-files/ddkitsInfo.dev.sh
+export MYSQL_PASSWORD='"${MYSQL_ROOT_PASSWORD}"'
+" > $DDKITSFL/ddkits-files/ddkitsInfo.dev.sh

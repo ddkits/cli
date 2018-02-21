@@ -29,15 +29,34 @@ export DDKITSSOLRPORT=$DDKITSSOLRPORT
 export DDKITSADMINPORT=$DDKITSADMINPORT
 export DDKITSWEBPORT=$DDKITSWEBPORT
 export DDKITSJENKINSPORT=$DDKITSJENKINSPORT
+export DDKITSFL=$(pwd)
+
+
+ if [[ -f $DDKITSFL'/ddkits-files/ddkitsInfo.ports.sh' ]]; then
+  rm -rf $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
+fi
+
+
+
 
 echo -e '
-export DDKITSWEBPORT="'${DDKITSWEBPORT}'"
-export DDKITSDBPORT="'${DDKITSDBPORT}'"
-export DDKITSJENKINSPORT="'${DDKITSJENKINSPORT}'"
-export DDKITSSOLRPORT="'${DDKITSSOLRPORT}'"
-export DDKITSADMINPORT="'${DDKITSADMINPORT}'"
-export DDKITSREDISPORT="'${DDKITSREDISPORT}'"
-  ' > $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
+
+#!/bin/sh
+
+#  Script.sh
+#
+#
+#  Created by mutasem elayyoub ddkits.com
+#
+
+export DDKITSFL='$(pwd)'
+export DDKITSDBPORT='${DDKITSDBPORT}'
+export DDKITSREDISPORT='${DDKITSREDISPORT}'
+export DDKITSSOLRPORT='${DDKITSSOLRPORT}'
+export DDKITSADMINPORT='${DDKITSADMINPORT}'
+export DDKITSWEBPORT='${DDKITSWEBPORT}'
+export DDKITSJENKINSPORT='${DDKITSJENKINSPORT}'
+' > $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
 
 source $DDKITSFL'/ddkits.dev.sh'
 
