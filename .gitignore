@@ -27,3 +27,7 @@ ddkits.phar
 */ddkitsInfo.ports.sh
 */ddkitsInfo.prod.sh
 ddkits-files/drupal/Dockerfile
+ddkits-files/ddkits/site.txt
+ddkits-files/ddkitsInfo.dev.sh
+ddkits-files/ddkitsInfo.ports.sh
+ddkits-files/ddkitscli.sh
