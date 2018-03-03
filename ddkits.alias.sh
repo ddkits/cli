@@ -75,20 +75,22 @@ ddk(){
           clear
           cat "./ddkits-files/ddkits/logo.txt"
           clear
-                docker-compose -f ddkits.yml up -d --build
+          docker-compose -f ddkits.yml up -d --build
           cp ddkits.alias.sh ddkits_alias 
           cp ddkits_alias ~/.ddkits_alias 
-                docker-machine create --driver virtualbox ddkits
-                docker-machine start ddkits
-                eval $(docker-machine env ddkits)
+          docker restart $(docker ps -q)
+          docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
+          docker-machine start ddkits
+          eval "$(docker-machine env ddkits)"
           echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
           else
                 docker-compose -f ddkits.yml up -d --build
           cp ddkits.alias.sh ddkits_alias 
           cp ddkits_alias ~/.ddkits_alias 
-                docker-machine create --driver virtualbox ddkits
-                docker-machine start ddkits
-                eval $(docker-machine env ddkits)
+          docker restart $(docker ps -q)
+          docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
+          docker-machine start ddkits
+          eval "$(docker-machine env ddkits)"
           echo 'command source ~/.ddkits_alias 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
         fi
@@ -133,6 +135,18 @@ ddk(){
         source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
         source ~/.ddkits_alias ~/.ddkits_alias_web
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
+        sudo rm ~/.ddkits_alias
+        cp ddkits.alias.sh ddkits_alias
+        sudo cp ddkits_alias ~/.ddkits_alias
+        sudo chmod u+x ~/.ddkits_alias
+        source ~/.ddkits_alias
+        source ~/.ddkits_alias_web
+        #  prepare ddkits container for the new websites
+        echo -e 'copying conf files into ddkits and restart'
+        docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
+        # docker cp ./ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
+        docker restart $(docker ps -q)
+        ddk go
   elif [[ $1 == "start" ]]; then
       if [[ $2 == "com" ]]; then
           clear
@@ -277,12 +291,12 @@ ddk(){
             **************************
 
 
-    Containers Use:
+    Containers DNS:
     Jenkins     http://jenkins.YOUR_DOMAIN.ddkits.site
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v1.20
+    DDKits v1.26
         '
      else
       echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
