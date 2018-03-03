@@ -1,5 +1,13 @@
-# DDKits v1.20 Built by Mutasem Elayyoub melayyoub@outlook.com
+# DDKits v1.26 Built by Mutasem Elayyoub melayyoub@outlook.com
 
+- Ip for DDKits Machine static ...55.100 so whenever any update for docker DDKits will keep the same ip
+- DDK rebuild now including all save information from the old installation at the same folder
+- DDK fix now fixing all docker machine drivers not just DDkits machine 
+- DDK rmn remove all uneeded old images and containers with <none> names
+- DDK del will remove all images and containers from the machine and restart the default machine
+
+
+# DDKits v1.20
 <img src="https://travis-ci.org/ddkits/cli.svg?branch=master" />
 
 Doctor Development Kit is an open source local development environment and workflow tool based on Docker. DDKits allows users to build more than one container under the same port with domains DNS control, super-fast development environments and to integrate those environments with their hosting provider or continuous integration workflows.
