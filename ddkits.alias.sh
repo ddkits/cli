@@ -22,6 +22,75 @@ ddk(){
         cat "./ddkits-files/ddkits/logo.txt"
            echo -e 'Enter your Sudo/Root Password:'
               read SUDOPASS
+              if [[ "$OSTYPE" == "linux-gnu" ]]; then
+                        PLATFORM='linux-gnu'
+                        echo 'This machine is '$PLATFORM' Docker setup will start now'
+                        echo $SUDOPASS | sudo -S apt-get install wget git -y
+                      elif [[ "$OSTYPE" == "darwin"* ]]; then
+                        PLATFORM='MacOS'
+                        echo 'This machine is '$PLATFORM' Docker setup will start now'
+                        echo $SUDOPASS | sudo -S gem install wget git -y
+                      elif [[ "$OSTYPE" == "cygwin" ]]; then
+                        PLATFORM='cygwin'
+                        echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM' 
+                      elif [[ "$OSTYPE" == "msys" ]]; then
+                         PLATFORM='msys'
+                        echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM'        
+                      elif [[ "$OSTYPE" == "win32" ]]; then
+                          PLATFORM='win32'
+                        echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM'         
+                      elif [[ "$OSTYPE" == "freebsd"* ]]; then
+                         PLATFORM='freebsd'
+                        echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM'        
+                      else
+                        break
+              fi
+              echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to make sure they are working fine.)'"
+              DDKITS_DOCKER='Do you have docker'
+              options=("Yes" "No" "Quit")
+              select opt in "${options[@]}"
+              do
+                  case $opt in
+                    "Yes")
+                      echo 'This machine is '$PLATFORM' No need to install Docker then :-)'
+                      break
+                      ;;
+                    "No")
+                      echo 'This machine is '$PLATFORM' Docker setup will start now'
+                      if [[ $PLATFORM == 'linux-gnu' ]]; then
+                        curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+                        curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine &&
+                        chmod +x /tmp/docker-machine &&
+                        echo $SUDOPASS | sudo -S cp /tmp/docker-machine /usr/local/bin/docker-machine
+                        echo $SUDOPASS | sudo -S chmod +x /usr/local/bin/docker-compose
+                      elif [[ $PLATFORM == 'MacOS' ]]; then
+                        curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+                        curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
+                        echo $SUDOPASS | sudo -S chmod +x /usr/local/bin/docker-machine
+                        echo $SUDOPASS | sudo -S chmod +x /usr/local/bin/docker-compose
+                      elif [[ $PLATFORM == 'linux-gnu' ]]; then
+                        echo 'This machine is '$PLATFORM' Docker setup will start now'
+                      elif [[ $PLATFORM == 'cygwin' ]]; then
+                        echo 'This machine is '$PLATFORM' Docker setup will start now'
+                      elif [[ $PLATFORM == 'msys' ]]; then
+                       echo 'This machine is '$PLATFORM' Docker setup will start now'
+                      elif [[ $PLATFORM == 'win32' ]]; then
+                        if [[ ! -d "$HOME/bin" ]]; then mkdir -p "$HOME/bin"; fi && \
+                          curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+                          curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-Windows-x86_64.exe > "$HOME/bin/docker-machine.exe" && \
+                          chmod +x "$HOME/bin/docker-machine.exe"
+                      else
+                        echo 'Unknown system please download and install docker from https://docker.com/'
+                        break
+                      fi
+                      break
+                      ;;
+                    "Quit")
+                      break
+                      ;;
+                      *) echo invalid option;;
+                  esac
+              done
               docker-machine ip ddkits
               echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
               echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
