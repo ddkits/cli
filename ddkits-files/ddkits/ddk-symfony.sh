@@ -66,9 +66,7 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 
 # Set the default command to execute
 
-RUN chmod 600 /etc/mysql/my.cnf \
-    && a2enmod rewrite 
-
+RUN chmod 600 /etc/mysql/my.cnf 
 RUN apt-get update \
   && apt-get install build-essential apt-transport-https  -y --force-yes\
   && echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
