@@ -103,8 +103,7 @@ COPY php7.ini /usr/local/etc/php/conf.d/php.ini
 
 # Set the default command to execute
 
-RUN chmod 600 /etc/mysql/my.cnf \
-    && a2enmod rewrite 
+RUN chmod 600 /etc/mysql/my.cnf
 RUN echo "alias drush=/var/www/html/drush/drush" >> ~/.bashrc
 RUN chmod -R 777 /var/www/html
 RUN apt-get install drush -y --force-yes 
