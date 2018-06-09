@@ -11,6 +11,8 @@ ddk(){
  if [[ $1 == "install" ]]; then
         clear
         cat "./ddkits-files/ddkits/logo.txt"
+        docker-machine create --driver virtualbox default
+        eval "$(docker-machine env default)"
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
       if [[ $DDKITSVER == 1 ]]; then
