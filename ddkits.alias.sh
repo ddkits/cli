@@ -151,6 +151,7 @@ ddk(){
           docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
           docker-machine start ddkits
           eval "$(docker-machine env ddkits)"
+          echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
           else
                 docker-compose -f ddkits.yml up -d --build
@@ -160,7 +161,7 @@ ddk(){
           docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
           docker-machine start ddkits
           eval "$(docker-machine env ddkits)"
-          echo 'command source ~/.ddkits_alias 2>/dev/null || true ' >> ~/.bash_profile
+          echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
         fi
   fi
