@@ -31,6 +31,31 @@ if [[ ! -d "${DDKITSFL}/ddkits-files/laravel/sites" ]]; then
   mkdir $DDKITSFL/ddkits-files/laravel/sites
   chmod -R 777 $DDKITSFL/ddkits-files/laravel/sites 
 fi
+if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then 
+  mkdir $DDKITSFL/ddkits-files/ddkits/ssl
+  chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl 
+fi
+
+cat "./ddkits-files/ddkits/logo.txt"
+      # create the crt files for ssl 
+          openssl req \
+              -newkey rsa:2048 \
+              -x509 \
+              -nodes \
+              -keyout $DDKITSSITES.key \
+              -new \
+              -out $DDKITSSITES.crt \
+              -subj /CN=$DDKITSSITES.site \
+              -reqexts SAN \
+              -extensions SAN \
+              -config <(cat /System/Library/OpenSSL/openssl.cnf \
+                  <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
+              -sha256 \
+              -days 3650
+          mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
+          mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
+          echo "ssl crt and .key files moved correctly"
+          
 echo -e '
 <VirtualHost *:80>
      ServerAdmin melayyoub@outlook.com
@@ -51,7 +76,37 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost> ' > $DDKITSFL/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
+</VirtualHost> 
+
+# <VirtualHost *:443>
+#   ServerAdmin melayyoub@outlook.com
+#    ServerName '$DDKITSSITES'
+#    '$DDKITSSERVERS'
+#    DocumentRoot /var/www/html/'$DOCUMENTROOT'
+
+#     ErrorLog ${APACHE_LOG_DIR}/error.log
+#     CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+#     # Enable/Disable SSL for this virtual host.
+#     SSLEngine on
+
+#     SSLProtocol all -SSLv2 -SSLv3
+#     SSLHonorCipherOrder On
+#     SSLCipherSuite ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+
+#     SSLCertificateFile /etc/ssl/certs/'$DDKITSSITES'.crt
+#     SSLCertificateKeyFile /etc/ssl/certs/'$DDKITSSITES'.key
+#     SSLCACertificatePath /etc/ssl/certs/
+
+    
+#   <Location "/">
+#     Order allow,deny
+#     Allow from all
+#     Options All
+#     AllowOverride All
+#     Require all granted
+#   </Location>
+# </VirtualHost>' > $DDKITSFL/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 

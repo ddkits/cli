@@ -33,6 +33,31 @@ if [[ ! -d "${DDKITSFL}/ddkits-files/git/sites" ]]; then
   chmod -R 777 $DDKITSFL/ddkits-files/git/sites 
 fi
 #  LAMP PHP 7
+if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then 
+  mkdir $DDKITSFL/ddkits-files/ddkits/ssl
+  chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl 
+fi
+
+cat "./ddkits-files/ddkits/logo.txt"
+      # create the crt files for ssl 
+          openssl req \
+              -newkey rsa:2048 \
+              -x509 \
+              -nodes \
+              -keyout $DDKITSSITES.key \
+              -new \
+              -out $DDKITSSITES.crt \
+              -subj /CN=$DDKITSSITES.site \
+              -reqexts SAN \
+              -extensions SAN \
+              -config <(cat /System/Library/OpenSSL/openssl.cnf \
+                  <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
+              -sha256 \
+              -days 3650
+          mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
+          mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
+          echo "ssl crt and .key files moved correctly"
+          
 
 echo -e '
 <VirtualHost *:80>
@@ -54,7 +79,8 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost> ' > $DDKITSFL/ddkits-files/git/sites/$DDKITSHOSTNAME.conf
+</VirtualHost> 
+' > $DDKITSFL/ddkits-files/git/sites/$DDKITSHOSTNAME.conf
 
 cat $DDKITSFL/ddkits-files/git/sites/gitlab-example.rb > $DDKITSFL/ddkits-files/git/sites/gitlab.rb
 

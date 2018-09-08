@@ -11,12 +11,31 @@ ddk(){
  if [[ $1 == "install" ]]; then
         clear
         cat "./ddkits-files/ddkits/logo.txt"
+      # create the crt files for ssl 
+          openssl req \
+              -newkey rsa:2048 \
+              -x509 \
+              -nodes \
+              -keyout ddkits.site.key \
+              -new \
+              -out ddkits.site.crt \
+              -subj /CN=ddkits.site \
+              -reqexts SAN \
+              -extensions SAN \
+              -config <(cat /System/Library/OpenSSL/openssl.cnf \
+                  <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site')) \
+              -sha256 \
+              -days 3650
+          mv ddkits.site.key ddkits-files/ddkits/ssl/
+          mv ddkits.site.crt ddkits-files/ddkits/ssl/
+          echo "ssl crt and .key files moved correctly"
+
       echo -e '(1) Localhost \n(2) virtualbox'
           read DDKITSVER
       if [[ $DDKITSVER == 1 ]]; then
         clear
         cat "./ddkits-files/ddkits/logo.txt"
-        docker-compose -f ddkits.yml up -d --build
+          docker-compose -f ddkits.yml up -d --build
       elif [[ $DDKITSVER == 2 ]]; then
         clear
         cat "./ddkits-files/ddkits/logo.txt"
@@ -138,12 +157,15 @@ ddk(){
             else
               break
           fi
+
+          
           docker-compose -f ddkits.yml up -d --build
         fi
         if [[ -f  ~/.ddkits_alias ]]; then
           clear
           cat "./ddkits-files/ddkits/logo.txt"
           clear
+
           docker-compose -f ddkits.yml up -d --build
           cp ddkits.alias.sh ddkits_alias 
           cp ddkits_alias ~/.ddkits_alias 
@@ -154,7 +176,8 @@ ddk(){
           echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
           else
-                docker-compose -f ddkits.yml up -d --build
+      
+          docker-compose -f ddkits.yml up -d --build
           cp ddkits.alias.sh ddkits_alias 
           cp ddkits_alias ~/.ddkits_alias 
           docker restart $(docker ps -q)
@@ -202,8 +225,28 @@ ddk(){
   elif [[ $1 == "rebuild" ]]; then
       clear
         cat "./ddkits-files/ddkits/logo.txt"
+
         source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
         source ~/.ddkits_alias ~/.ddkits_alias_web
+        # create the crt files for ssl 
+          openssl req \
+              -newkey rsa:2048 \
+              -x509 \
+              -nodes \
+              -keyout $DDKITSSITES.key \
+              -new \
+              -out $DDKITSSITES.crt \
+              -subj /CN=$DDKITSSITES.site \
+              -reqexts SAN \
+              -extensions SAN \
+              -config <(cat /System/Library/OpenSSL/openssl.cnf \
+                  <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
+              -sha256 \
+              -days 3650
+          mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
+          mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
+          echo "ssl crt and .key files moved correctly"
+
         docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
         sudo rm ~/.ddkits_alias
         cp ddkits.alias.sh ddkits_alias
@@ -212,6 +255,16 @@ ddk(){
         source ~/.ddkits_alias
         source ~/.ddkits_alias_web
         # export DDKITSIP=$(docker-machine ip ddkits)
+        #  prepare ddkits container for the new websites
+            echo -e 'copying conf files into ddkits and restart'
+            docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
+          # docker cp ./ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
+          # copy ssl crt keys to ddkits proxy 
+            docker cp ./ddkits-files/ddkits/ssl/$DDKITSSITES.crt ddkits:/etc/ssl/certs/$DDKITSSITES.crt
+            docker cp ./ddkits-files/ddkits/ssl/$DDKITSSITES.key ddkits:/etc/ssl/certs/$DDKITSSITES.key
+
+          docker restart ddkits
+          ddk go
         #  prepare ddkits container for the new websites
         matches_in_hosts="$(grep -n ${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
         ddkits_matches_in_hosts="$(grep -n jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site /etc/hosts | cut -f1 -d:)"

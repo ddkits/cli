@@ -8,20 +8,20 @@
 #
 
 # export all results
-export DDKITSFL=/Users/mutasemelayyoub/sites/lara-dev
-export DDKITSIP=192.168.55.100
-export JENKINS_ANSWER='y'
+export DDKITSFL=/Users/samelayyoub/sites/arround
+export DDKITSIP=192.168.55.100 
+export JENKINS_ANSWER='n'
 export JENKINS_ONLY='false'
-export JENKINS_ANSWER='y'
+export JENKINS_ANSWER='n'
 export SUDOPASS='123'
 export MAIL_ADDRESS='m@m.com'
-export DDKITSSITES='lara.dev'
+export DDKITSSITES='arround.site'
 export DDKITSIP=192.168.55.100
 export MYSQL_USER='ddk'
 export MYSQL_ROOT_PASSWORD='ddk'
 export MYSQL_DATABASE='ddk'
 export MYSQL_PASSWORD='ddk'
-export DDKITSWEBPORT=1152
-export DDKITSHOSTNAME='lara_dev'
+export DDKITSWEBPORT=1223
+export DDKITSHOSTNAME='arround_site'
 export MYSQL_PASSWORD='ddk'
 

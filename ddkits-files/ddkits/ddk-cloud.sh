@@ -32,7 +32,31 @@ if [[ ! -d "${DDKITSFL}/ddkits-files/cloud/sites" ]]; then
   mkdir $DDKITSFL/ddkits-files/cloud/sites
   chmod -R 777 $DDKITSFL/ddkits-files/cloud/sites 
 fi
+if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then 
+  mkdir $DDKITSFL/ddkits-files/ddkits/ssl
+  chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl 
+fi
 
+cat "./ddkits-files/ddkits/logo.txt"
+      # create the crt files for ssl 
+          openssl req \
+              -newkey rsa:2048 \
+              -x509 \
+              -nodes \
+              -keyout $DDKITSSITES.key \
+              -new \
+              -out $DDKITSSITES.crt \
+              -subj /CN=$DDKITSSITES.site \
+              -reqexts SAN \
+              -extensions SAN \
+              -config <(cat /System/Library/OpenSSL/openssl.cnf \
+                  <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
+              -sha256 \
+              -days 3650
+          mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
+          mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
+          echo "ssl crt and .key files moved correctly"
+          
 echo -e '
 <VirtualHost *:80>
      ServerAdmin melayyoub@outlook.com
@@ -59,7 +83,8 @@ echo -e '
 
  SetEnv HOME /var/www/html/public
  SetEnv HTTP_HOME /var/www/html/public
-</VirtualHost> ' > $DDKITSFL/ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
+</VirtualHost> 
+' > $DDKITSFL/ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
 
 
 echo -e '

@@ -94,6 +94,7 @@ fi
         ProxyTimeout 2400
         ProxyBadHeader Ignore 
       </VirtualHost>
+
       " >> ddkits-files/ddkits/sites/ddkitscust.conf
     else
     echo -e ""
@@ -114,39 +115,39 @@ fi
             ProxyPreserveHost on
             ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/
             ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
-        Timeout 2400
-        ProxyTimeout 2400
-        ProxyBadHeader Ignore 
-          </VirtualHost>
-  <VirtualHost *:80>
-    ServerName solr."$DDKITSSITES".ddkits.site
-    ProxyPreserveHost on
-    ProxyPass / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
-    ProxyPassReverse / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
-        Timeout 2400
-        ProxyTimeout 2400
-        ProxyBadHeader Ignore 
-  </VirtualHost>
+          Timeout 2400
+          ProxyTimeout 2400
+          ProxyBadHeader Ignore 
+            </VirtualHost>
+        <VirtualHost *:80>
+          ServerName solr."$DDKITSSITES".ddkits.site
+          ProxyPreserveHost on
+          ProxyPass / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
+          ProxyPassReverse / http://"$DDKITSIP":"$DDKITSSOLRPORT"/
+              Timeout 2400
+              ProxyTimeout 2400
+              ProxyBadHeader Ignore 
+        </VirtualHost>
 
-  <VirtualHost *:80>
-    ServerName jenkins."$DDKITSSITES".ddkits.site
-    ProxyPreserveHost on
-    ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
-    ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
-        Timeout 2400
-        ProxyTimeout 2400
-        ProxyBadHeader Ignore 
-  </VirtualHost>
+        <VirtualHost *:80>
+          ServerName jenkins."$DDKITSSITES".ddkits.site
+          ProxyPreserveHost on
+          ProxyPass / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
+          ProxyPassReverse / http://"$DDKITSIP":"$DDKITSJENKINSPORT"/
+              Timeout 2400
+              ProxyTimeout 2400
+              ProxyBadHeader Ignore 
+        </VirtualHost>
 
-  <VirtualHost *:80>
-    ServerName admin."$DDKITSSITES".ddkits.site
-    ProxyPreserveHost on
-    ProxyPass / http://"$DDKITSIP":"$DDKITSADMINPORT"/
-    ProxyPassReverse / http://"$DDKITSIP":"$DDKITSADMINPORT"/
-        Timeout 2400
-        ProxyTimeout 2400
-        ProxyBadHeader Ignore 
-  </VirtualHost>
+        <VirtualHost *:80>
+          ServerName admin."$DDKITSSITES".ddkits.site
+          ProxyPreserveHost on
+          ProxyPass / http://"$DDKITSIP":"$DDKITSADMINPORT"/
+          ProxyPassReverse / http://"$DDKITSIP":"$DDKITSADMINPORT"/
+              Timeout 2400
+              ProxyTimeout 2400
+              ProxyBadHeader Ignore 
+        </VirtualHost>
 
           " >> ddkits-files/ddkits/sites/ddkitscust.conf
         else
@@ -391,6 +392,7 @@ fi
               ;;
           "Wordpress")
       source ./ddkits-files/ddkits/ddk-wordpress.sh
+      
                break
               ;;
       "Git Server")
