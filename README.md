@@ -1,3 +1,12 @@
+# DDKits v2.01 Built by Mutasem Elayyoub melayyoub@outlook.com
+
+- HTTPS/HTTP included with all CMSs 
+- New ssl port to be used by composer
+- DDK rebuild now including all save information from the old installation at the same folder
+- DDK fix now fixing all docker machine drivers not just DDkits machine 
+- DDK rmn remove all uneeded old images and containers with <none> names
+- DDK del will remove all images and containers from the machine and restart the default machine
+
 # DDKits v1.26 Built by Mutasem Elayyoub melayyoub@outlook.com
 
 - Ip for DDKits Machine static ...55.100 so whenever any update for docker DDKits will keep the same ip
