@@ -43,7 +43,7 @@ cat "./ddkits-files/ddkits/logo.txt"
               -keyout $DDKITSSITES.key \
               -new \
               -out $DDKITSSITES.crt \
-              -subj /CN=$DDKITSSITES.site \
+              -subj /CN=$DDKITSSITES \
               -reqexts SAN \
               -extensions SAN \
               -config <(cat /System/Library/OpenSSL/openssl.cnf \
@@ -77,7 +77,29 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost> 
-' > $DDKITSFL/ddkits-files/magento/sites/$DDKITSHOSTNAME.conf
+
+<VirtualHost *:443>
+  ServerAdmin melayyoub@outlook.com
+   ServerName '$DDKITSSITES'
+   '$DDKITSSERVERS'
+    DocumentRoot /var/www/html/public
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+  
+  <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost>' > $DDKITSFL/ddkits-files/magento/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 
@@ -117,7 +139,8 @@ services:
     networks:
       - ddkits
     ports:
-      - "'$DDKITSWEBPORT':80" ' >> $DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORT':80" 
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 if [[ ! -d "mag-deploy/public" ]]; then
   mkdir $DDKITSFL/mag-deploy

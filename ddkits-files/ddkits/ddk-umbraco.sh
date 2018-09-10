@@ -49,7 +49,8 @@ services:
     networks:
       - ddkits
     ports:
-      - "'$DDKITSWEBPORT':80" ' >> $DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORT':80" 
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/um-deploy
 

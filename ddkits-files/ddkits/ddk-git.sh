@@ -47,7 +47,7 @@ cat "./ddkits-files/ddkits/logo.txt"
               -keyout $DDKITSSITES.key \
               -new \
               -out $DDKITSSITES.crt \
-              -subj /CN=$DDKITSSITES.site \
+              -subj /CN=$DDKITSSITES \
               -reqexts SAN \
               -extensions SAN \
               -config <(cat /System/Library/OpenSSL/openssl.cnf \
@@ -79,7 +79,28 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost> 
+</VirtualHost> <VirtualHost *:443>
+  ServerAdmin melayyoub@outlook.com
+   ServerName '$DDKITSSITES'
+   '$DDKITSSERVERS'
+    DocumentRoot /opt/gitlab/embedded/service/gitlab-rails/public
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+  
+  <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost>
 ' > $DDKITSFL/ddkits-files/git/sites/$DDKITSHOSTNAME.conf
 
 cat $DDKITSFL/ddkits-files/git/sites/gitlab-example.rb > $DDKITSFL/ddkits-files/git/sites/gitlab.rb
@@ -175,6 +196,7 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80" 
+      - "'$DDKITSWEBPORTSSL':443" 
 
       ' >> $DDKITSFL/ddkits.env.yml
 

@@ -44,7 +44,7 @@ cat "./ddkits-files/ddkits/logo.txt"
               -keyout $DDKITSSITES.key \
               -new \
               -out $DDKITSSITES.crt \
-              -subj /CN=$DDKITSSITES.site \
+              -subj /CN=$DDKITSSITES \
               -reqexts SAN \
               -extensions SAN \
               -config <(cat /System/Library/OpenSSL/openssl.cnf \
@@ -103,7 +103,28 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost> 
+</VirtualHost> <VirtualHost *:443>
+  ServerAdmin melayyoub@outlook.com
+   ServerName '$DDKITSSITES'
+   '$DDKITSSERVERS'
+    DocumentRoot /var/www/html/'$DOCUMENTROOT'
 
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+  
+  <Location "/">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Location>
+  <Directory "/var/www/html">
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
+  </Directory>
+</VirtualHost>
 ' > $DDKITSFL/ddkits-files/joomla/sites/$DDKITSHOSTNAME.conf
 
 echo -e 'version: "2"
@@ -122,6 +143,7 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80" 
+      - "'$DDKITSWEBPORTSSL':443"
     environment:
        JOOMLA_DB_HOST: '$DDKITSIP':'$DDKITSDBPORT'
        JOOMLA_DB_USER: '$MYSQL_USER'

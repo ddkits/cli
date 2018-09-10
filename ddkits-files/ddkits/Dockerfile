@@ -28,7 +28,6 @@ COPY ./custom_50x.html /var/www/html/custom_50x.html
 # using vm uncomment the ddkits.vm.conf if not direct localhost, then uncomment ddkits.conf
 
 ADD sites/ddkits.conf /etc/apache2/sites-enabled/ddkits.conf
-ADD sites/default-ssl.conf /etc/apache2/sites-anabled/
 ADD ssl/ddkits.site.crt /etc/ssl/certs/ddkits.site.crt
 ADD ssl/ddkits.site.key /etc/ssl/certs/ddkits.site.key
 

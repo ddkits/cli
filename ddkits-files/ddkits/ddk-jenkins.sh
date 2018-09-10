@@ -57,7 +57,8 @@ services:
     networks:
       - ddkits
     ports:
-      - "'$DDKITSWEBPORT':8080" ' >> $DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORT':80" 
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 if [[ ! -d "jenkins" ]]; then
   

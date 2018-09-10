@@ -67,6 +67,52 @@ fi
         ProxyTimeout 2400
         ProxyBadHeader Ignore 
       </VirtualHost>
+      <IfModule mod_ssl.c>
+        <VirtualHost *:443>
+                ServerAdmin webmaster@localhost
+                DocumentRoot /var/www/html
+                ServerName "$DDKITSSITES"
+                ProxyPreserveHost on
+                # Proxy HTTP requests
+                ProxyPass / http://"$DDKITSIP":"$DDKITSWEBPORT"/ 
+                ProxyPassReverse / http://"$DDKITSIP":"$DDKITSWEBPORT"/
+                
+                <Directory /var/www/html/>
+                    Options FollowSymLinks
+                    AllowOverride All
+                    Require all granted
+                </Directory>
+
+                ErrorLog /var/www/html/error.log
+                CustomLog /var/www/html/access.log combined
+                SSLCertificateFile /etc/ssl/certs/"$DDKITSSITES".crt
+                SSLCertificateKeyFile /etc/ssl/certs/"$DDKITSSITES".key
+        </VirtualHost>
+        </IfModule>
+      <VirtualHost *:443>
+        ServerName "$DDKITSSITES"
+        ProxyRequests Off
+        ProxyPreserveHost on
+
+        # Enable/Disable SSL for this virtual host.
+        SSLEngine on
+
+        SSLProtocol all -SSLv2 -SSLv3
+        SSLHonorCipherOrder On
+        SSLCipherSuite ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+
+        SSLCertificateFile /etc/ssl/certs/"$DDKITSSITES".crt
+        SSLCertificateKeyFile /etc/ssl/certs/"$DDKITSSITES".key
+        SSLCACertificatePath /etc/ssl/certs/
+        
+        # Proxy HTTP requests
+        ProxyPass / https://"$DDKITSIP":"$DDKITSWEBPORTSSL"/ 
+        ProxyPassReverse / https://"$DDKITSIP":"$DDKITSWEBPORTSSL"/
+
+        Timeout 2400
+        ProxyTimeout 2400
+        ProxyBadHeader Ignore 
+      </VirtualHost>
       <VirtualHost *:80>
         ServerName solr."$DDKITSSITES".ddkits.site
         ProxyPreserveHost on
@@ -119,6 +165,15 @@ fi
           ProxyTimeout 2400
           ProxyBadHeader Ignore 
             </VirtualHost>
+            <VirtualHost *:443>
+        ServerName "$DDKITSSITES"
+        ProxyPreserveHost on
+        ProxyPass / https://"$DDKITSIP":"$DDKITSWEBPORTSSL"/ 
+        ProxyPassReverse / https://"$DDKITSIP":"$DDKITSWEBPORTSSL"/
+        Timeout 2400
+        ProxyTimeout 2400
+        ProxyBadHeader Ignore 
+      </VirtualHost>
         <VirtualHost *:80>
           ServerName solr."$DDKITSSITES".ddkits.site
           ProxyPreserveHost on
@@ -169,7 +224,15 @@ fi
         ProxyTimeout 2400
         ProxyBadHeader Ignore 
             </VirtualHost>
-
+            <VirtualHost *:443>
+        ServerName "$DDKITSSITES"
+        ProxyPreserveHost on
+        ProxyPass / https://"$DDKITSIP":"$DDKITSWEBPORTSSL"/ 
+        ProxyPassReverse / https://"$DDKITSIP":"$DDKITSWEBPORTSSL"/
+        Timeout 2400
+        ProxyTimeout 2400
+        ProxyBadHeader Ignore 
+      </VirtualHost>
             <VirtualHost *:80>
               ServerName "$DDKITSSITESALIAS"
               ProxyPreserveHost on

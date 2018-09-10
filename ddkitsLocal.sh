@@ -12,6 +12,8 @@ export $DDKITSFL
 
     DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
     echo -e "  Your new Web port is  ${DDKITSWEBPORT}  "
+    DDKITSWEBPORTSSL="$(awk -v min=6001 -v max=7000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+    echo -e "  Your new Web SSL port is  ${DDKITSWEBPORTSSL}  "
     DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
     echo -e "Your new DB port is  ${DDKITSDBPORT}  "
     DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
@@ -28,6 +30,7 @@ export DDKITSREDISPORT=$DDKITSREDISPORT
 export DDKITSSOLRPORT=$DDKITSSOLRPORT
 export DDKITSADMINPORT=$DDKITSADMINPORT
 export DDKITSWEBPORT=$DDKITSWEBPORT
+export DDKITSWEBPORTSSL=$DDKITSWEBPORTSSL
 export DDKITSJENKINSPORT=$DDKITSJENKINSPORT
 export DDKITSFL=$(pwd)
 
@@ -56,6 +59,7 @@ export DDKITSREDISPORT='${DDKITSREDISPORT}'
 export DDKITSSOLRPORT='${DDKITSSOLRPORT}'
 export DDKITSADMINPORT='${DDKITSADMINPORT}'
 export DDKITSWEBPORT='${DDKITSWEBPORT}'
+export DDKITSWEBPORTSSL='${DDKITSWEBPORTSSL}'
 export DDKITSJENKINSPORT='${DDKITSJENKINSPORT}'
 ' > $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
 
@@ -374,6 +378,7 @@ echo -e '#<html><head><!--
 MAIL_ADDRESS = '$MAIL_ADDRESS'<br />
 Website = '$DDKITSSITES'<br />
 DDKits ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORT'<br />
+DDKits SSL ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORTSSL'<br />
 Mysql User = '$MYSQL_USER'<br />
 Mysql User Password = '$MYSQL_ROOT_PASSWORD'<br />
 Database name =' $MYSQL_DATABASE'<br />
@@ -383,6 +388,7 @@ Website Alias = '$DDKITSSITESALIAS' '$DDKITSSITESALIAS2' '$DDKITSSITESALIAS3'<br
 Ports:<br />
 <br />
 - Your new '$DDKITSSITES' port is: '$DDKITSWEBPORT'<br />
+- Your new SSL port is: '$DDKITSWEBPORT'<br />
 - Your new DB port is: '$DDKITSDBPORT'<br />
 - Your new Jenkins port is: '$DDKITSJENKINSPORT'<br />
 - Your new Solr port is: '$DDKITSSOLRPORT'<br />
@@ -399,6 +405,7 @@ echo -e '
 MAIL_ADDRESS = '$MAIL_ADDRESS'
 Website = '$DDKITSSITES'
 DDKits ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORT'
+DDKits SSL ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORTSSL'
 Mysql User = '$MYSQL_USER'
 Mysql User Password = '$MYSQL_ROOT_PASSWORD'
 Database name =' $MYSQL_DATABASE'
@@ -408,6 +415,7 @@ Website Alias = '$DDKITSSITESALIAS' '$DDKITSSITESALIAS2' '$DDKITSSITESALIAS3'
 Ports:
 
 - Your new '$DDKITSSITES' port is: '$DDKITSWEBPORT'
+- Your new '$DDKITSSITES' port SSL is: '$DDKITSWEBPORTSSL'
 - Your new DB port is: '$DDKITSDBPORT'
 - Your new Jenkins port is: '$DDKITSJENKINSPORT'
 - Your new Solr port is: '$DDKITSSOLRPORT'
