@@ -135,7 +135,7 @@ services:
       - $DDKITSFL/zenc-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_zenc_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_zenc_web
     networks:
       - ddkits
     ports:

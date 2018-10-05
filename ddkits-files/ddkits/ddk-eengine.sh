@@ -134,7 +134,7 @@ services:
       - $DDKITSFL/eengine-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_eengine_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_eengine_web
     networks:
       - ddkits
     ports:

@@ -135,7 +135,7 @@ services:
       - $DDKITSFL/mag-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_magento_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_magento_web
     networks:
       - ddkits
     ports:

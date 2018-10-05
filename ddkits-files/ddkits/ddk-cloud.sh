@@ -194,7 +194,7 @@ services:
       - $DDKITSFL/cloud-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_cloud_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_cloud_web
     networks:
       - ddkits
     ports:

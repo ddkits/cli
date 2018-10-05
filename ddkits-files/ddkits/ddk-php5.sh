@@ -137,7 +137,7 @@ services:
       - $DDKITSFL/lamp5-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_lamp5_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_lamp5_web
     networks:
       - ddkits
     ports:

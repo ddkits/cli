@@ -53,7 +53,7 @@ services:
       - $DDKITSFL/logs/jenkins.log:/var/log/jenkins/
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_jenkins_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins_web
     networks:
       - ddkits
     ports:

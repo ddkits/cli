@@ -136,7 +136,7 @@ services:
     
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_jom_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_jom_web
     volumes:
       - $DDKITSFL/jom-deploy:/var/www/html
     networks:

@@ -171,7 +171,7 @@ services:
     tty: true
     environment:
       - DDKITSHOSTNAME="'$DDKITSHOSTNAME'"
-    container_name: ${DDKITSHOSTNAME}_ddkits_drupal_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_drupal_web
     networks:
       - ddkits      
     ports:

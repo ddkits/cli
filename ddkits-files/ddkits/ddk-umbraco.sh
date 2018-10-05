@@ -45,7 +45,7 @@ services:
       - $DDKITSFL/um-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_umbraco_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_umbraco_web
     networks:
       - ddkits
     ports:

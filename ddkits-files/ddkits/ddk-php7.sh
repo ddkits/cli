@@ -132,7 +132,7 @@ services:
       - $DDKITSFL/lamp7-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_lamp7_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_lamp7_web
     networks:
       - ddkits
     ports:

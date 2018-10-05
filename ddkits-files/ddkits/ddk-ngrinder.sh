@@ -25,6 +25,9 @@ fi
 if [[  -f "${DDKITSFL}/ddkits-files/ngrinder/sites/$DDKITSHOSTNAME.conf" ]]; then
   rm $DDKITSFL/ddkits-files/ngrinder/sites/$DDKITSHOSTNAME.conf
 fi
+if [[  -f "$DDKITSFL/ddkits-files/ngrinder/ngrinder-agent/__agent.conf" ]]; then
+  rm $DDKITSFL/ddkits-files/ngrinder/ngrinder-agent/__agent.conf
+fi
 if [[ ! -d "${DDKITSFL}/ddkits-files/ngrinder/sites" ]]; then 
   mkdir $DDKITSFL/ddkits-files/ngrinder/sites
   chmod -R 777 $DDKITSFL/ddkits-files/ngrinder/sites 
@@ -103,26 +106,24 @@ echo -e '
 
 echo -e '
 
-FROM ddkits/lamp:7
+common.start_mode=agent
+agent.controller_host='$DDKITSSITES'
+agent.controller_port='$DDKITSWEBPORT'
+agent.region=Americas
+#agent.host_id=
+#agent.server_mode=true
 
-MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
+# provide more agent java execution option if necessary.
+#agent.java_opt=
+# set following false if you want to use more than 1G Xmx memory per a agent process.
+agent.limit_xmx=true
 
-RUN ln -sf $DDKITSFL/logs /var/log/nginx/access.log \
-    && ln -sf $DDKITSFL/logs /var/log/nginx/error.log \
-    && chmod 600 /etc/mysql/my.cnf \
-    && a2enmod rewrite \
-    && rm /etc/apache2/sites-enabled/000-default.conf 
-RUN chmod -R 777 /var/www/html
+# please uncomment the following option if you want to send all logs to the controller.
+#agent.all_logs=true
+# some jvm is not compatible with DNSJava. If so, set this false.
+#agent.enable_local_dns=false
 
-COPY php.ini /etc/php/7.0/fpm/php.ini
-RUN chmod o+rw /var/www/html
-COPY $DDKITSFL/sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf 
-
-# Fixing permissions 
-RUN chown -R www-data:www-data /var/www/html
-RUN usermod -u 1000 www-data
-
-' >> $DDKITSFL/ddkits-files/ngrinder/Dockerfile
+' > $DDKITSFL/ddkits-files/ngrinder/ngrinder-agent/__agent.conf
 
 echo -e 'version: "2"
 
@@ -131,7 +132,7 @@ services:
     image: ngrinder/controller:3.4
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_ngrinder_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_ngrinder_web
     networks:
       - ddkits
     volumes:
@@ -139,28 +140,49 @@ services:
     links:
       - mariadb
     ports:
-      - "16001:16001"
-      - "12000-12009:12000-12009"
       - "'$DDKITSWEBPORT':80"
       - "'$DDKITSWEBPORTSSL':443"
-    networks:
-      - ddkits
+      - "16001:16001"
+      - "12000-12009:12000-12009"
+      
   ngrinder-agent:
-      image: ngrinder/agent:3.4
+      image: ddkits/ngrinder-agent:latest
       links:
         - web
       environment:
-        - CONTROLLER_ADDR='$DDKITSSITES':16001
-      networks:
-        - ddkits
-' >> $DDKITSFL/ddkits.env.yml
-    
-echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ngrinder-deploy
+        - CONTROLLER_ADDR='$DDKITSIP':'$DDKITSWEBPORT'
+  ngrinder-agent1:
+        image: ddkits/ngrinder-agent:latest
+        links:
+          - web
+        environment:
+          - CONTROLLER_ADDR='$DDKITSIP':'$DDKITSWEBPORT'
+  ngrinder-agent2:
+        image: ddkits/ngrinder-agent:latest
+        links:
+          - web
+        environment:
+          - CONTROLLER_ADDR='$DDKITSIP':'$DDKITSWEBPORT'
+  ngrinder-agent3:
+        image: ddkits/ngrinder-agent:latest
+        links:
+          - web
+        environment:
+          - CONTROLLER_ADDR='$DDKITSIP':'$DDKITSWEBPORT'
+  ngrinder-agent4:
+        image: ddkits/ngrinder-agent:latest
+        links:
+          - web
+        environment:
+          - CONTROLLER_ADDR='$DDKITSIP':'$DDKITSWEBPORT'
+' > $DDKITSFL/ddkits.env.yml
 
+echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ngrinder-deploy
+echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ddkits-files/ngrinder/ngrinder-agent
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
-alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_ngrinder_web /bin/bash'
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_ngrinder_web /bin/bash'
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_ngrinder_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ngrinder-deploy
