@@ -152,7 +152,7 @@ services:
       - $DDKITSFL/symfony-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_symfony_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_symfony_web
     networks:
       - ddkits
     ports:

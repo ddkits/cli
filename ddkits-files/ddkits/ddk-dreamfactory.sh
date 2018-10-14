@@ -153,7 +153,7 @@ services:
       - $DDKITSFL/dreamf-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_dreamf_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_dreamf_web
     networks:
       - ddkits
     ports:

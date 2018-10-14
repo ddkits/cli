@@ -135,7 +135,7 @@ services:
       - $DDKITSFL/contao-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_contao_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_contao_web
     networks:
       - ddkits
     ports:

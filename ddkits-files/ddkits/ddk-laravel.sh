@@ -135,7 +135,7 @@ services:
       - $DDKITSFL/ll-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_laravel_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_laravel_web
     networks:
       - ddkits
     ports:

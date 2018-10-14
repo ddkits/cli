@@ -437,14 +437,14 @@ fi
   # Setup options Please make sure of all options before publish pick list 
   # 
 
-  options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony"  "ZenCart" "Zend" "Quit")
+  options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "nGrinder" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony" "ZenCart" "Zend" "Quit")
   select opt in "${options[@]}"
   do
       case $opt in
           "Drupal")
-     echo -e ""
-    echo -e 'What Drupal Version you want to start with: 7 or 8 ?'
-      read DDKITSDRUPALV
+        echo -e ""
+        echo -e 'What Drupal Version you want to start with: 7 or 8 ?'
+        read DDKITSDRUPALV
 
       if [[ $DDKITSDRUPALV == '7' ]]; then
       source ./ddkits-files/ddkits/ddk-drupal7.sh
@@ -486,6 +486,10 @@ fi
               ;;
           "Magento")
       source ./ddkits-files/ddkits/ddk-magento.sh
+              break
+              ;;
+          "nGrinder")
+      source ./ddkits-files/ddkits/ddk-ngrinder.sh
               break
               ;;
 

@@ -333,6 +333,7 @@ ddk(){
         cat "./ddkits-files/ddkits/logo.txt" 
         # remove none images and volumes
         docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+        docker rm $(docker ps --filter=status=exited --filter=status=created -q)
         docker volume rm $(docker volume ls -f dangling=true -q)
     elif [[ $1 == "style" ]]; then
       clear

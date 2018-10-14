@@ -10,8 +10,6 @@
     ],
   "require": {
     "overtrue/phplint": "^0.2.1",
-    "squizlabs/php_codesniffer": "2.*",
-    "drupal/coder" : "dev-8.x-2.x",
     "ext-xml": "*",
     "ext-json": "*",
     "ext-openssl": "*",
@@ -25,14 +23,10 @@
   "prefer-stable": true,
   "scripts": {
     "lint": [
-      "./vendor/bin/phplint",
-      "./vendor/bin/phpcs --config-set installed_paths ./../../drupal/coder/coder_sniffer",
-      "./vendor/bin/phpcs -n --report=full --standard=Drupal --ignore=*.tpl.php --extensions=install,module,php,inc"
+      "./vendor/bin/phplint"
     ],
     "test": [
-      "./vendor/bin/phplint --no-cache",
-      "./vendor/bin/phpcs --config-set installed_paths ./../../drupal/coder/coder_sniffer",
-      "./vendor/bin/phpcs -n --report=full --standard=Drupal --ignore=*.tpl.php --extensions=php,inc themes || true"
+      "./vendor/bin/phplint --no-cache"
     ]
   }  
 }

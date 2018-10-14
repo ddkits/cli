@@ -137,7 +137,7 @@ services:
     
     stdin_open: true
     tty: true
-    container_name: ${DDKITSHOSTNAME}_ddkits_wp_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_wp_web
     volumes:
       - $DDKITSFL/wp-deploy:/var/www/html
     networks:
