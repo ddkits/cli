@@ -156,6 +156,8 @@ COPY php7.ini /usr/local/etc/php/conf.d/php.ini
 RUN chmod 600 /etc/mysql/my.cnf
 RUN chmod -R 777 /var/www/html
 RUN composer require drush/drush && composer upgrade && composer update
+RUN export PATH="$HOME/.composer/vendor/bin:$PATH
+RUN echo "export PATH="$HOME/.composer/vendor/bin:$PATH" >> ~/.bashrc
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
 
 # Fixing permissions 
