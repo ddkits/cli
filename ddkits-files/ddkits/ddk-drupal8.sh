@@ -156,7 +156,7 @@ COPY php7.ini /usr/local/etc/php/conf.d/php.ini
 RUN chmod 600 /etc/mysql/my.cnf
 RUN echo "alias drush=/var/www/html/drush/drush" >> ~/.bashrc
 RUN chmod -R 777 /var/www/html
-RUN composer require drush/drush && composer update
+RUN composer require drush/drush && composer upgrade && composer update
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
 
 # Fixing permissions 
