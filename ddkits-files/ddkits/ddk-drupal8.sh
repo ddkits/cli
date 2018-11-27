@@ -159,6 +159,9 @@ RUN composer require drush/drush && composer outdated && composer update
 RUN export PATH="$HOME/.composer/vendor/bin:$PATH"
 RUN echo "export PATH="$HOME/.composer/vendor/bin:$PATH" ">> ~/.bashrc
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
+RUN curl https://drupalconsole.com/installer -L -o drupal.phar
+RUN mv drupal.phar /usr/local/bin/drupal
+RUN chmod +x /usr/local/bin/drupal
 
 # Fixing permissions 
 RUN chown -R www-data:www-data /var/www/html
