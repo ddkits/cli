@@ -156,7 +156,7 @@ fi
 echo $SUDOPASS | sudo -S chmod 777 composer.phar
 
 echo -e 'Now installing Laravel through composer '
-php composer.phar create-project laravel/laravel ll-deploy "5.5.*" --prefer-dist
+php composer.phar create-project laravel/laravel ll-deploy "5.*" --prefer-dist
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
 
 if [[ -f "ll-deploy/storage/logs/laravel.logs" ]]; then
