@@ -218,6 +218,12 @@ ddk(){
     clear
         cat "./ddkits-files/ddkits/logo.txt"
         php ddkits.phar install
+  elif [[ $1 == "new" && $2 == "c" ]]; then
+    clear
+        docker run -d 
+  elif [[ $1 == "new" && $2 == "run" ]]; then
+    clear
+        docker exec -it
   elif [[ $1 == "update" ]]; then
     clear
         cat "./ddkits-files/ddkits/logo.txt"
@@ -449,14 +455,16 @@ ddk(){
         ri      remove an image from docker images
         rc      remove a continer from docker containers
             **************************
-
-
+    Docker special commands
+      new       
+           c       Create a container from an image ex. ( ddk new c ddkits/lamp:7)   
+           run     Docker exec the new container ex. ( ddk new run 5d05535340b8 /bin/bash )
     Containers DNS:
     Jenkins     http://jenkins.YOUR_DOMAIN.ddkits.site
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v2.01
+    DDKits v2.11
         '
      else
       echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
