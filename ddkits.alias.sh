@@ -1,11 +1,9 @@
 #!/bin/sh
-
 #  Script.sh
 #
 #
 #  Created by mutasem elayyoub ddkits.com
 #
-
 # Copy the new Alias system and making sure of the DDKits installation
 ddk(){
  if [[ $1 == "install" ]]; then
