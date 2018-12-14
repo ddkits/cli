@@ -220,10 +220,10 @@ ddk(){
         php ddkits.phar install
   elif [[ $1 == "new" && $2 == "c" ]]; then
     clear
-        docker run -d 
+        docker run -d  $3 $4 $5
   elif [[ $1 == "new" && $2 == "run" ]]; then
     clear
-        docker exec -it
+        docker exec -it $3 $4 $5
   elif [[ $1 == "update" ]]; then
     clear
         cat "./ddkits-files/ddkits/logo.txt"
