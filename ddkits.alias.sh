@@ -9,6 +9,7 @@ ddk(){
  if [[ $1 == "install" ]]; then
         clear
         cat "./ddkits-files/ddkits/logo.txt"
+        export COMPOSE_TLS_VERSION=TLSv1_2
       # create the crt files for ssl 
           openssl req \
               -newkey rsa:2048 \
