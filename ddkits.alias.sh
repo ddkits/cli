@@ -312,6 +312,7 @@ ddk(){
         docker restart $(docker ps -q)
         ddk go
   elif [[ $1 == "start" ]]; then
+      export COMPOSE_TLS_VERSION=TLSv1_2
       if [[ $2 == "com" ]]; then
           clear
         cat "./ddkits-files/ddkits/logo.txt"
