@@ -160,9 +160,9 @@ RUN export PATH="$HOME/.composer/vendor/bin:$PATH"
 RUN echo "export PATH="$HOME/.composer/vendor/bin:$PATH" ">> ~/.bashrc
 RUN chmod -R 777 /var/www/html/ddkitscli.sh 
 RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B188E2B695BD4743
-RUN apt-get update && apt-get install -y libgmp-dev php7.2-gmp
-RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
-RUN docker-php-ext-install gmp
+# RUN apt-get update && apt-get install -y libgmp-dev php7.2-gmp
+# RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
+# RUN docker-php-ext-install gmp
 # RUN curl https://drupalconsole.com/installer -L -o drupal.phar
 # RUN mv drupal.phar /usr/local/bin/drupal
 # RUN chmod +x /usr/local/bin/drupal
