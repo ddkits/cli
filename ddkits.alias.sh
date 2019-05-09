@@ -40,6 +40,9 @@ ddk(){
         cat "./ddkits-files/ddkits/logo.txt"
            echo -e 'Enter your Sudo/Root Password:'
               read SUDOPASS
+              echo -e 'ifconfig Refresh ->'
+              sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
+              echo -e 'ifconfig Refresh -> done ifconfig'
               if [[ "$OSTYPE" == "linux-gnu" ]]; then
                         PLATFORM='linux-gnu'
                         echo 'This machine is '$PLATFORM' Docker setup will start now'
