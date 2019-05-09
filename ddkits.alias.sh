@@ -198,6 +198,9 @@ ddk(){
     if [[ -f "~/.ddkits_alias" ]]; then
        clear
       cat "./ddkits-files/ddkits/logo.txt"
+      echo -e 'ifconfig Refresh ->'
+      sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
+      echo -e 'ifconfig Refresh -> done ifconfig'
       sudo rm ~/.ddkits_alias
       cp ddkits.alias.sh ddkits_alias
       sudo cp ddkits_alias ~/.ddkits_alias
