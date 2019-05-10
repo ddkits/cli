@@ -41,7 +41,7 @@ ddk(){
            echo -e 'Enter your Sudo/Root Password:'
               read SUDOPASS
               echo -e 'ifconfig Refresh ->'
-              sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
+              sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up || echo $SUDOPASS
               echo -e 'ifconfig Refresh -> done ifconfig'
               if [[ "$OSTYPE" == "linux-gnu" ]]; then
                         PLATFORM='linux-gnu'
@@ -199,7 +199,7 @@ ddk(){
        clear
       cat "./ddkits-files/ddkits/logo.txt"
       echo -e 'ifconfig Refresh ->'
-      sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
+      sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up || echo $SUDOPASS
       echo -e 'ifconfig Refresh -> done ifconfig'
       sudo rm ~/.ddkits_alias
       cp ddkits.alias.sh ddkits_alias
