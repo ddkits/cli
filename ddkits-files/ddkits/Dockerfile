@@ -1,23 +1,8 @@
-FROM ddkits/lamp:latest
+FROM ddkits/lamp:cli
 
 MAINTAINER  Mutasem Elayyoub <melayyoub@outlook.com>
 
-RUN apt-get update \
-	&& apt-get install build-essential -y \
-	&& apt-get install apache2 libapache2-mod-proxy-html libxml2-dev apt-transport-https --force-yes -y \
-	&& rm /etc/apache2/sites-enabled/000-default.conf \
-	&& rm /etc/apache2/sites-available/000-default.conf \
-	&& echo deb http://get.docker.io/ubuntu docker main\ > /etc/apt/sources.list.d/docker.list \
-	&& apt-get update \
-	&& apt-get install -y --force-yes nano \
-                   wget \
-                   dialog \
-                   net-tools \
-                   lxc-docker \
-                   ufw \
-                   sudo \
-                   gufw \
-	&& apt-get update 
+RUN sudo apt-get --allow-unauthenticated upgrade -y 
 
 # NOT FOUND response
 COPY ./custom_404.html /var/www/html/custom_404.html
