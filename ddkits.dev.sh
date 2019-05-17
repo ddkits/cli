@@ -426,7 +426,7 @@ fi
   MYSQL_DATABASE='"$MYSQL_DATABASE"'
   MYSQL_PASSWORD='"$MYSQL_PASSWORD"'
   MAIL_ADDRESS='"$MAIL_ADDRESS"'" > $DDKITSFL/ddkits-files/ddkitscli.sh
-  cat $DDKITSFL/ddkits-files/ddkits-drupal.sh >> $DDKITSFL/ddkits-files/ddkitscli.sh
+  # cat $DDKITSFL/ddkits-files/ddkits-drupal.sh >> $DDKITSFL/ddkits-files/ddkitscli.sh
 
 
   DDKITSFL=$(pwd)
@@ -435,7 +435,6 @@ fi
   # 
   # Setup options Please make sure of all options before publish pick list 
   # 
-
   options=( "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "nGrinder" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony" "ZenCart" "Zend" "Quit")
   select opt in "${options[@]}"
   do
@@ -557,8 +556,8 @@ fi
   matches_in_hosts="$(grep -n ${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
   ddkits_matches_in_hosts="$(grep -n jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site /etc/hosts | cut -f1 -d:)"
   host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3}"
-  ddkits_host_entry="${DDKITSIP}   ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
-
+  ddkits_host_entry="${DDKITSIP} ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
+  pat="jenkins.${DDKITSSITES}.ddkits.site"
   # echo "Please enter your password if requested."
 
   echo ${SUDOPASS} | sudo -S cat /etc/hosts
@@ -566,29 +565,37 @@ fi
   if [ ! -z "$matches_in_hosts" ]
   then
       echo "Updating existing hosts entry."
-     
       # iterate over the line numbers on which matches were found
       while read -r line_number; do
           # replace the text of each line with the desired host entry
-        echo ${SUDOPASS} | sudo -S sed -i '' "${line_number}s/.*/${host_entry} /" /etc/hosts
+        echo ${SUDOPASS} | sudo -S sed "/${host_entry}/d" /etc/hosts > ~/hosts
+        echo ${SUDOPASS} | sudo -S sed "/${pat}/d" /etc/hosts > ~/hosts
+        echo ${SUDOPASS} | sudo -S mv ~/hosts /etc/hosts 
       done <<< "$matches_in_hosts"
+      echo "Adding new hosts entry."
+      echo "${host_entry}" | sudo tee -a /etc/hosts > /dev/null
+      echo "${ddkits_host_entry}" | sudo tee -a /etc/hosts > /dev/null
   else
       echo "Adding new hosts entry."
-      echo "$host_entry" | sudo tee -a /etc/hosts > /dev/null
+      echo "${host_entry}" | sudo tee -a /etc/hosts > /dev/null
+      echo "${ddkits_host_entry}" | sudo tee -a /etc/hosts > /dev/null
   fi
   echo ${SUDOPASS} | sudo -S cat /etc/hosts
 
-  if [ ! -z "$ddkits_matches_in_hosts" ]
-  then
-     # iterate over the line numbers on which matches were found
-      while read -r line_number; do
-          # replace the text of each line with the desired host entry
-        echo ${SUDOPASS} | sudo -S sed -i '' "${line_number}s/.*/${ddkits_host_entry} /" /etc/hosts
-      done <<< "$ddkits_matches_in_hosts"
-      else
-      echo "Adding new hosts entry."
-      echo "$ddkits_host_entry" | sudo tee -a /etc/hosts > /dev/null
-  fi
+
+  # if [ ! -z "$ddkits_matches_in_hosts" ]
+  # then
+  #    # iterate over the line numbers on which matches were found
+  #     while read -r line_number; do
+  #       # replace the text of each line with the desired host entry
+        
+  #       echo ${SUDOPASS} | sudo -S mv ~/hosts /etc/hosts 
+  #     done <<< "$ddkits_matches_in_hosts"
+      
+  #     else
+  #     echo "Adding new hosts entry."
+  #     echo "${ddkits_host_entry}" | sudo tee -a /etc/hosts > /dev/null
+  # fi
 
 
   if [[ "$JENKINS_ONLY" == "false" ]]; then

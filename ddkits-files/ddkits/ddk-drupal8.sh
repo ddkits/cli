@@ -219,15 +219,15 @@ else
   # chown $(echo "$USER") $DDKITSFL/deploy
 fi   
 
-if [[ ! -d "deploy/drush" ]]; then
-    wget "https://github.com/drush-ops/drush/archive/8.2.2.zip"
-    unzip 8.2.2.zip
-    rm 8.2.2.zip
-    mv drush-8.2.2 drush
-    cd drush
-    composer install
-    cd $DDKITSFL
-fi     
+# if [[ ! -d "deploy/drush" ]]; then
+#     wget "https://github.com/drush-ops/drush/archive/8.2.2.zip"
+#     unzip 8.2.2.zip
+#     rm 8.2.2.zip
+#     mv drush-8.2.2 drush
+#     cd drush
+#     composer install
+#     cd $DDKITSFL
+# fi     
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy 
 
@@ -245,7 +245,7 @@ alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bi
 alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash -c "cd public & drush "'
 
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash' \n" >> ~/.ddkits_alias_web
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/drupal-deploy
 

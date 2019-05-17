@@ -21,7 +21,7 @@ export MYSQL_USER='ddk'
 export MYSQL_ROOT_PASSWORD='ddk'
 export MYSQL_DATABASE='ddk'
 export MYSQL_PASSWORD='ddk'
-export DDKITSWEBPORT=1484
+export DDKITSWEBPORT=1101
 export DDKITSHOSTNAME='ddk_site'
 export MYSQL_PASSWORD='ddk'
 
