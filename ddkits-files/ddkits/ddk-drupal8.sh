@@ -195,10 +195,10 @@ services:
       - "'$DDKITSWEBPORT':80" 
       - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 if [[ ! -d "deploy/public" ]]; then
-  git clone https://github.com/ddkits/drupal-8.git $DDKITSFL/deploy
-  
+  git clone https://github.com/ddkits/drupal-8.git $DDKITSFL/deploy1
+  cp -r $DDKITSFL/deploy1/ $DDKITSFL/deploy/
+  rm -rf $DDKITSFL/deploy1
   echo $DDKITSFL
-  mv -f $DDKITSFL/deploy/deploy/* $DDKITSFL/deploy
   chmod -R 777 $DDKITSFL/deploy/public
   mkdir $DDKITSFL/deploy/public/sites/default/files
   chmod -R 777 $DDKITSFL/deploy/public/sites/default
@@ -206,27 +206,27 @@ if [[ ! -d "deploy/public" ]]; then
   cp -f $DDKITSFL/deploy/public/sites/default/default.settings.php $DDKITSFL/deploy/public/sites/default/settings.php
   cp -f $DDKITSFL/deploy/public/sites/default/default.services.yml $DDKITSFL/deploy/public/sites/default/services.yml
   cp $DDKITSFL/deploy/composer.phar $DDKITSFL/deploy/public/ddkits.phar
-  cd $DDKITSFL/deploy/public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $DDKITSFL/deploy/public && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
   cd $DDKITSFL
 else
     echo 'if you need a new drupal 8 installation please make sure to remove deploy/public folder and restart this step again.'
   
   echo $DDKITSFL
   rm -rf $DDKITSFL/deploy/public/vendor
-  cd $DDKITSFL/deploy/public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $DDKITSFL/deploy/public && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
   cd $DDKITSFL
   chmod -R 777 $DDKITSFL/deploy/public/sites/default/files
   # chown $(echo "$USER") $DDKITSFL/deploy
 fi   
 
 if [[ ! -d "deploy/drush" ]]; then
-       wget https://github.com/drush-ops/drush/archive/8.x.zip
-        unzip 8.x.zip
-        rm 8.x.zip
-        mv drush-8.x drush
-        cd drush
-        composer install
-       cd $DDKITSFL
+    wget "https://github.com/drush-ops/drush/archive/8.2.2.zip"
+    unzip 8.2.2.zip
+    rm 8.2.2.zip
+    mv drush-8.2.2 drush
+    cd drush
+    composer install
+    cd $DDKITSFL
 fi     
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy 
@@ -235,7 +235,9 @@ echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy
   echo -e 'Not a valid version please try again.'
 fi
 
-alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web drush'
+alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web public/drush'
+
+alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
@@ -244,7 +246,7 @@ alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bi
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
-echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public & drush'" >> ~/.ddkits_alias_web
+
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/drupal-deploy
 
 cd $DDKITSFL

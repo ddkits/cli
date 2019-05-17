@@ -39,7 +39,7 @@ ddk(){
         clear
         cat "./ddkits-files/ddkits/logo.txt"
            echo -e 'Enter your Sudo/Root Password:'
-              read SUDOPASS
+              read -s SUDOPASS
               if [[ "$OSTYPE" == "linux-gnu" ]]; then
                         PLATFORM='linux-gnu'
                         echo 'This machine is '$PLATFORM' Docker setup will start now'
@@ -467,7 +467,7 @@ ddk(){
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v2.11
+    DDKits v2.12
         '
      else
       echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
