@@ -10,6 +10,7 @@ ddk(){
         clear
         cat "./ddkits-files/ddkits/logo.txt"
         export COMPOSE_TLS_VERSION=TLSv1_2
+        
       # create the crt files for ssl 
           openssl req \
               -newkey rsa:2048 \
@@ -196,7 +197,7 @@ ddk(){
        clear
       cat "./ddkits-files/ddkits/logo.txt"
       echo -e 'ifconfig Refresh ->'
-      sudo ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up | echo $SUDOPASS
+      echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
       echo -e 'ifconfig Refresh -> done ifconfig'
       sudo rm ~/.ddkits_alias
       cp ddkits.alias.sh ddkits_alias
