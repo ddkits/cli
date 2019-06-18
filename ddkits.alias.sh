@@ -345,6 +345,8 @@ ddk(){
         docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
         docker rm $(docker ps --filter=status=exited --filter=status=created -q)
         docker volume rm $(docker volume ls -f dangling=true -q)
+        docker image prune --all
+        clear
     elif [[ $1 == "style" ]]; then
       clear
         cat "./ddkits-files/ddkits/logo.txt"
