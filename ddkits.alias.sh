@@ -6,9 +6,19 @@
 #
 # Copy the new Alias system and making sure of the DDKits installation
 ddk() {
+  # Check if the file exist
+  FILE=~/.ddkits/ddkits-files/ddkits/p.sh
+  if test -f "$FILE"; then
+    source $FILE
+  fi
   if [[ $1 == "install" ]]; then
     echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
     read -s SUDOPASS
+    # make the logo file from source
+    LOGO=~/.ddkits/ddkits-files/ddkits/logo.txt
+    echo -e 'export SUDOPASS='${SUDOPASS}'
+             export LOGO='${LOGO}'' >~/.ddkits/ddkits-files/ddkits/p.sh
+    chmod 700 ~/.ddkits/ddkits-files/ddkits/p.sh
     # Downlaod all files into a seperate folder for ddkits only
     echo -e 'Creating DDkits folder .ddkits'
     # echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
@@ -16,11 +26,12 @@ ddk() {
       # Control will enter here if $DIRECTORY doesn't exist.
       echo -w 'git clone --single-branch --branch base https://github.com/ddkits/cli.git ~/.ddkits'
       git clone --single-branch --branch base https://github.com/ddkits/cli.git ~/.ddkits
+      chmod -R 744 ~/.ddkits
     else
       git --git-dir=~/.ddkits git pull
     fi
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     echo -e 'Welcome to DDKits world...'
     export COMPOSE_TLS_VERSION=TLSv1_2
 
@@ -48,11 +59,13 @@ ddk() {
     read DDKITSVER
     if [[ $DDKITSVER == 1 ]]; then
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       docker-compose -f ddkits.yml up -d --build
     elif [[ $DDKITSVER == 2 ]]; then
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
+      echo -e 'Enter your Sudo/Root Password:'
+      read -s SUDOPASS
       if [[ "$OSTYPE" == "linux-gnu" ]]; then
         PLATFORM='linux-gnu'
         echo 'This machine is '$PLATFORM' Docker setup will start now'
@@ -126,12 +139,12 @@ ddk() {
       echo $SUDOPASS | sudo -S cp ~/ddkits/ddkits_alias ~/.ddkits_alias
       if [ $? -eq 0 ]; then
         clear
-        cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+        echo $SUDOPASS | sudo -S cat $LOGO
         echo 'DDKits saying it is fine no need to reinstall'
       else
         if [[ "$OSTYPE" == "linux-gnu" ]]; then
           clear
-          cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+          echo $SUDOPASS | sudo -S cat $LOGO
           PLATFORM='linux-gnu'
           echo 'This machine is '$PLATFORM' Docker setup will start now'
           echo $SUDOPASS | sudo -S apt-get install wget curl git -y
@@ -140,29 +153,29 @@ ddk() {
             echo $SUDOPASS | sudo -S cp /tmp/docker-machine /usr/local/bin/docker-machine
         elif [[ "$OSTYPE" == "darwin"* ]]; then
           clear
-          cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+          echo $SUDOPASS | sudo -S cat $LOGO
           PLATFORM='MacOS'
           echo 'This machine is '$PLATFORM' Docker setup will start now'
           curl -L https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-$(uname -s)-$(uname -m) >/usr/local/bin/docker-machine &&
             echo $SUDOPASS | sudo -S chmod +x /usr/local/bin/docker-machine
         elif [[ "$OSTYPE" == "cygwin" ]]; then
           clear
-          cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+          echo $SUDOPASS | sudo -S cat $LOGO
           PLATFORM='cygwin'
           echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "Docker, compose and docker-machine" INSTALLED ON YOUR SYSTEM'
         elif [[ "$OSTYPE" == "msys" ]]; then
           clear
-          cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+          echo $SUDOPASS | sudo -S cat $LOGO
           PLATFORM='msys'
           echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE  "Docker, compose and docker-machine"  INSTALLED ON YOUR SYSTEM'
         elif [[ "$OSTYPE" == "win32" ]]; then
           clear
-          cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+          echo $SUDOPASS | sudo -S cat $LOGO
           PLATFORM='win32'
           echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE  "Docker, compose and docker-machine"  INSTALLED ON YOUR SYSTEM'
         elif [[ "$OSTYPE" == "freebsd"* ]]; then
           clear
-          cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+          echo $SUDOPASS | sudo -S cat $LOGO
           PLATFORM='freebsd'
           echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE  "Docker, compose and docker-machine"  INSTALLED ON YOUR SYSTEM'
         else
@@ -173,7 +186,7 @@ ddk() {
       fi
       if [[ -f ~/.ddkits_alias ]]; then
         clear
-        cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+        echo $SUDOPASS | sudo -S cat $LOGO
         clear
 
         docker-compose -f ddkits.yml up -d --build
@@ -203,9 +216,11 @@ ddk() {
   elif [[ $1 == "check" ]]; then
     docker ps --filter "name=ddkits"
   elif [[ $1 == "fix" ]]; then
-    if [[ -f "~/.ddkits_alias" ]]; then
+    # Alias file
+    ALIASFILE=~/.ddkits_alias
+    if [[ -f $ALIASFILE ]]; then
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       echo -e 'ifconfig Refresh ->'
       echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
       echo -e 'ifconfig Refresh -> done ifconfig'
@@ -218,7 +233,7 @@ ddk() {
       docker restart $(docker ps -q)
     else
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       cp ddkits.alias.sh ddkits_alias
       sudo cp ddkits_alias ~/.ddkits_alias
       sudo chmod u+x ~/.ddkits_alias
@@ -229,7 +244,7 @@ ddk() {
 
   elif [[ $1 == "com" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     php ddkits.phar install
   elif [[ $1 == "new" && $2 == "c" ]]; then
     clear
@@ -239,11 +254,11 @@ ddk() {
     docker exec -it $3 $4 $5
   elif [[ $1 == "update" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d
   elif [[ $1 == "rebuild" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
     source ~/.ddkits_alias ~/.ddkits_alias_web
     # create the crt files for ssl
@@ -326,28 +341,28 @@ ddk() {
     export COMPOSE_TLS_VERSION=TLSv1_2
     if [[ $2 == "com" ]]; then
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       source ddkitsLocal.sh && composer install
     else
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       source ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
     fi
   elif [[ $1 == "c" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     docker ps
   elif [[ $1 == "who" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     cat "./ddkits-files/ddkits/site.txt"
   elif [[ $1 == "clean" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     docker volume rm $(docker volume ls -qf dangling=true)
   elif [[ $1 == "rmn" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     # remove none images and volumes
     docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
     docker rm $(docker ps --filter=status=exited --filter=status=created -q)
@@ -356,19 +371,19 @@ ddk() {
     clear
   elif [[ $1 == "style" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     echo "${red}hello ${yellow}this is ${green}coloured${normal}"
   elif [[ $1 == "nostyle" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     docker ps
   elif [[ $1 == "i" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     docker images
   elif [[ $1 == "go" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     echo -e ''
     echo ':---)) Welcome back ' && echo "$USER"
     echo -e ''
@@ -377,7 +392,7 @@ ddk() {
     eval $(docker-machine env ddkits)
   elif [[ $1 == "del" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     read -p "Are you sure you want to remove DDkits from your system? " -n 1 -r
     echo # (optional) move to a new line
     if [[ ! $REPLY == ^[Yy]$ ]]; then
@@ -421,29 +436,29 @@ ddk() {
 
   elif [[ $1 == "stop" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     echo -e ''
     echo 'Bye for now  ' && echo "$USER"
     echo -e ''
     eval $(docker-machine env default)
   elif [[ $1 == "r" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     docker run
   elif [[ $1 == "ir" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     echo -e 'please use "  ddkri  " instead \n or "  ddk rm all  " to delete all dockers images and containers from your machine'
   elif [[ $1 == "cr" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     echo -e 'please use "  ddkrc  " instead '
   elif [[ $1 == "drush" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     if [[ $2 == "install" ]]; then
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       # install composer locally for drush needs and other composer packages
       wget https://getcomposer.org/composer.phar
       echo $SUDOPASS | sudo -S mv composer.phar /usr/local/bin/
@@ -452,19 +467,19 @@ ddk() {
     fi
   elif [[ $1 == "rm" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     if [[ $2 == "all" ]]; then
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       source ~/.ddkits/ddkits.rm.sh
     elif [[ $2 == "c" ]]; then
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       # Delete all containers
       docker rm $(docker ps -a -q) -f
     elif [[ $2 == "i" ]]; then
       clear
-      cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+      echo $SUDOPASS | sudo -S cat $LOGO
       # Delete all images
       docker rmi $(docker images -q) -f
     else
@@ -472,7 +487,7 @@ ddk() {
     fi
   elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     clear
-    cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+    echo $SUDOPASS | sudo -S cat $LOGO
     clear
     echo -e 'DDkits built by Mutasem Elayyoub www.DDKits.com
     List of commands after "ddk <option>":
