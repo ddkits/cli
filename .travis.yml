@@ -7,8 +7,6 @@ php:
   - '7.0'
 services:
   - docker
-  - docker-compose
-  - docker-machine
 before_script:
   - sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi

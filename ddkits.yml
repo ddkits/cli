@@ -2,7 +2,7 @@ version: "2"
 
 services:
   ddkits:
-    build: ./ddkits-files/ddkits
+    build: ~/.ddkits/ddkits-files/ddkits
     image: ddkits
     container_name: ddkits
     ports:
@@ -11,11 +11,8 @@ services:
     volumes:
         - ./deploy/docker.sock:/tmp/docker.sock
         - /etc/nginx
-        # - ./deploy/nginx:/etc/nginx/sites-available/
-        # - ./deploy/nginx:/etc/nginx/sites-enabled/
     networks:
       - ddkits
-
 networks:
   ddkits:
 

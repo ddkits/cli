@@ -25,8 +25,7 @@ if [[ -f "./Dockerfile" ]]; then
   rm ./Dockerfile
 fi
 #  delete ddkits conf file for the custom site if available
-if [ -f "ddkits-files/ddkits/sites/ddkitscust.conf" ]
-  then 
+if [ -f "ddkits-files/ddkits/sites/ddkitscust.conf" ]; then
   rm ddkits-files/ddkits/sites/ddkitscust.conf
 fi
 
