@@ -284,8 +284,8 @@ else
   fi
 fi
 echo -e ""
-echo -e 'Enter your Sudo Password:  '
-read -s SUDOPASS
+# echo -e 'Enter your Sudo Password:  '
+# read -s SUDOPASS
 echo -e ""
 echo -e 'Enter your MYSQL ROOT USER:  '
 
