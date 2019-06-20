@@ -11,9 +11,14 @@ ddk() {
     read -s SUDOPASS
     # Downlaod all files into a seperate folder for ddkits only
     echo -e 'Creating DDkits folder .ddkits'
-    echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
-    echo $SUDOPASS | sudo -S git clone -b base https://github.com/ddkits/cli.git ~/.ddkits
-
+    # echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
+    if [ ! -d "$DIRECTORY" ]; then
+      # Control will enter here if $DIRECTORY doesn't exist.
+      echo -w 'git clone --single-branch --branch base https://github.com/ddkits/cli.git ~/.ddkits'
+      git clone --single-branch --branch base https://github.com/ddkits/cli.git ~/.ddkits
+    else
+      git --git-dir=~/.ddkits git pull
+    fi
     clear
     cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
     echo -e 'Welcome to DDKits world...'
@@ -35,6 +40,7 @@ ddk() {
         <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site')) \
       -sha256 \
       -days 3650
+    mkdir ~/.ddkits/ddkits-files/ddkits/ssl
     mv ~/.ddkits/ddkits.site.key ~/.ddkits/ddkits-files/ddkits/ssl/
     mv ~/.ddkits/ddkits.site.crt ~/.ddkits/ddkits-files/ddkits/ssl/
     echo "ssl crt and .key files moved correctly"
@@ -47,8 +53,6 @@ ddk() {
     elif [[ $DDKITSVER == 2 ]]; then
       clear
       cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
-      echo -e 'Enter your Sudo/Root Password:'
-      read -s SUDOPASS
       if [[ "$OSTYPE" == "linux-gnu" ]]; then
         PLATFORM='linux-gnu'
         echo 'This machine is '$PLATFORM' Docker setup will start now'
