@@ -11,6 +11,7 @@ ddk() {
   if test -f "$FILE"; then
     source $FILE
   fi
+
   if [[ $1 == "install" ]]; then
     echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
     read -s SUDOPASS
@@ -64,8 +65,6 @@ ddk() {
     elif [[ $DDKITSVER == 2 ]]; then
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
-      echo -e 'Enter your Sudo/Root Password:'
-      read -s SUDOPASS
       if [[ "$OSTYPE" == "linux-gnu" ]]; then
         PLATFORM='linux-gnu'
         echo 'This machine is '$PLATFORM' Docker setup will start now'
