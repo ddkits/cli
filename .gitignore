@@ -18,6 +18,8 @@ ddkits-files/*/sites/*.conf
 ddkits_alias
 app
 *.html
+*.crt
+*.key
 deploy
 *-deploy
 ddkits.phar
@@ -27,7 +29,8 @@ ddkits.phar
 */ddkitsInfo.ports.sh
 */ddkitsInfo.prod.sh
 ddkits-files/drupal/Dockerfile
-ddkits-files/ddkits/site.txt
-ddkits-files/ddkitsInfo.dev.sh
+*/*ddkits/site.txt
+*/*Info.dev.sh
 ddkits-files/ddkitsInfo.ports.sh
 ddkits-files/ddkitscli.sh
+ddkits-files/ddkitsInfo.dev.sh
