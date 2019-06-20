@@ -234,7 +234,6 @@ ddk(){
   elif [[ $1 == "rebuild" ]]; then
       clear
         cat "./ddkits-files/ddkits/logo.txt"
-
         source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
         source ~/.ddkits_alias ~/.ddkits_alias_web
         # create the crt files for ssl 
@@ -282,7 +281,7 @@ ddk(){
 
         # echo "Please enter your password if requested."
 
-        echo ${SUDOPASS} | sudo -S cat /etc/hosts
+        # echo ${SUDOPASS} | sudo -S cat /etc/hosts
 
         if [ ! -z "$matches_in_hosts" ]
         then
@@ -345,7 +344,7 @@ ddk(){
         docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
         docker rm $(docker ps --filter=status=exited --filter=status=created -q)
         docker volume rm $(docker volume ls -f dangling=true -q)
-        docker image prune --all
+        echo 'y' | docker image prune --all
         clear
     elif [[ $1 == "style" ]]; then
       clear
@@ -371,11 +370,49 @@ ddk(){
     elif [[ $1 == "del" ]]; then
       clear
         cat "./ddkits-files/ddkits/logo.txt"
-        echo -e ''
-        echo ':---(( Bye ' && echo "$USER"
-        echo -e ''
-        docker-machine rm ddkits
-        eval $(docker-machine env default)
+        read -p "Are you sure you want to remove DDkits from your system? " -n 1 -r
+        echo    # (optional) move to a new line
+        if [[ ! $REPLY == ^[Yy]$ ]]
+        then
+            echo -e 'Removing DDKits files'
+            echo ${SUDOPASS} | sudo -S rm ~/.ddkits_alias
+            echo ${SUDOPASS} | sudo -S rm ~/.ddkits_alias_web
+            # echo "Please enter your password if requested."
+            SITEDEL=.site
+            # echo ${SUDOPASS} | sudo -S cat /etc/hosts
+            # Remove the Source from Bash file
+            matches="$(grep -n ${SITEDEL} ~/etc/hosts | cut -f1 -d:)"
+            if [ ! -z "$matches" ]
+            then
+                echo "Updating Hosts file"
+              
+                # iterate over the line numbers on which matches were found
+                while read -r line_number; do
+                    # Remove all DDkits entries
+                  echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" /etc/hosts
+                done <<< "$matches"
+            fi
+            # Remove the Source from Bash file
+            BASHSITE=ddk
+             matchesbash="$(grep -n ${BASHSITE} ~/.bash_profile | cut -f1 -d:)"
+            if [ ! -z "$matchesbash" ]
+            then
+                echo "Updating Hosts file"
+              
+                # iterate over the line numbers on which matches were found
+                while read -r line_number; do
+                    # Remove all DDkits entries
+                  echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ~/.bash_profile
+                done <<< "$matchesbash"
+            fi
+            source ~/.bash_profile
+            echo -e ''
+            echo ':---(( Bye ' && echo "$USER"
+            echo -e ''
+            docker-machine rm ddkits
+            eval $(docker-machine env default)
+        fi
+        
     elif [[ $1 == "stop" ]]; then
       clear
         cat "./ddkits-files/ddkits/logo.txt"
@@ -470,7 +507,7 @@ ddk(){
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v2.12
+    DDKits v2.20
         '
      else
       echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com

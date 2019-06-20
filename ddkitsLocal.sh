@@ -455,12 +455,24 @@ if [ -f "ddkits.prod.sh" ]
  then
     echo -e 'Production'
   else
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
-echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
-source ~/.ddkits_alias_web
-source ~/.ddkits_alias
+# Remove the Source from Bash file
+  BASHSITE=ddk
+    matchesbash="$(grep -n ${BASHSITE} ~/.bash_profile | cut -f1 -d:)"
+  if [ ! -z "$matchesbash" ]
+  then
+      echo "Updating Hosts file"
+    
+      # iterate over the line numbers on which matches were found
+      while read -r line_number; do
+          # Remove all DDkits entries
+        echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ~/.bash_profile
+      done <<< "$matchesbash"
+  fi
 echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias' >> ~/.bashrc_profile
 echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias_web' >> ~/.bashrc_profile
+# echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
+echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
+source ~/.bash_profile
 
 fi
 
