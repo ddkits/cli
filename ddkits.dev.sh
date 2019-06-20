@@ -10,7 +10,7 @@ source ddkits.alias.sh
 DDKITSFL=$(pwd)
 
 clear
-cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+cat $LOGO
 echo -e "
   Welcome to DDKits Development Version
   "
@@ -326,7 +326,7 @@ fi
 # echo $SUDOPASS | sudo -S chown $(echo "$USER") ./
 echo $SUDOPASS | sudo -S chmod -R 777 ./
 clear
-cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+cat $LOGO
 
 #  export all values the user insert into his bash system
 export MAIL_ADDRESS=$MAIL_ADDRESS
@@ -389,7 +389,7 @@ select opt in "${options[@]}"; do
 done
 
 clear
-cat "~/.ddkits/ddkits-files/ddkits/logo.txt"
+cat $LOGO
 
 # echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 #
