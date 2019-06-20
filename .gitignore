@@ -20,6 +20,7 @@ app
 *.html
 *.crt
 *.key
+*/*.dev.sh
 deploy
 *-deploy
 ddkits.phar
