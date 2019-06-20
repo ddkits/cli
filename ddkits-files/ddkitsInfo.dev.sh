@@ -8,7 +8,7 @@
 #
 
 # export all results
-export DDKITSFL=/Users/sam.elayyoub/sites/ddk/cli
+export DDKITSFL=/Users/sam.elayyoub/sites/search
 export DDKITSIP=192.168.55.114 
 export JENKINS_ANSWER='n'
 export JENKINS_ONLY='false'
