@@ -15,7 +15,7 @@ ddk() {
   if [[ $1 == "install" ]]; then
     echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
     read -s SUDOPASS
-
+    echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
     # Downlaod all files into a seperate folder for ddkits only
     echo -e 'Creating DDkits folder .ddkits'
     DIRECTORY="$(echo ~/.ddkits)"
@@ -65,7 +65,7 @@ ddk() {
     if [[ $DDKITSVER == 1 ]]; then
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
-      docker-compose -f ddkits.yml up -d --build
+      docker-compose -f ~/.ddkits/ddkits.yml up -d --build
     elif [[ $DDKITSVER == 2 ]]; then
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
@@ -138,8 +138,8 @@ ddk() {
         esac
       done
       docker-machine ip ddkits
-      echo $SUDOPASS | sudo -S cp ~/ddkits/ddkits.alias.sh ddkits_alias
-      echo $SUDOPASS | sudo -S cp ~/ddkits/ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
       if [ $? -eq 0 ]; then
         clear
         echo $SUDOPASS | sudo -S cat $LOGO
@@ -184,15 +184,13 @@ ddk() {
         else
           break
         fi
-
-        docker-compose -f ~/.ddkits/ddkits.yml up -d --build
       fi
       if [[ -f ~/.ddkits_alias ]]; then
         clear
         echo $SUDOPASS | sudo -S cat $LOGO
         clear
 
-        docker-compose -f ddkits.yml up -d --build
+        docker-compose -f ~/.ddkits/ddkits.yml up -d --build
         cp ddkits.alias.sh ddkits_alias
         cp ddkits_alias ~/.ddkits_alias
         docker restart $(docker ps -q)
@@ -203,7 +201,7 @@ ddk() {
         echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
       else
 
-        docker-compose -f ddkits.yml up -d --build
+        docker-compose -f ~/.ddkits/ddkits.yml up -d --build
         cp ddkits.alias.sh ddkits_alias
         cp ddkits_alias ~/.ddkits_alias
         docker restart $(docker ps -q)
@@ -488,7 +486,7 @@ ddk() {
       # Delete all images
       docker rmi $(docker images -q) -f
     else
-      docker-compose -f ddkits.yml -f ddkits.env.yml rm
+      docker-compose -f ~/.ddkits/ddkits.yml -f ddkits.env.yml rm
     fi
   elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     clear
