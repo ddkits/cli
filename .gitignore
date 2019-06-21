@@ -14,7 +14,7 @@ composer.lock
 .DS_Store
 ddkits.env.yml
 ddkitsnew.yml
-ddkits-files/*/sites/*.conf
+ddkits-files/*/sites/*_*.conf
 ddkits_alias
 app
 *.html
