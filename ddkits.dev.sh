@@ -27,8 +27,8 @@ if [[ -z "$DDKITSIP" ]]; then
   DDKITSIP='127.0.0.1'
 fi
 #  delete ddkits conf file for the custom site if available
-if [ -f "~/.ddkits/ddkits-files/ddkits/sites/ddkitscust.conf" ]; then
-  rm ~/.ddkits/ddkits-files/ddkits/sites/ddkitscust.conf
+if [ -f "./ddkits-files/ddkits/sites/ddkitscust.conf" ]; then
+  rm ./ddkits-files/ddkits/sites/ddkitscust.conf
 fi
 # check if the ddkitscli.sh exist and delete it if yes else create new one
 if [ -f "ddkits-files/drupal/ddkitscli.sh" ]; then
@@ -139,7 +139,7 @@ if [[ "$DDKITSSITESALIAS" == "" ]]; then
         ProxyBadHeader Ignore 
       </VirtualHost>
 
-      " >>~/.ddkits/ddkits-files/ddkits/sites/ddkitscust.conf
+      " >./ddkits-files/ddkits/sites/ddkitscust.conf
 else
   echo -e ""
 
@@ -201,7 +201,7 @@ else
               ProxyBadHeader Ignore 
         </VirtualHost>
 
-          " >>~/.ddkits/ddkits-files/ddkits/sites/ddkitscust.conf
+          " >./ddkits-files/ddkits/sites/ddkitscust.conf
   else
     echo -e ""
     echo -e ' domain alias 3 (ex. www.ddkits.site) if there is no alias just leave this blank'
@@ -279,7 +279,7 @@ else
         ProxyBadHeader Ignore 
   </VirtualHost>
 
-            " >>~/.ddkits/ddkits-files/ddkits/sites/ddkitscust.conf
+            " >./ddkits-files/ddkits/sites/ddkitscust.conf
     fi
   fi
 fi

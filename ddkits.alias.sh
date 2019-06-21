@@ -277,8 +277,8 @@ ddk() {
         <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
       -sha256 \
       -days 3650
-    mv ~/.ddkits/$DDKITSSITES.key ~/.ddkits/$DDKITSFL/ddkits-files/ddkits/ssl/
-    mv ~/.ddkits/$DDKITSSITES.crt ~/.ddkits/$DDKITSFL/ddkits-files/ddkits/ssl/
+    mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
+    mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
     echo "ssl crt and .key files moved correctly"
 
     docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
@@ -291,11 +291,11 @@ ddk() {
     # export DDKITSIP=$(docker-machine ip ddkits)
     #  prepare ddkits container for the new websites
     echo -e 'copying conf files into ddkits and restart'
-    docker cp ~/.ddkits/ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
+    docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
     # docker cp ~/.ddkits/ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
     # copy ssl crt keys to ddkits proxy
-    docker cp ~/.ddkits/ddkits-files/ddkits/ssl/$DDKITSSITES.crt ddkits:/etc/ssl/certs/$DDKITSSITES.crt
-    docker cp ~/.ddkits/ddkits-files/ddkits/ssl/$DDKITSSITES.key ddkits:/etc/ssl/certs/$DDKITSSITES.key
+    docker cp ./ddkits-files/ddkits/ssl/$DDKITSSITES.crt ddkits:/etc/ssl/certs/$DDKITSSITES.crt
+    docker cp ./ddkits-files/ddkits/ssl/$DDKITSSITES.key ddkits:/etc/ssl/certs/$DDKITSSITES.key
 
     docker restart ddkits
     ddk go
@@ -334,7 +334,7 @@ ddk() {
       echo "$ddkits_host_entry" | sudo tee -a /etc/hosts >/dev/null
     fi
     echo -e 'copying conf files into ddkits and restart'
-    docker cp ~/.ddkits/ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
+    docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
     # docker cp ~/.ddkits/ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
     docker restart $(docker ps -q)
     ddk go
