@@ -61,7 +61,6 @@ export DDKITSJENKINSPORT='${DDKITSJENKINSPORT}'
 
 source $DDKITSFL'/ddkits.dev.sh'
 
-clear
 cat $LOGO
 
 # Create our system ddkits enviroment
@@ -80,7 +79,7 @@ services:
 networks:
     ddkits:
 
-  ' >>$DDKITSFL/ddkitsnew.yml
+  ' >$DDKITSFL/ddkitsnew.yml
 
 elif [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "y" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
   echo -e 'version: "2"
@@ -154,7 +153,7 @@ services:
 networks:
     ddkits:
 
-  ' >>$DDKITSFL/ddkitsnew.yml
+  ' >$DDKITSFL/ddkitsnew.yml
 
 # Create our system ddkits enviroment
 
@@ -218,7 +217,7 @@ services:
 networks:
     ddkits:
 
-  ' >>$DDKITSFL/ddkitsnew.yml
+  ' >$DDKITSFL/ddkitsnew.yml
 
 # Create our system ddkits enviroment
 
@@ -285,7 +284,7 @@ services:
 networks:
     ddkits:
 
-  ' >>$DDKITSFL/ddkitsnew.yml
+  ' >$DDKITSFL/ddkitsnew.yml
 
 # Create our system ddkits enviroment
 
@@ -340,7 +339,7 @@ services:
 networks:
     ddkits:
 
-  ' >>$DDKITSFL/ddkitsnew.yml
+  ' >$DDKITSFL/ddkitsnew.yml
 
 fi
 
