@@ -18,15 +18,14 @@ ddk() {
 
     # Downlaod all files into a seperate folder for ddkits only
     echo -e 'Creating DDkits folder .ddkits'
-    DIRECTORY=~/.ddkits
+    DIRECTORY="$(echo ~/.ddkits)"
     echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
     if [ ! -d "$DIRECTORY" ]; then
       # Control will enter here if $DIRECTORY doesn't exist.
-      echo -w 'git clone --single-branch --branch base https://github.com/ddkits/cli.git ~/.ddkits'
       git clone https://github.com/ddkits/base.git ~/.ddkits
       chmod -R 744 ~/.ddkits
     else
-      DIRIS=$(echo -e "${DIRECTORY}/.git")
+      DIRIS=$(echo "${DIRECTORY}/.git")
       git --git-dir=${DIRIS} checkout -f
       git --git-dir=${DIRIS} pull
     fi
@@ -59,6 +58,7 @@ ddk() {
     mkdir ~/.ddkits/ddkits-files/ddkits/ssl
     mv ~/.ddkits/ddkits.site.key ~/.ddkits/ddkits-files/ddkits/ssl/
     mv ~/.ddkits/ddkits.site.crt ~/.ddkits/ddkits-files/ddkits/ssl/
+    chmod -R 777 ~/.ddkits/ddkits-files/ddkits/ssl
     echo "ssl crt and .key files moved correctly"
     echo -e '(1) Localhost \n(2) virtualbox'
     read DDKITSVER
@@ -533,7 +533,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v2.20
+    DDKits v2.21
         '
   else
     echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
