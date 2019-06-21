@@ -4,6 +4,7 @@ public/sites/*/default.settings.php
 
 # Ignore paths that contain user-generated content.
 public/*
+*p.sh
 sites/*
 vendor/*
 pre_installation_whywebs/*
