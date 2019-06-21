@@ -6,15 +6,17 @@ RUN export TERM=xterm
 
 RUN sudo apt-get --allow-unauthenticated upgrade -y 
 
-# NOT FOUND response
-COPY ./custom_404.html /var/www/html/custom_404.html
-COPY ./custom_50x.html /var/www/html/custom_50x.html
-
 #  default conf for proxy service
 
 ADD sites/ddkits.conf /etc/apache2/sites-enabled/ddkits.conf
 ADD ssl/ddkits.site.crt /etc/ssl/certs/ddkits.site.crt
 ADD ssl/ddkits.site.key /etc/ssl/certs/ddkits.site.key
+
+# NOT FOUND response
+RUN mkdir /var/www/html
+ADD sites/custom_404.html /var/www/html/custom_404.html
+ADD sites/custom_50x.html /var/www/html/custom_50x.html
+ADD sites/index.php /var/www/html/index.php
 
 #  default conf for proxy service
 

@@ -15,22 +15,26 @@ ddk() {
   if [[ $1 == "install" ]]; then
     echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
     read -s SUDOPASS
+
+    # Downlaod all files into a seperate folder for ddkits only
+    echo -e 'Creating DDkits folder .ddkits'
+    DIRECTORY=~/.ddkits
+    echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
+    if [ ! -d "$DIRECTORY" ]; then
+      # Control will enter here if $DIRECTORY doesn't exist.
+      echo -w 'git clone --single-branch --branch base https://github.com/ddkits/cli.git ~/.ddkits'
+      git clone https://github.com/ddkits/base.git ~/.ddkits
+      chmod -R 744 ~/.ddkits
+    else
+      DIRIS=$(echo -e "${DIRECTORY}/.git")
+      git --git-dir=${DIRIS} checkout -f
+      git --git-dir=${DIRIS} pull
+    fi
     # make the logo file from source
     LOGO=~/.ddkits/ddkits-files/ddkits/logo.txt
     echo -e 'export SUDOPASS='${SUDOPASS}'
              export LOGO='${LOGO}'' >~/.ddkits/ddkits-files/ddkits/p.sh
     chmod 700 ~/.ddkits/ddkits-files/ddkits/p.sh
-    # Downlaod all files into a seperate folder for ddkits only
-    echo -e 'Creating DDkits folder .ddkits'
-    # echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
-    if [ ! -d "$DIRECTORY" ]; then
-      # Control will enter here if $DIRECTORY doesn't exist.
-      echo -w 'git clone --single-branch --branch base https://github.com/ddkits/cli.git ~/.ddkits'
-      git clone --single-branch --branch base https://github.com/ddkits/cli.git ~/.ddkits
-      chmod -R 744 ~/.ddkits
-    else
-      git --git-dir=~/.ddkits git pull
-    fi
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
     echo -e 'Welcome to DDKits world...'
@@ -403,26 +407,28 @@ ddk() {
       SITEDEL=.site
       # echo ${SUDOPASS} | sudo -S cat /etc/hosts
       # Remove the Source from Bash file
-      matches="$(grep -n ${SITEDEL} ~/etc/hosts | cut -f1 -d:)"
+      matches="$(grep -n ${SITEDEL} /etc/hosts | cut -f1 -d:)"
       if [ ! -z "$matches" ]; then
         echo "Updating Hosts file"
-
         # iterate over the line numbers on which matches were found
         while read -r line_number; do
           # Remove all DDkits entries
+          echo ${line_number}
           echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" /etc/hosts
         done <<<"$matches"
       fi
       # Remove the Source from Bash file
-      BASHSITE=ddk
+      BASHSITE=ddkits_alias
+      BSHFILE=~/.bash_profile
       matchesbash="$(grep -n ${BASHSITE} ~/.bash_profile | cut -f1 -d:)"
       if [ ! -z "$matchesbash" ]; then
-        echo "Updating Hosts file"
-
+        echo "Updating bash profile file"
         # iterate over the line numbers on which matches were found
-        while read -r line_number; do
+        while read -r line_numbers; do
           # Remove all DDkits entries
-          echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ~/.bash_profile
+          echo ${line_numbers}
+          echo ${SUDOPASS} | sudo -S sed -i '' "/${line_numbers}/d" ~/.bash_profile
+
         done <<<"$matchesbash"
       fi
       source ~/.bash_profile
