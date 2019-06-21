@@ -18,6 +18,8 @@ ddkits-files/*/sites/*_*.conf
 ddkits_alias
 app
 *.html
+~ddkits-files/ddkits/*.html
+~ddkits-files/ddkits/*/*.html
 *.crt
 *.key
 */*.dev.sh
