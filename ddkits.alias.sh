@@ -18,6 +18,7 @@ ddk() {
 
     # Downlaod all files into a seperate folder for ddkits only
     echo -e 'Creating DDkits folder .ddkits'
+    DIRECTORY=~/.ddkits
     # echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
     if [ ! -d "$DIRECTORY" ]; then
       # Control will enter here if $DIRECTORY doesn't exist.
@@ -25,7 +26,8 @@ ddk() {
       git clone https://github.com/ddkits/base.git ~/.ddkits
       chmod -R 744 ~/.ddkits
     else
-      git --git-dir=~/.ddkits git pull
+      DIRIS=$(echo -e "${DIRECTORY}/.git")
+      git --git-dir=${DIRIS} pull
     fi
     # make the logo file from source
     LOGO=~/.ddkits/ddkits-files/ddkits/logo.txt
