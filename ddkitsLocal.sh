@@ -370,16 +370,10 @@ if [ ! -z "$matches" ]; then
   while read -r line_number; do
     # replace the text of each line with the desired entry
     echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ~/.ddkits_alias_web
-    echo ${SUDOPASS} | sudo -S sed "/${host_entry}/d" ~/.ddkits_alias_web >~/.ddkits_alias_web_tmp
-    echo ${SUDOPASS} | sudo -S mv ~/.ddkits_alias_web_tmp ~/.ddkits_alias_web
   done <<<"$matches"
-  echo "Adding new entry."
-  echo "${entry}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
-else
-  echo "Adding new entry."
-  echo "${entry}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
 fi
-
+echo "Adding new entry."
+  echo "${entry}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
 #  All information in one file html as a referance
 
 echo -e '#<html><head><!--

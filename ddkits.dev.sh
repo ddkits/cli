@@ -545,7 +545,7 @@ MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
 ddkits_matches_in_hosts="$(grep -n jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site /etc/hosts | cut -f1 -d:)"
 host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3}"
-ddkits_host_entry="${DDKITSIP} ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
+ddkits_host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
 pat="jenkins.${DDKITSSITES}.ddkits.site"
 # echo "Please enter your password if requested."
 
@@ -556,33 +556,18 @@ if [ ! -z "$matches_in_hosts" ]; then
   # iterate over the line numbers on which matches were found
   while read -r line_number; do
     # replace the text of each line with the desired host entry
+    # echo ${SUDOPASS} | sudo -S sed -i '' "${line_number}s/.*/${host_entry} /" /etc/hosts
     echo ${SUDOPASS} | sudo -S sed "/${host_entry}/d" /etc/hosts >~/hosts
     echo ${SUDOPASS} | sudo -S sed "/${pat}/d" /etc/hosts >~/hosts
     echo ${SUDOPASS} | sudo -S mv ~/hosts /etc/hosts
   done <<<"$matches_in_hosts"
   echo "Adding new hosts entry."
-  echo "${host_entry}" | sudo tee -a /etc/hosts >/dev/null
   echo "${ddkits_host_entry}" | sudo tee -a /etc/hosts >/dev/null
 else
   echo "Adding new hosts entry."
-  echo "${host_entry}" | sudo tee -a /etc/hosts >/dev/null
   echo "${ddkits_host_entry}" | sudo tee -a /etc/hosts >/dev/null
 fi
 echo ${SUDOPASS} | sudo -S cat /etc/hosts
-
-# if [ ! -z "$ddkits_matches_in_hosts" ]
-# then
-#    # iterate over the line numbers on which matches were found
-#     while read -r line_number; do
-#       # replace the text of each line with the desired host entry
-
-#       echo ${SUDOPASS} | sudo -S mv ~/hosts /etc/hosts
-#     done <<< "$ddkits_matches_in_hosts"
-
-#     else
-#     echo "Adding new hosts entry."
-#     echo "${ddkits_host_entry}" | sudo tee -a /etc/hosts > /dev/null
-# fi
 
 if [[ "$JENKINS_ONLY" == "false" ]]; then
 

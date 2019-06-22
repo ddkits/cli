@@ -60,6 +60,8 @@ ddk() {
     mv ~/.ddkits/ddkits.site.crt ~/.ddkits/ddkits-files/ddkits/ssl/
     chmod -R 777 ~/.ddkits/ddkits-files/ddkits/ssl
     echo "ssl crt and .key files moved correctly"
+    echo -e 'DDkits web
+    ' > ~/.ddkits_alias_web
     echo -e '(1) Localhost \n(2) virtualbox'
     read DDKITSVER
     if [[ $DDKITSVER == 1 ]]; then
@@ -138,7 +140,7 @@ ddk() {
         esac
       done
       docker-machine ip ddkits
-      echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
       echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
       if [ $? -eq 0 ]; then
         clear
@@ -191,8 +193,8 @@ ddk() {
         clear
 
         docker-compose -f ~/.ddkits/ddkits.yml up -d --build
-        cp ddkits.alias.sh ddkits_alias
-        cp ddkits_alias ~/.ddkits_alias
+        echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+        echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
         docker restart $(docker ps -q)
         docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
         docker-machine start ddkits
@@ -202,8 +204,8 @@ ddk() {
       else
 
         docker-compose -f ~/.ddkits/ddkits.yml up -d --build
-        cp ddkits.alias.sh ddkits_alias
-        cp ddkits_alias ~/.ddkits_alias
+        echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+        echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
         docker restart $(docker ps -q)
         docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
         docker-machine start ddkits
@@ -225,19 +227,19 @@ ddk() {
       echo -e 'ifconfig Refresh ->'
       echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
       echo -e 'ifconfig Refresh -> done ifconfig'
-      sudo rm ~/.ddkits_alias
-      cp ddkits.alias.sh ddkits_alias
-      sudo cp ddkits_alias ~/.ddkits_alias
-      sudo chmod u+x ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S  rm ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
+      echo $SUDOPASS | sudo -S  cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S  chmod u+x ~/.ddkits_alias
       source ~/.ddkits_alias
       source ~/.ddkits_alias_web
       docker restart $(docker ps -q)
     else
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
-      cp ddkits.alias.sh ddkits_alias
-      sudo cp ddkits_alias ~/.ddkits_alias
-      sudo chmod u+x ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S  cp ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S  chmod u+x ~/.ddkits_alias
       source ~/.ddkits_alias
       source ~/.ddkits_alias_web
       docker restart $(docker ps -q)
@@ -299,12 +301,8 @@ ddk() {
 
     docker restart ddkits
     ddk go
-    #  prepare ddkits container for the new websites
     matches_in_hosts="$(grep -n ${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
-    ddkits_matches_in_hosts="$(grep -n jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site /etc/hosts | cut -f1 -d:)"
-    host_entry="${DDKITSIP} ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3}"
-    ddkits_host_entry="${DDKITSIP}   ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
-
+    host_entry="${DDKITSIP}  ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
     # echo "Please enter your password if requested."
 
     # echo ${SUDOPASS} | sudo -S cat /etc/hosts
@@ -322,17 +320,6 @@ ddk() {
       echo "$host_entry" | sudo tee -a /etc/hosts >/dev/null
     fi
     echo ${SUDOPASS} | sudo -S cat /etc/hosts
-
-    if [ ! -z "$ddkits_matches_in_hosts" ]; then
-      # iterate over the line numbers on which matches were found
-      while read -r line_number; do
-        # replace the text of each line with the desired host entry
-        echo ${SUDOPASS} | sudo -S sed -i '' "${line_number}s/.*/${ddkits_host_entry} /" /etc/hosts
-      done <<<"$ddkits_matches_in_hosts"
-    else
-      echo "Adding new hosts entry."
-      echo "$ddkits_host_entry" | sudo tee -a /etc/hosts >/dev/null
-    fi
     echo -e 'copying conf files into ddkits and restart'
     docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
     # docker cp ~/.ddkits/ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
@@ -400,7 +387,7 @@ ddk() {
       echo ${SUDOPASS} | sudo -S rm ~/.ddkits_alias
       echo ${SUDOPASS} | sudo -S rm ~/.ddkits_alias_web
       # echo "Please enter your password if requested."
-      SITEDEL=.site
+      SITEDEL=ddkits
       # echo ${SUDOPASS} | sudo -S cat /etc/hosts
       # Remove the Source from Bash file
       matches="$(grep -n ${SITEDEL} /etc/hosts | cut -f1 -d:)"
@@ -428,10 +415,10 @@ ddk() {
         done <<<"$matchesbash"
       fi
       source ~/.bash_profile
+      docker-machine rm ddkits
       echo -e ''
       echo ':---(( Bye ' && echo "$USER"
       echo -e ''
-      docker-machine rm ddkits
       eval $(docker-machine env default)
     fi
 
