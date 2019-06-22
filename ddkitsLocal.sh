@@ -373,7 +373,11 @@ if [ ! -z "$matches" ]; then
   done <<<"$matches"
 fi
 echo "Adding new entry."
-  echo "${entry}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
+  echo "${entry1}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
+  echo "${entry2}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
+  echo "${entry3}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
+  echo "${entry4}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
+  echo "alias ddkc-ddkits='docker exec -it ddkits /bin/bash' \n" | sudo tee -a ~/.ddkits_alias_web >/dev/null
 #  All information in one file html as a referance
 
 echo -e '#<html><head><!--
