@@ -285,9 +285,9 @@ ddk() {
 
     docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
     sudo rm ~/.ddkits_alias
-    cp ddkits.alias.sh ddkits_alias
-    sudo cp ddkits_alias ~/.ddkits_alias
-    sudo chmod u+x ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
     source ~/.ddkits_alias
     source ~/.ddkits_alias_web
     # export DDKITSIP=$(docker-machine ip ddkits)
