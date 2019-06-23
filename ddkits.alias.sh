@@ -154,7 +154,6 @@ ddk() {
       echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
       echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
       if [ $? -eq 0 ]; then
-        clear
         echo $SUDOPASS | sudo -S cat $LOGO
         echo 'DDKits saying it is fine no need to reinstall'
       else
@@ -201,7 +200,6 @@ ddk() {
       if [[ -f ~/.ddkits_alias ]]; then
         clear
         echo $SUDOPASS | sudo -S cat $LOGO
-        clear
 
         docker-compose -f ~/.ddkits/ddkits.yml up -d --build
         echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
