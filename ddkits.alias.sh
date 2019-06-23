@@ -62,8 +62,19 @@ ddk() {
     echo "ssl crt and .key files moved correctly"
     echo -e 'DDkits web
     ' > ~/.ddkits_alias_web
-    echo -e '(1) Localhost \n(2) virtualbox'
-    read DDKITSVER
+    ddk ip 
+    if [[ $DDKMACHINE == '1' ]]; then
+      # ddk go
+      # ddk c | grep ddkits  >/dev/null && export DDKITSIP=$(docker-machine ip ddkits) || export DDKITSIP='Please make sure your DDKits container is installed and running'
+      echo -e 'DDKits virtualbox already installed and will be used to install DDKits container'
+    else
+      # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
+      echo -e '(1) Localhost \n(2) virtualbox'
+      read DDKITSVER
+    fi
+    echo -e 'Your DDkits ip: 
+      '${DDKITSIP}
+    
     if [[ $DDKITSVER == 1 ]]; then
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
@@ -215,7 +226,17 @@ ddk() {
       fi
     fi
   elif [[ $1 == "ip" ]]; then
-    docker-machine ip ddkits
+    Docker-machine ls | grep ddkits  >/dev/null && export DDKMACHINE='1' || echo 'DDKits container is not using DDKits Docker Machine'
+    # export DDKITSIP=$(docker-machine ip ddkits)
+    if [[ $DDKITSVER == '1' ]]; then
+      ddk go
+      ddk c | grep ddkits >/dev/null && export DDKITSIP=$(docker-machine ip ddkits) || export DDKITSIP='Please make sure your DDKits container is installed and running'
+    else
+      ddk c | grep ddkits >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
+      # docker-machine ls | grep error >/dev/null && docker-machine create --driver virtualbox default || echo -e 'DDkits need to be installed first'
+    fi
+    echo -e 'Your DDkits ip: 
+      '${DDKITSIP}
   elif [[ $1 == "check" ]]; then
     docker ps --filter "name=ddkits"
   elif [[ $1 == "fix" ]]; then
@@ -300,7 +321,8 @@ ddk() {
     docker cp ./ddkits-files/ddkits/ssl/$DDKITSSITES.key ddkits:/etc/ssl/certs/$DDKITSSITES.key
 
     docker restart ddkits
-    ddk go
+    ddk ip
+
     matches_in_hosts="$(grep -n ${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
     host_entry="${DDKITSIP}  ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
     # echo "Please enter your password if requested."
@@ -473,6 +495,11 @@ ddk() {
     else
       docker-compose -f ~/.ddkits/ddkits.yml -f ddkits.env.yml rm
     fi
+  elif [[ $1 == "init" ]]; then
+    clear
+    echo $SUDOPASS | sudo -S cat $LOGO
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.init.sh .ddkits-files/ddkits.init.sh
+    source .ddkits-files/ddkits.init.sh
   elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
@@ -516,7 +543,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v2.21
+    DDKits v3.01
         '
   else
     echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
