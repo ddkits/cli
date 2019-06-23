@@ -262,6 +262,8 @@ ddk() {
       source ~/.ddkits_alias
       source ~/.ddkits_alias_web
       docker restart $(docker ps -q)
+      ddk c | grep ddkits  >/dev/null && ddk install || echo -e 'DDkits Ready to go, well done :-)'
+
     fi
 
   elif [[ $1 == "com" ]]; then
