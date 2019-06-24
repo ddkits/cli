@@ -397,7 +397,7 @@ ddk() {
       echo ${SUDOPASS} | sudo -S rm ~/.ddkits_alias
       echo ${SUDOPASS} | sudo -S rm ~/.ddkits_alias_web
       # echo "Please enter your password if requested."
-      SITEDEL=ddkits
+      SITEDEL="ddkits.site"
       # echo ${SUDOPASS} | sudo -S cat /etc/hosts
       # Remove the Source from Bash file
       matches="$(grep -n ${SITEDEL} /etc/hosts | cut -f1 -d:)"
