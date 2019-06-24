@@ -187,28 +187,26 @@ ddk() {
           break
         fi
       fi
-      if [[ -f ~/.ddkits_alias ]]; then
-        clear
+      clear
         echo $SUDOPASS | sudo -S cat $LOGO
-
-        docker-compose -f ~/.ddkits/ddkits.yml up -d --build
+      if [[ -f ~/.ddkits_alias ]]; then
         echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
         echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
         docker restart $(docker ps -q)
         docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
         docker-machine start ddkits
         eval "$(docker-machine env ddkits)"
+        docker-compose -f ~/.ddkits/ddkits.yml up -d --build
         echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
         echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
       else
-
-        docker-compose -f ~/.ddkits/ddkits.yml up -d --build
         echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
         echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
         docker restart $(docker ps -q)
         docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
         docker-machine start ddkits
         eval "$(docker-machine env ddkits)"
+        docker-compose -f ~/.ddkits/ddkits.yml up -d --build
         echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
         echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
       fi
