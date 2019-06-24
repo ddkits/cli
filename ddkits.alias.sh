@@ -214,7 +214,7 @@ ddk() {
   elif [[ $1 == "ip" ]]; then
     Docker-machine ls | grep ddkits  >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
     # export DDKITSIP=$(docker-machine ip ddkits)
-    if [[ $DDKMACHINE == 1 ]]; then
+    if [[ $DDKMACHINE == "1" ]]; then
       ddk go
       ddk c | grep ddkits >/dev/null && export DDKITSIP=$(docker-machine ip ddkits) || export DDKITSIP='Please make sure your DDKits container is installed and running'
     else

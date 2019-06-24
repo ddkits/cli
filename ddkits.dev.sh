@@ -7,7 +7,7 @@
 # This system built by Mutasem Elayyoub DDKits.com
 # insert DDKits alias into anyh system command lines
 # source ddkits.alias.sh
-DDKITSFL=$(pwd)
+export DDKITSFL=$(pwd)
 
 clear
 cat $LOGO
