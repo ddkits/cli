@@ -62,20 +62,9 @@ ddk() {
     echo "ssl crt and .key files moved correctly"
     echo -e 'DDkits web
     ' > ~/.ddkits_alias_web
-    ddk ip 
-    if [[ $DDKMACHINE == '1' ]]; then
-      # ddk go
-      # ddk c | grep ddkits  >/dev/null && export DDKITSIP=$(docker-machine ip ddkits) || export DDKITSIP='Please make sure your DDKits container is installed and running'
-      echo -e 'DDKits virtualbox already installed and will be used to install DDKits container'
-      export DDKITSVER=2
-    else
       # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
       echo -e '(1) Localhost \n(2) virtualbox'
       read DDKITSVER
-    fi
-    echo -e 'Your DDkits ip: 
-      '${DDKITSIP}
-    
     if [[ $DDKITSVER == 1 ]]; then
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
