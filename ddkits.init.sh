@@ -6,8 +6,6 @@
 #
 # This system built by Mutasem Elayyoub DDKits.com
 # insert DDKits alias into anyh system command lines
-
-
 DDKITSFL=$(pwd)
 export $DDKITSFL
 
@@ -16,6 +14,7 @@ mkdir $DDKITSFL/.ddkits-files
 mkdir $DDKITSFL/.ddkits-files/ddkits
 mkdir $DDKITSFL/.ddkits-files/ddkits/sites
 mkdir $DDKITSFL/.ddkits-files/ddkits/ssl
+echo -e '.ddkits-files/' >> .gitignore
 
 echo -e "
   Welcome to DDKits Development Version

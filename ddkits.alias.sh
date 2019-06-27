@@ -484,9 +484,11 @@ ddk() {
       docker-compose -f ~/.ddkits/ddkits.yml -f ddkits.env.yml rm
     fi
   elif [[ $1 == "init" ]]; then
-    clear
     echo $SUDOPASS | sudo -S cat $LOGO
+    mkdir .ddkits-files
+    chmod -R 777 .ddkits-files
     echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.init.sh .ddkits-files/ddkits.init.sh
+    clear
     source .ddkits-files/ddkits.init.sh
   elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     clear
