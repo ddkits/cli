@@ -34,7 +34,7 @@ fi
 
 echo -e 'FROM kevinobee/umbraco:latest ' >> $DDKITSFL/ddkits-files/umbraco/Dockerfile
 
-echo -e 'version: "2"
+echo -e 'version: "3.1"
 
 services:
   web:

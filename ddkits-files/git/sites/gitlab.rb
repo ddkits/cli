@@ -872,7 +872,7 @@
 # nginx['tcp_nodelay'] = 'on'
 # nginx['gzip'] = "on"
 # nginx['gzip_http_version'] = "1.0"
-# nginx['gzip_comp_level'] = "2"
+# nginx['gzip_comp_level'] = "3.1"
 # nginx['gzip_proxied'] = "any"
 # nginx['gzip_types'] = [ "text/plain", "text/css", "application/x-javascript", "text/xml", "application/xml", "application/xml+rss", "text/javascript", "application/json" ]
 # nginx['keepalive_timeout'] = 65

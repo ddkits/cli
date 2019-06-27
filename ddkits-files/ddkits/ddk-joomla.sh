@@ -127,7 +127,7 @@ echo -e '
 </VirtualHost>
 ' > $DDKITSFL/ddkits-files/joomla/sites/$DDKITSHOSTNAME.conf
 
-echo -e 'version: "2"
+echo -e 'version: "3.1"
 
 services:
   web:

@@ -142,7 +142,7 @@ RUN usermod -u 1000 www-data
 # chmod -R 777 storage
 #  ' > $DDKITSFL/ll-deploy/ddkits.fix.sh
 
-echo -e 'version: "2"
+echo -e 'version: "3.1"
 
 services:
   web:

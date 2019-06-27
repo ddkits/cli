@@ -125,7 +125,7 @@ agent.limit_xmx=true
 
 ' > $DDKITSFL/ddkits-files/ngrinder/ngrinder-agent/__agent.conf
 
-echo -e 'version: "2"
+echo -e 'version: "3.1"
 
 services:
   web:

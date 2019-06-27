@@ -174,7 +174,7 @@ RUN usermod -u 1000 www-data
 ' >> $DDKITSFL/ddkits-files/drupal/Dockerfile
 
 #  create ddkits compose file for the new website
-echo -e 'version: "2"
+echo -e 'version: "3.1"
 
 services:
   web:

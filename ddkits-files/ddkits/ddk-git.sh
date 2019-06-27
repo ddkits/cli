@@ -180,7 +180,7 @@ systemctl restart gitlab-runsvdir \
   && /etc/init.d/iptables save \
   && gitlab-ctl reconfigure ' > $DDKITSFL/git-deploy/ddkits.fix.sh
 
-echo -e 'version: "2"
+echo -e 'version: "3.1"
 
 services:
   web:

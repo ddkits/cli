@@ -127,7 +127,7 @@ RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 ' >> $DDKITSFL/ddkits-files/zend/Dockerfile
 
-echo -e 'version: "2"
+echo -e 'version: "3.1"
 
 services:
   web:

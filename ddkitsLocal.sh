@@ -65,7 +65,7 @@ cat $LOGO
 
 # Create our system ddkits enviroment
 if [[ "$JENKINS_ONLY" == "true" ]]; then
-  echo -e 'version: "2"
+  echo -e 'version: "3.1"
 
 services:
   cache:
@@ -82,7 +82,7 @@ networks:
   ' >$DDKITSFL/ddkitsnew.yml
 
 elif [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "y" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
-  echo -e 'version: "2"
+  echo -e 'version: "3.1"
 
 services:
   mariadb:
@@ -158,7 +158,7 @@ networks:
 # Create our system ddkits enviroment
 
 elif [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "y" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
-  echo -e 'version: "2"
+  echo -e 'version: "3.1"
 
 services:
   mariadb:
@@ -222,7 +222,7 @@ networks:
 # Create our system ddkits enviroment
 
 elif [[ "$JENKINS_ANSWER" == "y" ]] && [[ "$SOLR_ANSWER" == "n" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
-  echo -e 'version: "2"
+  echo -e 'version: "3.1"
 
 services:
   mariadb:
@@ -289,7 +289,7 @@ networks:
 # Create our system ddkits enviroment
 
 elif [[ "$JENKINS_ANSWER" == "n" ]] && [[ "$SOLR_ANSWER" == "n" ]] && [[ "$JENKINS_ONLY" == "false" ]]; then
-  echo -e 'version: "2"
+  echo -e 'version: "3.1"
 
 services:
   mariadb:
