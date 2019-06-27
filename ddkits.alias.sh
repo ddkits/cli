@@ -61,10 +61,10 @@ ddk() {
     chmod -R 777 ~/.ddkits/ddkits-files/ddkits/ssl
     echo "ssl crt and .key files moved correctly"
     echo -e 'DDkits web
-    ' > ~/.ddkits_alias_web
-      # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
-      echo -e '(1) Localhost \n(2) virtualbox'
-      read DDKITSVER
+    ' >~/.ddkits_alias_web
+    # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
+    echo -e '(1) Localhost \n(2) virtualbox'
+    read DDKITSVER
     if [[ $DDKITSVER == 1 ]]; then
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
@@ -188,7 +188,7 @@ ddk() {
         fi
       fi
       clear
-        echo $SUDOPASS | sudo -S cat $LOGO
+      echo $SUDOPASS | sudo -S cat $LOGO
       if [[ -f ~/.ddkits_alias ]]; then
         echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
         echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
@@ -212,7 +212,7 @@ ddk() {
       fi
     fi
   elif [[ $1 == "ip" ]]; then
-    Docker-machine ls | grep ddkits  >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
+    Docker-machine ls | grep ddkits >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
     # export DDKITSIP=$(docker-machine ip ddkits)
     if [[ $DDKMACHINE == "1" ]]; then
       ddk go
@@ -226,34 +226,19 @@ ddk() {
   elif [[ $1 == "check" ]]; then
     docker ps --filter "name=ddkits"
   elif [[ $1 == "fix" ]]; then
-    # Alias file
-    ALIASFILE=~/.ddkits_alias
-    if [[ -f $ALIASFILE ]]; then
-      clear
-      echo $SUDOPASS | sudo -S cat $LOGO
-      echo -e 'ifconfig Refresh ->'
-      echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
-      echo -e 'ifconfig Refresh -> done ifconfig'
-      echo $SUDOPASS | sudo -S  rm ~/.ddkits_alias
-      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
-      echo $SUDOPASS | sudo -S  cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
-      echo $SUDOPASS | sudo -S  chmod u+x ~/.ddkits_alias
-      source ~/.ddkits_alias
-      source ~/.ddkits_alias_web
-      docker restart $(docker ps -q)
-    else
-      clear
-      echo $SUDOPASS | sudo -S cat $LOGO
-      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
-      echo $SUDOPASS | sudo -S  cp ddkits_alias ~/.ddkits_alias
-      echo $SUDOPASS | sudo -S  chmod u+x ~/.ddkits_alias
-      source ~/.ddkits_alias
-      source ~/.ddkits_alias_web
-      docker restart $(docker ps -q)
-      ddk c | grep ddkits  >/dev/null && ddk install || echo -e 'DDkits Ready to go, well done :-)'
-
-    fi
-
+    clear
+    echo $SUDOPASS | sudo -S cat $LOGO
+    echo -e 'ifconfig Refresh ->'
+    echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
+    echo -e 'ifconfig Refresh -> done ifconfig'
+    echo $SUDOPASS | sudo -S rm ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
+    source ~/.ddkits_alias
+    source ~/.ddkits_alias_web
+    docker restart $(docker ps -q)
+    ddk c | grep ddkits >/dev/null && ddk install || echo -e 'DDkits Ready to go, well done :-)'
   elif [[ $1 == "com" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
