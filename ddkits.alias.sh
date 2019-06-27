@@ -238,7 +238,7 @@ ddk() {
     source ~/.ddkits_alias
     source ~/.ddkits_alias_web
     docker restart $(docker ps -q)
-    ddk c | grep ddkits >/dev/null && ddk install || echo -e 'DDkits Ready to go, well done :-)'
+    ddk c | grep ddkits >/dev/null && echo -e 'DDkits Ready to go, well done :-)' || ddk install
   elif [[ $1 == "com" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
