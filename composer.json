@@ -1,5 +1,5 @@
 {
-  "name": "ddkits/composer",
+  "name": "ddkits/cli",
   "description": "DDKits is an open source proxy software built using Docker and virtualBox which includes terminal commands, to create and build a local environment for all kind of platforms. DDKits is able to initialize the website using any platforms ( CMS or MVC ) to build containers with different domains. It bypasses IPs and ports to DDKits container and uses one IP and port instead.",
   "type": "project",
   "homepage": "http://ddkits.com",
