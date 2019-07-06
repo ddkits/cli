@@ -51,8 +51,7 @@ ddk() {
       -subj /CN=ddkits.site \
       -reqexts SAN \
       -extensions SAN \
-      -config <(cat /System/Library/OpenSSL/openssl.cnf \
-        <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site')) \
+      -config <(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site')) \
       -sha256 \
       -days 3650
     mkdir ~/.ddkits/ddkits-files/ddkits/ssl
@@ -269,8 +268,7 @@ ddk() {
       -subj /CN=$DDKITSSITES.site \
       -reqexts SAN \
       -extensions SAN \
-      -config <(cat /System/Library/OpenSSL/openssl.cnf \
-        <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
+      -config <(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
       -sha256 \
       -days 3650
     mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
