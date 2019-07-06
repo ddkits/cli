@@ -32,7 +32,9 @@
   "prefer-stable": true,
   "scripts": {
     "post-create-project-cmd": [
-            "git pull origin master"
+            "git pull origin master",
+            "source ddkits.alias.sh",
+            "echo 'DDkits ready to go... ENJOY!!'"
         ],
     "post-update-cmd": [
             "git pull origin master"
