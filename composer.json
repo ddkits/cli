@@ -32,6 +32,12 @@
   },
   "prefer-stable": true,
   "scripts": {
+    "post-create-project-cmd": [
+            "@source ddkits.alias.sh && echo 'DDkits is ready ENJOY!!!'"
+        ],
+    "post-update-cmd": [
+            "git pull origin master"
+    ],
     "lint": [
       "./vendor/bin/phplint"
     ],
