@@ -26,17 +26,18 @@
     "ext-json": "*",
     "ext-openssl": "*",
     "ext-curl": "*",
-    "drush/drush": "~8.0",
     "psy/psysh": "^0.8.5",
     "pear/http_request2": "^2.3"
   },
   "prefer-stable": true,
   "scripts": {
     "post-create-project-cmd": [
-            "@source ddkits.alias.sh && echo 'DDkits is ready ENJOY!!!'"
+            "git pull origin master",
+            "source ddkits.alias.sh && echo 'DDkits is ready ENJOY!!!'"
         ],
     "post-update-cmd": [
-            "git pull origin master"
+            "git pull origin master",
+            "source ddkits.alias.sh && echo 'DDkits is ready ENJOY!!!'"
     ],
     "lint": [
       "./vendor/bin/phplint"
