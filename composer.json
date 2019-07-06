@@ -11,7 +11,7 @@
       "homepage": "http://ddkits.com"
     }
   ],
-  "minimum-stability": "dev-master",
+  "minimum-stability": "dev",
   "require": {
     "overtrue/phplint": "^0.2.1",
     "ext-xml": "*",
