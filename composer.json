@@ -11,6 +11,14 @@
       "homepage": "http://ddkits.com"
     }
   ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/ddkits/cli"
+      "name": "ddkits/cli",
+      "reference": "master"
+    }
+  ],
   "minimum-stability": "dev",
   "require": {
     "overtrue/phplint": "^0.2.1",
