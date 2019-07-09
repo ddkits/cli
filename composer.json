@@ -1,6 +1,6 @@
 {
   "name": "ddkits/cli",
-  "description": "DDKits is an open source proxy software built using Docker and virtualBox which includes terminal commands, to create and build a local environment for all kind of platforms. DDKits is able to initialize the website using any platforms ( CMS or MVC ) to build containers with different domains. It bypasses IPs and ports to DDKits container and uses one IP and port instead.",
+  "description": "DDKits is an open source proxy software built using Docker \n and virtualBox which includes terminal commands, to create and build a local \n environment for all kind of platforms.  After creating run ```source project_folder/ddkits.alias.sh ``` DDKits is able to initialize the website \n using any platforms ( CMS or MVC ) to build containers with different domains. \n It bypasses IPs and ports to DDKits container and uses one IP and port instead.",
   "type": "project",
   "homepage": "http://ddkits.com",
   "license": "MIT",
@@ -32,11 +32,11 @@
   "prefer-stable": true,
   "scripts": {
     "post-create-project-cmd": [
-            "git pull origin master",
-            "echo 'DDkits ready to go... \n get into the project folder and run the command below \n source ddkits.alias.sh'"
-        ],
+      "git pull origin master",
+      "echo 'DDkits ready to go... \n get into the project folder and run the command below \n source ddkits.alias.sh'"
+    ],
     "post-update-cmd": [
-            "git pull origin master"
+      "git pull origin master"
     ],
     "lint": [
       "./vendor/bin/phplint"
@@ -44,5 +44,5 @@
     "test": [
       "./vendor/bin/phplint --no-cache"
     ]
-  }  
+  }
 }
