@@ -20,10 +20,10 @@ alias ddkc-ddkits='docker exec -it ddkits /bin/bash'
 # echo "alias ddkc-"$DDKITSSITES"-admin='docker exec -it "$DDKITSHOSTNAME"_ddkits_admin /bin/bash'" >> ~/.ddkits_alias_web
 
 # New entry check to stay out of duplications
-entry1="alias ddkc-"$DDKITSSITES"-cache='docker exec -it "$DDKITSHOSTNAME"_ddkits_cache /bin/bash' \n"
-entry2="alias ddkc-"$DDKITSSITES"-jen='docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins /bin/bash' \n"
-entry3="alias ddkc-"$DDKITSSITES"-solr='docker exec -it "$DDKITSHOSTNAME"_ddkits_solr /bin/bash' \n"
-entry4="alias ddkc-"$DDKITSSITES"-admin='docker exec -it "$DDKITSHOSTNAME"_ddkits_admin /bin/bash' \n"
+entry1="alias ddkc-"$DDKITSSITES"-cache='docker exec -it "$DDKITSHOSTNAME"_ddkits_cache /bin/bash'"
+entry2="alias ddkc-"$DDKITSSITES"-jen='docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins /bin/bash'"
+entry3="alias ddkc-"$DDKITSSITES"-solr='docker exec -it "$DDKITSHOSTNAME"_ddkits_solr /bin/bash'"
+entry4="alias ddkc-"$DDKITSSITES"-admin='docker exec -it "$DDKITSHOSTNAME"_ddkits_admin /bin/bash'"
 entry=($entry1 $entry2 $entry3 $entry4)
 matches="$(grep -n ${DDKITSSITES} ~/.ddkits_alias_web | cut -f1 -d:)"
 
@@ -41,4 +41,4 @@ echo "Adding new entry."
   echo "${entry2}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
   echo "${entry3}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
   echo "${entry4}" | sudo tee -a ~/.ddkits_alias_web >/dev/null
-  echo "alias ddkc-ddkits='docker exec -it ddkits /bin/bash' \n" | sudo tee -a ~/.ddkits_alias_web >/dev/null
+  echo "alias ddkc-ddkits='docker exec -it ddkits /bin/bash'" | sudo tee -a ~/.ddkits_alias_web >/dev/null
