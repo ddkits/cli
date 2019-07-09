@@ -47,8 +47,7 @@ cat "./ddkits-files/ddkits/logo.txt"
               -subj /CN=$DDKITSSITES \
               -reqexts SAN \
               -extensions SAN \
-              -config <(cat /System/Library/OpenSSL/openssl.cnf \
-                  <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
+              -config <(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
               -sha256 \
               -days 3650
           mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
@@ -150,8 +149,17 @@ services:
        WORDPRESS_DB_USER: '$MYSQL_USER'
        WORDPRESS_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >> $DDKITSFL/ddkits.env.yml  
 
-wget http://wordpress.org/latest.tar.gz
-tar xfz latest.tar.gz  
+# check if wget command exist
+
+if wget ; then
+    wget http://wordpress.org/latest.tar.gz
+    tar xfz *.tar.gz  
+else
+    echo -e "\033[0;31m$(tput setab 7) ERROR: ' wget ' command needed for Wordpress to download, \n 
+    download the files manually http://wordpress.org/latest.tar.gz \n and move them to the \n ../project_folder/wp-deploy/public \n folder to get your site to work.\033[0m"
+fi
+
+
 mkdir $DDKITSFL/wp-deploy
 mkdir $DDKITSFL/wp-deploy/public
 mv wordpress/* $DDKITSFL/wp-deploy/public

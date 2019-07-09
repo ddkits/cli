@@ -7,6 +7,8 @@
 # Copy the new Alias system and making sure of the DDKits installation
 ddk() {
   # Check if the file exist
+  RED='\033[0;31m'
+  NC='\033[0m'
   FILE=~/.ddkits/ddkits-files/ddkits/p.sh
   if test -f "$FILE"; then
     source $FILE
