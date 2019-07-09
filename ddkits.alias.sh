@@ -498,7 +498,7 @@ ddk() {
             **************************
         i       - Show all your docker images
         c       - Show all your docker containers
-        r       - Docker run\n
+        r       - Docker run
         rm      - Remove your compose extra unused containers or containers with error
             **************************
         rm all  - Restore docker images and containers "Important this command remove all your containers and images"
