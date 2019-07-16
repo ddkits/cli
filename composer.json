@@ -32,11 +32,10 @@
   "prefer-stable": true,
   "scripts": {
     "post-create-project-cmd": [
-      "git pull origin master",
+      "source ddkits.alias.sh && ddk fix",
       "echo 'DDkits ready to go... \n get into the project folder and run the command below \n source ddkits.alias.sh'"
     ],
     "post-update-cmd": [
-      "git pull origin master",
       "source ddkits.alias.sh && ddk fix"
     ],
     "lint": [
