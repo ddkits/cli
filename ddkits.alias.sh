@@ -4,6 +4,7 @@
 #
 #  Created by mutasem elayyoub ddkits.com
 #
+shopt -s extglob
 # Copy the new Alias system and making sure of the DDKits installation
 ddk() {
   # Check if the file exist
@@ -40,7 +41,7 @@ ddk() {
     echo $SUDOPASS | sudo -S cat $LOGO
     echo -e 'Welcome to DDKits world...'
     export COMPOSE_TLS_VERSION=TLSv1_2
-
+    export CONFIGIS=<(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site'))
     # create the crt files for ssl
     echo -e 'Creating Self assigned KEY & CRT'
     openssl req \
@@ -53,7 +54,7 @@ ddk() {
       -subj /CN=ddkits.site \
       -reqexts SAN \
       -extensions SAN \
-      -config <"(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site'))" \
+      -config $CONFIGIS \
       -sha256 \
       -days 3650
     mkdir ~/.ddkits/ddkits-files/ddkits/ssl
@@ -259,6 +260,7 @@ ddk() {
     echo $SUDOPASS | sudo -S cat $LOGO
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
     source ~/.ddkits_alias ~/.ddkits_alias_web
+    export CONFIGREBUILD=<(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES''))
     # create the crt files for ssl
     openssl req \
       -newkey rsa:2048 \
@@ -270,7 +272,7 @@ ddk() {
       -subj /CN=$DDKITSSITES.site \
       -reqexts SAN \
       -extensions SAN \
-      -config <"(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES''))" \
+      -config $CONFIGREBUILD \
       -sha256 \
       -days 3650
     mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
