@@ -32,7 +32,7 @@
   "prefer-stable": true,
   "scripts": {
     "post-create-project-cmd": [
-      "source ddkits.alias.sh && ddk fix",
+      "source ddkits.alias.sh && ddk install",
       "echo 'DDkits ready to go... \n get into the project folder and run the command below \n source ddkits.alias.sh'"
     ],
     "post-update-cmd": [
