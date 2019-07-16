@@ -36,8 +36,11 @@
       "echo 'DDkits ready to go... \n get into the project folder and run the command below \n source ddkits.alias.sh'"
     ],
     "post-update-cmd": [
-      "source ddkits.alias.sh && ddk fix"
+      "source ddkits.alias.sh"
     ],
+    "ddk":[
+       "ddk install" 
+     ],
     "lint": [
       "./vendor/bin/phplint"
     ],
