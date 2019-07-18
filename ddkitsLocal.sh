@@ -26,18 +26,7 @@ DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+ran
 echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
 DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
-sp="/-\|"
-sc=0
-spin() {
-   printf "\b${sp:sc++:1}"
-   ((sc==${#sp})) && sc=0
-}
-endspin() {
-   printf "\r%s\n" "$@"
-}
 
-until work_done; do
-spin
 export DDKITSDBPORT=$DDKITSDBPORT
 export DDKITSREDISPORT=$DDKITSREDISPORT
 export DDKITSSOLRPORT=$DDKITSSOLRPORT
@@ -463,6 +452,3 @@ echo -e '
 
 echo -ne '#######################   (100%)\r'
 echo -ne '\n'
-
-done
-endspin
