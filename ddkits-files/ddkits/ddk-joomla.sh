@@ -29,7 +29,7 @@ if [[ ! -d "${DDKITSFL}/ddkits-files/joomla/sites" ]]; then
   mkdir $DDKITSFL/ddkits-files/joomla/sites
   chmod -R 777 $DDKITSFL/ddkits-files/joomla/sites 
 fi
-DOCUMENTROOT='public'
+DOCUMENTROOT=$WEBROOT
 if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then 
   mkdir $DDKITSFL/ddkits-files/ddkits/ssl
   chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl 
@@ -150,8 +150,8 @@ services:
        JOOMLA_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >> $DDKITSFL/ddkits.env.yml  
 
 mkdir $DDKITSFL/jom-deploy
-mkdir $DDKITSFL/jom-deploy/public
-git clone https://github.com/ddkits/Joomla.git $DDKITSFL/jom-deploy/public
+mkdir $DDKITSFL/jom-deploy/$WEBROOT
+git clone https://github.com/ddkits/Joomla.git $DDKITSFL/jom-deploy/$WEBROOT
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/jom-deploy  
 

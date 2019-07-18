@@ -64,9 +64,9 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /opt/gitlab/embedded/service/gitlab-rails/public
-      ErrorLog /opt/gitlab/embedded/service/gitlab-rails/public/error.log
-     CustomLog /opt/gitlab/embedded/service/gitlab-rails/public/access.log combined
+     DocumentRoot /opt/gitlab/embedded/service/gitlab-rails/'$WEBROOT'
+      ErrorLog /opt/gitlab/embedded/service/gitlab-rails/'$WEBROOT'/error.log
+     CustomLog /opt/gitlab/embedded/service/gitlab-rails/'$WEBROOT'/access.log combined
     <Location "/">
       Require all granted
       AllowOverride All
@@ -83,7 +83,7 @@ echo -e '
   ServerAdmin melayyoub@outlook.com
    ServerName '$DDKITSSITES'
    '$DDKITSSERVERS'
-    DocumentRoot /opt/gitlab/embedded/service/gitlab-rails/public
+    DocumentRoot /opt/gitlab/embedded/service/gitlab-rails/'$WEBROOT'
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined

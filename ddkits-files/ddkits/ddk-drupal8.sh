@@ -12,7 +12,7 @@ if [ -f "${DDKITSFL}/ddkits-files/drupal/ddkitscli.sh" ]; then
 else 
     echo "there is no old file we will create new file for you ==> "
 fi
-export DOCUMENTROOT="public"
+export DOCUMENTROOT=$WEBROOT
 # delete the old environment yml file
 if [[ -f "${DDKITSFL}/ddkits.env.yml" ]]; then
   rm $DDKITSFL/ddkits.env.yml
@@ -194,28 +194,28 @@ services:
     ports:
       - "'$DDKITSWEBPORT':80" 
       - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
-if [[ ! -d "deploy/public" ]]; then
+if [[ ! -d "deploy/${WEBROOT}" ]]; then
   git clone https://github.com/ddkits/drupal-8.git $DDKITSFL/deploy1
   cp -r $DDKITSFL/deploy1/ $DDKITSFL/deploy/
   rm -rf $DDKITSFL/deploy1
   echo $DDKITSFL
-  chmod -R 777 $DDKITSFL/deploy/public
-  mkdir $DDKITSFL/deploy/public/sites/default/files
-  chmod -R 777 $DDKITSFL/deploy/public/sites/default
-  rm -rf $DDKITSFL/deploy/public/vendor
-  cp -f $DDKITSFL/deploy/public/sites/default/default.settings.php $DDKITSFL/deploy/public/sites/default/settings.php
-  cp -f $DDKITSFL/deploy/public/sites/default/default.services.yml $DDKITSFL/deploy/public/sites/default/services.yml
-  cp $DDKITSFL/deploy/composer.phar $DDKITSFL/deploy/public/ddkits.phar
-  cd $DDKITSFL/deploy/public && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
+  chmod -R 777 $DDKITSFL/deploy/$WEBROOT
+  mkdir $DDKITSFL/deploy/$WEBROOT/sites/default/files
+  chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default
+  rm -rf $DDKITSFL/deploy/$WEBROOT/vendor
+  cp -f $DDKITSFL/deploy/$WEBROOT/sites/default/default.settings.php $DDKITSFL/deploy/$WEBROOT/sites/default/settings.php
+  cp -f $DDKITSFL/deploy/$WEBROOT/sites/default/default.services.yml $DDKITSFL/deploy/$WEBROOT/sites/default/services.yml
+  cp $DDKITSFL/deploy/composer.phar $DDKITSFL/deploy/$WEBROOT/ddkits.phar
+  cd $DDKITSFL/deploy/$WEBROOT && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
   cd $DDKITSFL
 else
-    echo 'if you need a new drupal 8 installation please make sure to remove deploy/public folder and restart this step again.'
+    echo 'if you need a new drupal 8 installation please make sure to remove deploy/'$WEBROOT' folder and restart this step again.'
   
   echo $DDKITSFL
-  rm -rf $DDKITSFL/deploy/public/vendor
-  cd $DDKITSFL/deploy/public && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
+  rm -rf $DDKITSFL/deploy/$WEBROOT/vendor
+  cd $DDKITSFL/deploy/$WEBROOT && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
   cd $DDKITSFL
-  chmod -R 777 $DDKITSFL/deploy/public/sites/default/files
+  chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default/files
   # chown $(echo "$USER") $DDKITSFL/deploy
 fi   
 
@@ -235,14 +235,14 @@ echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy
   echo -e 'Not a valid version please try again.'
 fi
 
-alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web public/drush'
+alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web '$WEBROOT'/drush'
 
 alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash'
-alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash -c "cd public & drush "'
+alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash -c "cd '$WEBROOT' & drush "'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web " >> ~/.ddkits_alias_web

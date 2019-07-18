@@ -38,7 +38,12 @@ echo -e "DDKits required field are all required please make sure to write them c
   "
 echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 read MAIL_ADDRESS
+echo -e ""
 
+# enter your webroot
+echo -e 'What''s your Web root (ex.docroot or web), where would you like to load your index file from:  '
+read WEBROOT
+echo -e ""
 echo -e 'Enter your Domain Name:  '
 read DDKITSSITES
 echo -e ""
@@ -324,6 +329,7 @@ cat $LOGO
 
 #  export all values the user insert into his bash system
 export MAIL_ADDRESS=$MAIL_ADDRESS
+export WEBROOT=$WEBROOT
 export DDKITSSITES=$DDKITSSITES
 export DDKITSIP=$DDKITSIP
 export MYSQL_USER=$MYSQL_USER
@@ -410,6 +416,7 @@ echo -e "
   MYSQL_USER='"$MYSQL_USER"'
   MYSQL_ROOT_PASSWORD='"$MYSQL_ROOT_PASSWORD"'
   MYSQL_DATABASE='"$MYSQL_DATABASE"'
+  WEBROOT='"$WEBROOT"'
   MYSQL_PASSWORD='"$MYSQL_PASSWORD"'
   MAIL_ADDRESS='"$MAIL_ADDRESS"'" >$DDKITSFL/ddkits-files/ddkitscli.sh
 # cat $DDKITSFL/ddkits-files/ddkits-drupal.sh >> $DDKITSFL/ddkits-files/ddkitscli.sh
@@ -575,6 +582,9 @@ if [[ "$JENKINS_ONLY" == "false" ]]; then
 
 fi
 
+echo -ne '#####                     (33%)\r'
+sleep 1
+
 # export all results
 export DDKITSFL=$DDKITSFL
 export DDKITSIP=$DDKITSIP
@@ -582,6 +592,7 @@ export JENKINS_ANSWER=${JENKINS_ANSWER}
 export JENKINS_ONLY=${JENKINS_ONLY}
 export JENKINS_ANSWER=${JENKINS_ANSWER}
 export SUDOPASS=${SUDOPASS}
+export WEBROOT=${WEBROOT}
 export MAIL_ADDRESS=${MAIL_ADDRESS}
 export DDKITSSITES=${DDKITSSITES}
 export DDKITSIP=${DDKITSIP}
@@ -607,6 +618,7 @@ echo -e "
 #
 
 # export all results
+export WEBROOT="${WEBROOT}"
 export DDKITSFL="${DDKITSFL}"
 export DDKITSIP="${DDKITSIP} "
 export JENKINS_ANSWER='"${JENKINS_ANSWER}"'

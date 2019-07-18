@@ -60,7 +60,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
+     DocumentRoot /var/www/html/'$WEBROOT'
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -79,7 +79,7 @@ echo -e '
   ServerAdmin melayyoub@outlook.com
    ServerName '$DDKITSSITES'
    '$DDKITSSERVERS'
-    DocumentRoot /var/www/html/public
+    DocumentRoot /var/www/html/'$WEBROOT'
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -141,16 +141,16 @@ services:
       - "'$DDKITSWEBPORT':80" 
       - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
-if [[ ! -d "eengine-deploy/public" ]]; then
+if [[ ! -d "eengine-deploy/${WEBROOT}" ]]; then
   
   echo $DDKITSFL
-  cp $DDKITSFL/composer.phar $DDKITSFL/eengine-deploy/public/ddkits.phar
+  cp $DDKITSFL/composer.phar $DDKITSFL/eengine-deploy/$WEBROOT/ddkits.phar
   git clone https://github.com/ddkits/eengine eengine-deploy
-  echo $SUDOPASS | sudo -S chmod -R 777 public $DDKITSFL/eengine-deploy
+  echo $SUDOPASS | sudo -S chmod -R 777 $WEBROOT $DDKITSFL/eengine-deploy
   cd $DDKITSFL/eengine-deploy
-  cd public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $WEBROOT && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
   cd $DDKITSFL
-  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/eengine-deploy/public
+  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/eengine-deploy/$WEBROOT
 fi
 
 # create get into ddkits container

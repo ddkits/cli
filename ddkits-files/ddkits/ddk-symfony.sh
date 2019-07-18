@@ -61,7 +61,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public/web
+     DocumentRoot /var/www/html/'$WEBROOT'/web
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -81,7 +81,7 @@ echo -e '
   ServerAdmin melayyoub@outlook.com
    ServerName '$DDKITSSITES'
    '$DDKITSSERVERS'
-    DocumentRoot /var/www/html/public/web
+    DocumentRoot /var/www/html/'$WEBROOT'/web
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -161,30 +161,30 @@ services:
 
 
 
-if [[ ! -d "symfony-deploy/public" ]]; then
+if [[ ! -d "symfony-deploy/${WEBROOT}" ]]; then
   
   echo $DDKITSFL
   echo $SUDOPASS | sudo -S curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
   echo $SUDOPASS | sudo -S chmod a+x /usr/local/bin/symfony
   mkdir symfony-deploy
-  echo $SUDOPASS | sudo -S chmod -R 777 public $DDKITSFL/symfony-deploy
-  symfony new symfony-deploy/public
-  cp $DDKITSFL/composer.phar $DDKITSFL/symfony-deploy/public/ddkits.phar
+  echo $SUDOPASS | sudo -S chmod -R 777 $WEBROOT $DDKITSFL/symfony-deploy
+  symfony new symfony-deploy/$WEBROOT
+  cp $DDKITSFL/composer.phar $DDKITSFL/symfony-deploy/$WEBROOT/ddkits.phar
   cd $DDKITSFL/symfony-deploy
-  cd public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $WEBROOT && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
   cd $DDKITSFL
-  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/symfony-deploy/public
+  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/symfony-deploy/$WEBROOT
 fi
 
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_symfony_web /bin/bash'
-alias ddkc-$DDKITSSITES-run='docker exec -it ${DDKITSHOSTNAME}_ddkits_symfony_web /bin/bash php public/bin/console server:run 127.0.0.1:8000'
+alias ddkc-$DDKITSSITES-run='docker exec -it ${DDKITSHOSTNAME}_ddkits_symfony_web /bin/bash php '$WEBROOT'/bin/console server:run 127.0.0.1:8000'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_symfony_web /bin/bash'" >> ~/.ddkits_alias_web
-echo "alias ddkc-"$DDKITSSITES"-run='docker exec -it "$DDKITSHOSTNAME"_ddkits_symfony_web /bin/bash php public/bin/console server:run 127.0.0.1:8000'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-run='docker exec -it "$DDKITSHOSTNAME"_ddkits_symfony_web /bin/bash php '$WEBROOT'/bin/console server:run 127.0.0.1:8000'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/symfony-deploy
 
 cd $DDKITSFL

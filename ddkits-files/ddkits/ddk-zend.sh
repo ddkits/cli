@@ -65,7 +65,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
+     DocumentRoot /var/www/html/'$WEBROOT'
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -85,7 +85,7 @@ echo -e '
   ServerAdmin melayyoub@outlook.com
    ServerName '$DDKITSSITES'
    '$DDKITSSERVERS'
-    DocumentRoot /var/www/html/public
+    DocumentRoot /var/www/html/'$WEBROOT'
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -189,7 +189,7 @@ echo '
 
 
 
-if [[ ! -d "zend-deploy/public" ]]; then
+if [[ ! -d "zend-deploy/${WEBROOT}" ]]; then
   
   cp -R ddkits-files/zend/composer.json $DDKITSFL/
   cp composer.phar $DDKITSFL/ddkits.phar
@@ -197,8 +197,8 @@ if [[ ! -d "zend-deploy/public" ]]; then
   php ddkits.phar require zendframework/zendframework && php ddkits.phar install -n
   php ddkits.phar create-project zendframework/skeleton-application zend-deploy/
   cd $DDKITSFL
-  echo $SUDOPASS | sudo -S chmod -R 777 public $DDKITSFL/zend-deploy
-  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/zend-deploy/public
+  echo $SUDOPASS | sudo -S chmod -R 777 $WEBROOT $DDKITSFL/zend-deploy
+  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/zend-deploy/$WEBROOT
 fi
 
 # create get into ddkits container

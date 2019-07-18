@@ -62,7 +62,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
+     DocumentRoot /var/www/html/'$WEBROOT'
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -82,7 +82,7 @@ echo -e '
   ServerAdmin melayyoub@outlook.com
    ServerName '$DDKITSSITES'
    '$DDKITSSERVERS'
-    DocumentRoot /var/www/html/public
+    DocumentRoot /var/www/html/'$WEBROOT'
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -149,17 +149,17 @@ alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_ss_web /bin/ba
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_ss_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ss-deploy
 
-if [[ ! -d "ss-deploy/public" ]]; then
+if [[ ! -d "ss-deploy/${WEBROOT}" ]]; then
   
   echo $DDKITSFL
 mkdir $DDKITSFL/ss-deploy
-mkdir $DDKITSFL/ss-deploy/public
-cd $DDKITSFL/ss-deploy/public
+mkdir $DDKITSFL/ss-deploy/$WEBROOT
+cd $DDKITSFL/ss-deploy/$WEBROOT
 wget https://silverstripe-ssorg-releases.s3.amazonaws.com/sssites-ssorg-prod/assets/releases/SilverStripe-cms-v3.6.1.tar.gz
 tar -xvzf SilverStripe-cms-v3.6.1.tar.gz 
 rm -rf SilverStripe-cms-v3.6.1.tar.gz
 cd $DDKITSFL
-cp $DDKITSFL/composer.phar $DDKITSFL/ss-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/ss-deploy/public/ddkits.phar
+cp $DDKITSFL/composer.phar $DDKITSFL/ss-deploy/$WEBROOT/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/ss-deploy/$WEBROOT/ddkits.phar
 fi
 
 cd $DDKITSFL

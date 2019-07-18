@@ -12,7 +12,7 @@ if [ -f "${DDKITSFL}/ddkits-files/drupal/ddkitscli.sh" ]; then
 else 
     echo "there is no old file we will create new file for you ==> "
 fi
-export DOCUMENTROOT="public"
+export DOCUMENTROOT=$WEBROOT
 # delete the old environment yml file
 if [[ -f "${DDKITSFL}/ddkits.env.yml" ]]; then
   rm $DDKITSFL/ddkits.env.yml
@@ -177,34 +177,34 @@ services:
     ports:
       - "'$DDKITSWEBPORT':80" 
       - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
-if [[ ! -d "deploy/public" ]]; then
+if [[ ! -d "deploy/${WEBROOT}" ]]; then
   git clone https://github.com/ddkits/drupal-7.git $DDKITSFL/deploy
   
   cp -R deploy/deploy/* deploy
   rm -rf deploy/deploy
   echo $DDKITSFL
-  chmod -R 755 $DDKITSFL/deploy/public
-  mkdir $DDKITSFL/deploy/public/sites/default/files
-  chmod -R 777 $DDKITSFL/deploy/public/sites/default/files
-elif [[ -d "deploy/public" ]]; then
-  echo 'if you need a new drupal7 installation please make sure to remove deploy/public folder and restart this step again.'
+  chmod -R 755 $DDKITSFL/deploy/$WEBROOT
+  mkdir $DDKITSFL/deploy/$WEBROOT/sites/default/files
+  chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default/files
+elif [[ -d "deploy/${WEBROOT}" ]]; then
+  echo 'if you need a new drupal7 installation please make sure to remove deploy/'$WEBROOT' folder and restart this step again.'
 fi  
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy   
 
 
 
-alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web public/drush '
+alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web '$WEBROOT'/drush '
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash'
-alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash -c "cd public && drush"'
+alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash -c "cd '$WEBROOT' && drush"'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
-# echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd public && drush''" >> ~/.ddkits_alias_web
+# echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash -c 'cd $WEBROOT && drush''" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/drupal-deploy
 
-ln -sfn $DDKITSFL/deploy/sites $DDKITSFL/deploy/public/sites/default
+ln -sfn $DDKITSFL/deploy/sites $DDKITSFL/deploy/$WEBROOT/sites/default
 
 cd $DDKITSFL

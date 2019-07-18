@@ -10,6 +10,8 @@
 DDKITSFL=$(pwd)
 export $DDKITSFL
 
+echo -ne '#############             (66%)\r'
+sleep 1
 DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "  Your new Web port is  ${DDKITSWEBPORT}  "
 DDKITSWEBPORTSSL="$(awk -v min=6001 -v max=7000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
@@ -24,7 +26,18 @@ DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+ran
 echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
 DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
+sp="/-\|"
+sc=0
+spin() {
+   printf "\b${sp:sc++:1}"
+   ((sc==${#sp})) && sc=0
+}
+endspin() {
+   printf "\r%s\n" "$@"
+}
 
+until work_done; do
+spin
 export DDKITSDBPORT=$DDKITSDBPORT
 export DDKITSREDISPORT=$DDKITSREDISPORT
 export DDKITSSOLRPORT=$DDKITSSOLRPORT
@@ -447,3 +460,9 @@ echo -e '
 #  sudo apachectl restart   OR sudo service apache2 restart OR by manual restart it within the UI panel
 ###################################################################################################################
 '
+
+echo -ne '#######################   (100%)\r'
+echo -ne '\n'
+
+done
+endspin

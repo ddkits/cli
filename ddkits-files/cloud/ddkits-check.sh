@@ -7,7 +7,7 @@
 #  Created by mutasem elayyoub ddkits.com
 #
 
-ocpath="/var/www/html/public"
+ocpath="/var/www/html/${WEBROOT}"
 htuser="www-data"
 htgroup="www-data"
 rootuser="www-data"

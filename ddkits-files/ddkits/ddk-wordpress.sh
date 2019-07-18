@@ -55,7 +55,7 @@ cat "./ddkits-files/ddkits/logo.txt"
           echo "ssl crt and .key files moved correctly"
 
   
-DOCUMENTROOT='public'
+DOCUMENTROOT=$WEBROOT
 
 # Build out docker file to start our install
 echo -e '
@@ -156,13 +156,13 @@ if wget ; then
     tar xfz *.tar.gz  
 else
     echo -e "\033[0;31m$(tput setab 7) ERROR: ' wget ' command needed for Wordpress to download, \n 
-    download the files manually http://wordpress.org/latest.tar.gz \n and move them to the \n ../project_folder/wp-deploy/public \n folder to get your site to work.\033[0m"
+    download the files manually http://wordpress.org/latest.tar.gz \n and move them to the \n ../project_folder/wp-deploy/'$WEBROOT' \n folder to get your site to work.\033[0m"
 fi
 
 
 mkdir $DDKITSFL/wp-deploy
-mkdir $DDKITSFL/wp-deploy/public
-mv wordpress/* $DDKITSFL/wp-deploy/public
+mkdir $DDKITSFL/wp-deploy/$WEBROOT
+mv wordpress/* $DDKITSFL/wp-deploy/$WEBROOT
 rmdir $DDKITSFL/wordpress/
 rm -f latest.tar.gz
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/wp-deploy  

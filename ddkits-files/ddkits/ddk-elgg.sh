@@ -60,7 +60,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
+     DocumentRoot /var/www/html/'$WEBROOT'
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -141,16 +141,16 @@ services:
       - "'$DDKITSWEBPORT':80" 
       - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
-if [[ ! -d "elgg-deploy/public" ]]; then
+if [[ ! -d "elgg-deploy/${WEBROOT}" ]]; then
   
   echo $DDKITSFL
-  cp $DDKITSFL/composer.phar $DDKITSFL/elgg-deploy/public/ddkits.phar
+  cp $DDKITSFL/composer.phar $DDKITSFL/elgg-deploy/$WEBROOT/ddkits.phar
   git clone https://github.com/ddkits/elgg elgg-deploy
-  echo $SUDOPASS | sudo -S chmod -R 777 public $DDKITSFL/elgg-deploy
+  echo $SUDOPASS | sudo -S chmod -R 777 $WEBROOT $DDKITSFL/elgg-deploy
   cd $DDKITSFL/elgg-deploy
-  cd public && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
+  cd $WEBROOT && php ddkits.phar config --global discard-changes true && php ddkits.phar install -n
   cd $DDKITSFL
-  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/elgg-deploy/public
+  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/elgg-deploy/$WEBROOT
 fi
 
 # create get into ddkits container
