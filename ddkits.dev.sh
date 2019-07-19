@@ -427,7 +427,7 @@ DDKITS_PLATFORM='Please pick which platform you want to install: '
 #
 # Setup options Please make sure of all options before publish pick list
 #
-options=("Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "nGrinder" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony" "ZenCart" "Zend" "Quit")
+options=("Custom" "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "nGrinder" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony" "ZenCart" "Zend" "Quit")
 select opt in "${options[@]}"; do
   case $opt in
   "Drupal")
@@ -475,6 +475,10 @@ select opt in "${options[@]}"; do
     ;;
   "Magento")
     source ./ddkits-files/ddkits/ddk-magento.sh
+    break
+    ;;
+  "Custom")
+    source ./ddkits-files/ddkits/custom.sh
     break
     ;;
   "nGrinder")

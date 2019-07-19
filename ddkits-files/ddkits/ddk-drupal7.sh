@@ -197,8 +197,8 @@ alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web '$W
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
-alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash'
-alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web /bin/bash -c "cd '$WEBROOT' && drush"'
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash'
+alias ddkd-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_drupal_web /bin/bash -c "cd '$WEBROOT' && drush"'
 
 #  fixed the alias for machine
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_drupal_web /bin/bash'" >> ~/.ddkits_alias_web
