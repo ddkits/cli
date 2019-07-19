@@ -62,7 +62,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
+     DocumentRoot /var/www/html/'$WEBROOT'
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -81,14 +81,14 @@ echo -e '
   Dav off
  </IfModule>
 
- SetEnv HOME /var/www/html/public
- SetEnv HTTP_HOME /var/www/html/public
+ SetEnv HOME /var/www/html/'$WEBROOT'
+ SetEnv HTTP_HOME /var/www/html/'$WEBROOT'
 </VirtualHost>
 <VirtualHost *:443>
   ServerAdmin melayyoub@outlook.com
    ServerName '$DDKITSSITES'
    '$DDKITSSERVERS'
-    DocumentRoot /var/www/html/public
+    DocumentRoot /var/www/html/'$WEBROOT'
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -118,7 +118,7 @@ echo -e '
 #  Created by mutasem elayyoub ddkits.com
 #
 
-ocpath="/var/www/html/public"
+ocpath="/var/www/html/'$WEBROOT'"
 htuser="www-data"
 htgroup="www-data"
 rootuser="www-data"
@@ -130,7 +130,7 @@ mkdir -p $ocpath/assets
 printf "chmod Files and Directories\n"
 find ${ocpath}/ -type f -print0 | xargs -0 chmod 0640
 find ${ocpath}/ -type d -print0 | xargs -0 chmod 0750
-chmod -R 0770 /var/www/html/public/data
+chmod -R 0770 /var/www/html/'$WEBROOT'/data
 
 printf "chown Directories\n"
 chown -R ${rootuser}:${htgroup} ${ocpath}/
@@ -204,11 +204,11 @@ services:
 # Installing ownCloud9 on local host 
 
    
-if [[ ! -d "cloud-deploy/public" ]]; then
+if [[ ! -d "cloud-deploy/${WEBROOT}" ]]; then
   
   echo $DDKITSFL
 mkdir $DDKITSFL/cloud-deploy
-chmod -R 777 $DDKITSFL/cloud-deploy/public
+chmod -R 777 $DDKITSFL/cloud-deploy/$WEBROOT
 cd $DDKITSFL/cloud-deploy
 wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2
 wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2.sha256
@@ -218,10 +218,10 @@ sha256sum -c owncloud-9.0.4.tar.bz2.sha256
 gpg --import owncloud.asc
 gpg --verify owncloud-9.0.4.tar.bz2.asc
 tar xjvf owncloud-9.0.4.tar.bz2 
-cp -r owncloud public
+cp -r owncloud $WEBROOT
 rm -rf owncloud
 cd $DDKITSFL
-chmod -R 777 $DDKITSFL/cloud-deploy/public
+chmod -R 777 $DDKITSFL/cloud-deploy/$WEBROOT
 fi
 
 # create get into ddkits container
@@ -232,6 +232,6 @@ alias ddkc-$DDKITSSITES-fix='docker exec -it ${DDKITSHOSTNAME}_ddkits_cloud_web 
 echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash'" >> ~/.ddkits_alias_web
 echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/cloud-deploy
-echo $SUDOPASS | sudo -S chmod -R 0770 $DDKITSFL/cloud-deploy/public/data
+echo $SUDOPASS | sudo -S chmod -R 0770 $DDKITSFL/cloud-deploy/$WEBROOT/data
 
 cd $DDKITSFL

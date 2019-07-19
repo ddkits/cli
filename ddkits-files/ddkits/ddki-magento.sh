@@ -60,7 +60,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
+     DocumentRoot /var/www/html/'$WEBROOT'
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -82,7 +82,7 @@ echo -e '
   ServerAdmin melayyoub@outlook.com
    ServerName '$DDKITSSITES'
    '$DDKITSSERVERS'
-    DocumentRoot /var/www/html/public
+    DocumentRoot /var/www/html/'$WEBROOT'
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -142,20 +142,20 @@ services:
       - "'$DDKITSWEBPORT':80" 
       - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
-if [[ ! -d "mag-deploy/public" ]]; then
+if [[ ! -d "mag-deploy/${WEBROOT}" ]]; then
   mkdir $DDKITSFL/mag-deploy
-  git clone https://github.com/ddkits/magento.git $DDKITSFL/mag-deploy/public
+  git clone https://github.com/ddkits/magento.git $DDKITSFL/mag-deploy/$WEBROOT
   
   echo $DDKITSFL
-  cp -f $DDKITSFL/composer.phar $DDKITSFL/mag-deploy/public/ddkits.phar
-  cp $DDKITSFL/composer.phar $DDKITSFL/mag-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/mag-deploy/public/ddkits.phar
-  cd $DDKITSFL/mag-deploy/public && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install -n
+  cp -f $DDKITSFL/composer.phar $DDKITSFL/mag-deploy/$WEBROOT/ddkits.phar
+  cp $DDKITSFL/composer.phar $DDKITSFL/mag-deploy/$WEBROOT/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/mag-deploy/$WEBROOT/ddkits.phar
+  cd $DDKITSFL/mag-deploy/$WEBROOT && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install -n
   cd $DDKITSFL
 else
   
   echo $DDKITSFL
-  cp $DDKITSFL/composer.phar $DDKITSFL/mag-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/mag-deploy/public/ddkits.phar
-  cd $DDKITSFL/mag-deploy/public && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install -n
+  cp $DDKITSFL/composer.phar $DDKITSFL/mag-deploy/$WEBROOT/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/mag-deploy/$WEBROOT/ddkits.phar
+  cd $DDKITSFL/mag-deploy/$WEBROOT && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install -n
   cd $DDKITSFL
 fi        
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/mag-deploy

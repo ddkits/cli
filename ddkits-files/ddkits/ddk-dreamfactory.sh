@@ -60,7 +60,7 @@ echo -e '
      ServerAdmin melayyoub@outlook.com
      ServerName '$DDKITSSITES'
      '$DDKITSSERVERS'
-     DocumentRoot /var/www/html/public
+     DocumentRoot /var/www/html/'$WEBROOT'
       ErrorLog /var/www/html/error.log
      CustomLog /var/www/html/access.log combined
     <Location "/">
@@ -80,7 +80,7 @@ echo -e '
   ServerAdmin melayyoub@outlook.com
    ServerName '$DDKITSSITES'
    '$DDKITSSERVERS'
-    DocumentRoot /var/www/html/public
+    DocumentRoot /var/www/html/'$WEBROOT'
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -134,7 +134,7 @@ RUN usermod -u 1000 www-data
 # #
 
 # composer install --no-dev
-# chmod -R 777 /var/www/html/storage /var/www/html/vendor /var/www/html/public
+# chmod -R 777 /var/www/html/storage /var/www/html/vendor /var/www/html/$WEBROOT
 # php artisan cache:clear
 # php artisan key:generate
 # php artisan cache:clear
@@ -172,20 +172,20 @@ if [[ ! -d "dreamf-deploy" ]]; then
   git clone https://github.com/dreamfactorysoftware/dreamfactory.git $DDKITSFL/dreamf-deploy
   
   echo $DDKITSFL
-  cp $DDKITSFL/composer.phar $DDKITSFL/dreamf-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/dreamf-deploy/public/ddkits.phar
-  cd $DDKITSFL/dreamf-deploy/public && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install --no-dev -n
+  cp $DDKITSFL/composer.phar $DDKITSFL/dreamf-deploy/$WEBROOT/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/dreamf-deploy/$WEBROOT/ddkits.phar
+  cd $DDKITSFL/dreamf-deploy/$WEBROOT && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install --no-dev -n
   php artisan df:setup
   echo $SUDOPASS | sudo -S chmod -R 2775 storage/ bootstrap/cache/
   cd $DDKITSFL
 # create database variables for dreamfactory
   rm -rf $DDKITSFL/dreamf-deploy/.env
   cat $DDKITSFL/ddkits-files/dreamf/env >> $DDKITSFL/dreamf-deploy/.env
-  chmod -R 777 $DDKITSFL/dreamf-deploy/storage/ $DDKITSFL/dreamf-deploy/public/ $DDKITSFL/dreamf-deploy/public/ bootstrap/cache/
+  chmod -R 777 $DDKITSFL/dreamf-deploy/storage/ $DDKITSFL/dreamf-deploy/$WEBROOT/ $DDKITSFL/dreamf-deploy/$WEBROOT/ bootstrap/cache/
 else
   
   echo $DDKITSFL
-  cp $DDKITSFL/composer.phar $DDKITSFL/dreamf-deploy/public/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/dreamf-deploy/public/ddkits.phar
-  cd $DDKITSFL/dreamf-deploy/public && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install --no-dev -n
+  cp $DDKITSFL/composer.phar $DDKITSFL/dreamf-deploy/$WEBROOT/ddkits.phar && echo $SUDOPASS | sudo -S chmod 777 $DDKITSFL/dreamf-deploy/$WEBROOT/ddkits.phar
+  cd $DDKITSFL/dreamf-deploy/$WEBROOT && php ddkits.phar config --global discard-changes true &&  php ddkits.phar install --no-dev -n
   cd $DDKITSFL
 fi     
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/dreamf-deploy
