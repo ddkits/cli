@@ -14,7 +14,13 @@ ddk() {
   if test -f "$FILE"; then
     source $FILE
   fi
-
+  FILE2=ddkits-files/ddkitsInfo.dev.sh
+  # checking if the site has a root
+  if test -f "$FILE2"; then
+    # source the information needed to import
+    source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
+  fi
+  
   if [[ $1 == "install" ]]; then
     echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
     read -s SUDOPASS
@@ -233,6 +239,17 @@ ddk() {
     echo -e 'ifconfig Refresh ->'
     echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
     echo -e 'ifconfig Refresh -> done ifconfig'
+    DIRECTORY="$(echo ~/.ddkits)"
+    echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
+    if [ ! -d "$DIRECTORY" ]; then
+      # Control will enter here if $DIRECTORY doesn't exist.
+      git clone https://github.com/ddkits/base.git ~/.ddkits
+      chmod -R 744 ~/.ddkits
+    else
+      DIRIS=$(echo "${DIRECTORY}/.git")
+      git --git-dir=${DIRIS} checkout -f
+      git --git-dir=${DIRIS} pull
+    fi
     echo $SUDOPASS | sudo -S rm ~/.ddkits_alias
     echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
     echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
@@ -254,6 +271,18 @@ ddk() {
   elif [[ $1 == "update" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
+    DIRECTORY="$(echo ~/.ddkits)"
+    echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
+    if [ ! -d "$DIRECTORY" ]; then
+      # Control will enter here if $DIRECTORY doesn't exist.
+      git clone https://github.com/ddkits/base.git ~/.ddkits
+      chmod -R 744 ~/.ddkits
+    else
+      DIRIS=$(echo "${DIRECTORY}/.git")
+      git --git-dir=${DIRIS} checkout -f
+      git --git-dir=${DIRIS} pull
+    fi
+    echo -e 'Now updating this website containers'
     docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d
   elif [[ $1 == "rebuild" ]]; then
     clear
