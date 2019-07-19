@@ -59,7 +59,7 @@ export DDKITSADMINPORT='${DDKITSADMINPORT}'
 export DDKITSWEBPORT='${DDKITSWEBPORT}'
 export DDKITSWEBPORTSSL='${DDKITSWEBPORTSSL}'
 export DDKITSJENKINSPORT='${DDKITSJENKINSPORT}'
-' >$DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
+' > $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
 
 source $DDKITSFL'/ddkits.dev.sh'
 

@@ -152,9 +152,7 @@ echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddk
 if [[ ! -f "composer.phar" ]]; then
   wget https://getcomposer.org/composer.phar
 fi
-
 echo $SUDOPASS | sudo -S chmod 777 composer.phar
-
 echo -e 'Now installing Laravel through composer '
 php composer.phar create-project laravel/laravel ll-deploy "5.7.*" --prefer-dist
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy

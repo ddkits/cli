@@ -430,6 +430,24 @@ ddk() {
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
     docker run
+  elif [[ $1 == "db-import" ]]; then
+    clear
+    echo $SUDOPASS | sudo -S cat $LOGO
+    # source the information needed to import
+    source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
+    MARIADB=$DDKITSHOSTNAME'_ddkits_db'
+    export MARIADB=$DDKITSHOSTNAME'_ddkits_db'
+    echo $MARIADB
+    docker exec -i $MARIADB mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE < $2 
+  elif [[ $1 == "db-export" ]]; then
+    clear
+    echo $SUDOPASS | sudo -S cat $LOGO
+    # source the information needed to import
+    source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
+    MARIADB=$DDKITSHOSTNAME'_ddkits_db'
+    export MARIADB=$DDKITSHOSTNAME'_ddkits_db'
+    echo $MARIADB
+    docker exec -i $MARIADB mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE > $2 
   elif [[ $1 == "ir" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
@@ -484,16 +502,22 @@ ddk() {
     echo -e 'DDkits built by Mutasem Elayyoub www.DDKits.com
     List of commands after "ddk <option>":
 
-        -h      - Show comand list
-        who     - Show all details about your site
-        go      - Start or check your DDKits working or not
-        stop    - ACtivate default vm
-        del     - Remove DDKits VM and go back to default
-        clean   - Clean undefiend or unused Volumes and images
-        rmn     - Clean <none> extra images and containers
-        fix     - Fix DDKits containers in full for any problem
-        start   - Start new your ddkits setup process "this command must be in your project folder"
-        prod    - Start production installation   // available with DDKits PRO only 
+        -h       - Show comand list
+        who      - Show all details about your site
+        go       - Start or check your DDKits working or not
+        stop     - ACtivate default vm
+        del      - Remove DDKits VM and go back to default
+        clean    - Clean undefiend or unused Volumes and images
+        rmn      - Clean <none> extra images and containers
+        fix      - Fix DDKits containers in full for any problem
+        start    - Start new your ddkits setup process "this command must be in your project folder"
+        prod     - Start production installation   // available with DDKits PRO only 
+            **************************
+        // Database with DDkits
+        db-import - Direct import DB into your Database 
+              ex. ddk db-import FILE_NAME.sql
+        db-export - Direct export DB into your Database 
+              ex. ddk db-export FILE_NAME.sql
             **************************
         update  - Update your ddkits setup process "this command must be in your project folder"
             **************************

@@ -179,10 +179,10 @@ services:
       - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 if [[ ! -d "deploy/${WEBROOT}" ]]; then
   git clone https://github.com/ddkits/drupal-7.git $DDKITSFL/deploy
-  
   cp -R deploy/deploy/* deploy
   rm -rf deploy/deploy
   echo $DDKITSFL
+  mv $DDKITSFL/deploy/public $DDKITSFL/deploy/$WEBROOT
   chmod -R 755 $DDKITSFL/deploy/$WEBROOT
   mkdir $DDKITSFL/deploy/$WEBROOT/sites/default/files
   chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default/files
