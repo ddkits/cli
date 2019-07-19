@@ -335,6 +335,10 @@ ddk() {
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
     docker ps
+  elif [[ $1 == "test" ]]; then
+    clear
+    echo $SUDOPASS | sudo -S cat $LOGO
+    source ddkitstest.sh
   elif [[ $1 == "who" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
@@ -531,6 +535,8 @@ ddk() {
             **************************
         rm all  - Restore docker images and containers "Important this command remove all your containers and images"
             **************************
+        test  - CI/CD phplint checking all php files without vendors for a secure depoloyment
+            **************************
     List of commands after "ddk<option>":
         ri      remove an image from docker images
         rc      remove a continer from docker containers
@@ -544,7 +550,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v3.21
+    DDKits v3.24
         '
   else
     echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
