@@ -209,32 +209,32 @@ if [[ ! -d "deploy/${WEBROOT}" ]]; then
   cp $DDKITSFL/deploy/composer.phar $DDKITSFL/deploy/$WEBROOT/ddkits.phar
   cd $DDKITSFL/deploy/$WEBROOT && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
   cd $DDKITSFL
-else
-    echo 'if you need a new drupal 8 installation please make sure to remove deploy/'$WEBROOT' folder and restart this step again.'
-  
-  echo $DDKITSFL
-  rm -rf $DDKITSFL/deploy/$WEBROOT/vendor
-  cd $DDKITSFL/deploy/$WEBROOT && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
-  cd $DDKITSFL
-  chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default/files
-  # chown $(echo "$USER") $DDKITSFL/deploy
-fi   
+  else
+      echo 'if you need a new drupal 8 installation please make sure to remove deploy/'$WEBROOT' folder and restart this step again.'
+    
+    echo $DDKITSFL
+    rm -rf $DDKITSFL/deploy/$WEBROOT/vendor
+    cd $DDKITSFL/deploy/$WEBROOT && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
+    cd $DDKITSFL
+    chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default/files
+    # chown $(echo "$USER") $DDKITSFL/deploy
+  fi   
 
-# if [[ ! -d "deploy/drush" ]]; then
-#     wget "https://github.com/drush-ops/drush/archive/8.2.2.zip"
-#     unzip 8.2.2.zip
-#     rm 8.2.2.zip
-#     mv drush-8.2.2 drush
-#     cd drush
-#     composer install
-#     cd $DDKITSFL
-# fi     
+  # if [[ ! -d "deploy/drush" ]]; then
+  #     wget "https://github.com/drush-ops/drush/archive/8.2.2.zip"
+  #     unzip 8.2.2.zip
+  #     rm 8.2.2.zip
+  #     mv drush-8.2.2 drush
+  #     cd drush
+  #     composer install
+  #     cd $DDKITSFL
+  # fi     
 
-echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy 
+  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy 
 
- else
-  echo -e 'Not a valid version please try again.'
-fi
+#  else
+#   echo -e 'Not a valid version please try again.'
+# fi
 
 alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_drupal_web '$WEBROOT'/drush'
 
