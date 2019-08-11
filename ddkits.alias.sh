@@ -96,7 +96,7 @@ ddk() {
           docker-machine start ddkits
           eval "$(docker-machine env ddkits)"
           docker-compose -f ~/.ddkits/ddkits.yml up -d --build
-          echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
+          echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
         else
           echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
@@ -106,7 +106,7 @@ ddk() {
           docker-machine start ddkits
           eval "$(docker-machine env ddkits)"
           docker-compose -f ~/.ddkits/ddkits.yml up -d --build
-          echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
+          echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
         fi
   elif [[ $1 == "ip" ]]; then
@@ -323,14 +323,14 @@ ddk() {
       # Remove the Source from Bash file
       BASHSITE=ddkits_alias
       BSHFILE=~/.bash_profile
-      matchesbash="$(grep -n ${BASHSITE} ~/.bash_profile | cut -f1 -d:)"
+      matchesbash="$(grep -n ${BASHSITE} ${BSHFILE} | cut -f1 -d:)"
       if [ ! -z "$matchesbash" ]; then
         echo "Updating bash profile file"
         # iterate over the line numbers on which matches were found
         while read -r line_numbers; do
           # Remove all DDkits entries
           echo ${line_numbers}
-          echo ${SUDOPASS} | sudo -S sed -i '' "/${line_numbers}/d" ~/.bash_profile
+          echo ${SUDOPASS} | sudo -S sed -i '' "/${line_numbers}/d" ${BSHFILE}
 
         done <<<"$matchesbash"
       fi

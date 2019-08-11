@@ -21,7 +21,7 @@ printf "chmod Files and Directories
 "
 find ${ocpath}/ -type f -print0 | xargs -0 chmod 0640
 find ${ocpath}/ -type d -print0 | xargs -0 chmod 0750
-chmod -R 0770 /var/www/html/public/data
+chmod -R 0770 /var/www/html/${WEBROOT}/data
 
 printf "chown Directories
 "

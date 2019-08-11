@@ -415,14 +415,15 @@ if [ -f "ddkits.prod.sh" ]; then
 else
   # Remove the Source from Bash file
   BASHSITE=ddk
-  matchesbash="$(grep -n ${BASHSITE} ~/.bash_profile | cut -f1 -d:)"
+  BSHFILE=~/.bash_profile
+  matchesbash="$(grep -n ${BASHSITE} ${BSHFILE} | cut -f1 -d:)"
   if [ ! -z "$matchesbash" ]; then
     echo "Updating Hosts file"
 
     # iterate over the line numbers on which matches were found
     while read -r line_number; do
       # Remove all DDkits entries
-      echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ~/.bash_profile
+      echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ${BSHFILE}
     done <<<"$matchesbash"
   fi
   echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias' >>~/.bashrc_profile
