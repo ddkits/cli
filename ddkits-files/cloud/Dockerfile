@@ -5,7 +5,7 @@ MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
 RUN export TERM=xterm
 
-RUN rm /etc/apache2/sites-enabled/000-default.conf
+RUN rm /etc/apache2/sites-enabled/*
 COPY sites/cloud_dev.conf /etc/apache2/sites-enabled/cloud_dev.conf
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 COPY get-pip.py /var/www/html/get-pip.py
