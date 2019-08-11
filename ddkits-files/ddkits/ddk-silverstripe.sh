@@ -111,7 +111,7 @@ MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 RUN ln -sf $DDKITSFL/logs /var/log/nginx/access.log \
     && ln -sf $DDKITSFL/logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
-    && rm /etc/apache2/sites-enabled/000-default.conf  
+    && rm /etc/apache2/sites-enabled/*  
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini

@@ -138,7 +138,7 @@ MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
 RUN export TERM=xterm
 
-RUN rm /etc/apache2/sites-enabled/000-default.conf
+RUN rm /etc/apache2/sites-enabled/*
 COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
 COPY ddkitscli.sh /var/www/html/ddkitscli.sh
 COPY php5.ini /usr/local/etc/php/conf.d/php.ini
