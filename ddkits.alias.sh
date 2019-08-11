@@ -69,7 +69,7 @@ ddk() {
       chmod -R 777 ~/.ddkits/ddkits-files/ddkits/ssl
       echo "ssl crt and .key files moved correctly"
       echo -e 'DDkits web
-      ' >~/.ddkits_alias_web
+      ' > ~/.ddkits_alias_web
       # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
       echo -e '(1) Localhost \n(2) virtualbox'
       read DDKITSVER
@@ -86,10 +86,10 @@ ddk() {
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
         docker-machine ip ddkits
-        echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+        echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
         echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias    
         if [[ -f ~/.ddkits_alias ]]; then
-          echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+          echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
           echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
           docker restart $(docker ps -q)
           docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
@@ -99,7 +99,7 @@ ddk() {
           echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >> ~/.bash_profile
           echo -e '\nDDKits Already installed successfully before, \nThank you for using DDKits'
         else
-          echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+          echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
           echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
           docker restart $(docker ps -q)
           docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
@@ -141,8 +141,8 @@ ddk() {
       git --git-dir=${DIRIS} pull
     fi
     echo $SUDOPASS | sudo -S rm ~/.ddkits_alias
-    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
-    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
+    echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
     echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
     source ~/.ddkits_alias
     source ~/.ddkits_alias_web
@@ -200,8 +200,8 @@ ddk() {
 
     docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
     sudo rm ~/.ddkits_alias
-    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
-    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
+    echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
     echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
     source ~/.ddkits_alias
     source ~/.ddkits_alias_web

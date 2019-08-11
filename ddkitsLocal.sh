@@ -408,7 +408,7 @@ Ports:
 
 Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com 
 Copyright @2017 DDKits.com. Mutasem Elayyoub 
-' >./ddkits-files/ddkits/site.txt
+' > ./ddkits-files/ddkits/site.txt
 
 if [ -f "ddkits.prod.sh" ]; then
   echo -e 'Production'
@@ -426,8 +426,8 @@ else
       echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ${BSHFILE}
     done <<<"$matchesbash"
   fi
-  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias' >>~/.bashrc_profile
-  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias_web' >>~/.bashrc_profile
+  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias' >> ~/.bashrc_profile
+  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias_web' >> ~/.bashrc_profile
   # echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
   echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
   source ~/.bash_profile
