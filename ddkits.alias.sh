@@ -119,16 +119,19 @@ ddk() {
     echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
     echo -e 'ifconfig Refresh -> done ifconfig'
     DIRECTORY="$(echo ~/.ddkits)"
-    echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
+    # remove the directory first to pull it again
+    echo $SUDOPASS | sudo -S rm -rf $DIRECTORY
     if [ ! -d "$DIRECTORY" ]; then
       # Control will enter here if $DIRECTORY doesn't exist.
-      git clone https://github.com/ddkits/base.git ~/.ddkits
+      git clone https://github.com/ddkits/base.git $DIRECTORY
       chmod -R 744 ~/.ddkits
     else
       DIRIS=$(echo "${DIRECTORY}/.git")
       git --git-dir=${DIRIS} checkout -f
       git --git-dir=${DIRIS} pull
     fi
+    echo $SUDOPASS | sudo -S chmod u+x $DIRECTORY
+    # build the bash files for different browsers
     echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
     echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
     echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
