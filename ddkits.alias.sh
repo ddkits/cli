@@ -86,9 +86,10 @@ ddk() {
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
       docker-machine ip ddkits
-      echo $SUDOPASS | sudo -S rm ~/.ddkits_alias  
+      echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
       echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
       echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
       docker restart $(docker ps -q)
       docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
       docker-machine start ddkits
@@ -128,9 +129,10 @@ ddk() {
       git --git-dir=${DIRIS} checkout -f
       git --git-dir=${DIRIS} pull
     fi
-    echo $SUDOPASS | sudo -S rm ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
     echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
     echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
+    source ~/.ddkits_alias ~/.ddkits_alias_web
     echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
     source ~/.ddkits_alias
     source ~/.ddkits_alias_web
@@ -166,6 +168,9 @@ ddk() {
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
+    echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
+    echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
+    echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
     source ~/.ddkits_alias ~/.ddkits_alias_web
     export CONFIGREBUILD=<(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES''))
     # create the crt files for ssl
