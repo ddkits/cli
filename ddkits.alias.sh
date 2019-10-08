@@ -407,6 +407,12 @@ ddk() {
     else
       docker-compose -f ~/.ddkits/ddkits.yml -f ddkits.env.yml rm
     fi
+  elif [[ $1 == "docker" ]]; then
+        if bash --login '/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh'; then
+          echo 'Docker started'
+        elseddk caller
+          echo 'Check your docker'
+        fi
   elif [[ $1 == "init" ]]; then
     echo $SUDOPASS | sudo -S cat $LOGO
     mkdir .ddkits-files
@@ -416,60 +422,62 @@ ddk() {
     source .ddkits-files/ddkits.init.sh
   elif [[ $1 == "--help" ]] || [[ $1 == "-h" ]]; then
     clear
+    RED='\033[0;31m'
+    NC='\033[0m'
     echo $SUDOPASS | sudo -S cat $LOGO
-    clear
-    echo -e 'DDkits built by Mutasem Elayyoub www.DDKits.com
-    List of commands after "ddk <option>":
-
-        -h       - Show comand list
-        who      - Show all details about your site
-        go       - Start or check your DDKits working or not
-        stop     - ACtivate default vm
-        del      - Remove DDKits VM and go back to default
-        clean    - Clean undefiend or unused Volumes and images
-        rmn      - Clean <none> extra images and containers
-        fix      - Fix DDKits containers in full for any problem
-        start    - Start new your ddkits setup process "this command must be in your project folder"
-        prod     - Start production installation   // available with DDKits PRO only 
+    echo -e "DDkits built by Mutasem Elayyoub (Sam Elayyoub) www.DDKits.com
+    List of commands after 'ddk <option>':
+        ${red}docker${normal}  - Mac users can start their docker by using this command
+        ${red}-h${normal}       - Show comand list
+        ${red}who${normal}      - Show all details about your site
+        ${red}go${normal}       - Start or check your DDKits working or not
+        ${red}stop${normal}     - ACtivate default vm
+        ${red}del${normal}      - Remove DDKits VM and go back to default
+        ${red}clean${normal}    - Clean undefiend or unused Volumes and images
+        ${red}rmn${normal}      - Clean <none> extra images and containers
+        ${red}fix${normal}      - Fix DDKits containers in full for any problem
+        ${red}start${normal}    - Start new your ddkits setup process 'this command must be in your project folder'
+        ${red}prod${normal}     - Start production installation   // available with DDKits PRO only 
             **************************
         // Database with DDkits
-        db-import - Direct import DB into your Database 
+        ${red}db-import${normal} - Direct import DB into your Database 
               ex. ddk db-import FILE_NAME.sql
-        db-export - Direct export DB into your Database 
+        ${red}db-export${normal} - Direct export DB into your Database 
               ex. ddk db-export FILE_NAME.sql
             **************************
-        update  - Update your ddkits setup process "this command must be in your project folder"
+        ${red}update${normal}  - Update your ddkits setup process 'this command must be in your project folder'
             **************************
-        rebuild - Update your ddkits rebuild and build your project images and containers
-                process "this command must be in your project folder"
+        ${red}rebuild${normal} - Update your ddkits rebuild and build your project images and containers
+                process 'this command must be in your project folder'
             **************************
-        i       - Show all your docker images
-        c       - Show all your docker containers
-        r       - Docker run
-        rm      - Remove your compose extra unused containers or containers with error
+        ${red}i${normal}       - Show all your docker images
+        ${red}c${normal}       - Show all your docker containers
+        ${red}r${normal}       - Docker run
+        ${red}rm${normal}      - Remove your compose extra unused containers or containers with error
             **************************
-        rm all  - Restore docker images and containers "Important this command remove all your containers and images"
+        ${red}rm all${normal}  - Restore docker images and containers 
+                                'Important this command remove all your containers and images'
             **************************
-        test  - CI/CD phplint checking all php files without vendors for a secure depoloyment
+        ${red}test${normal}  - CI/CD phplint checking all php files without vendors for a secure depoloyment
             **************************
-    List of commands after "ddk<option>":
-        ri      remove an image from docker images
-        rc      remove a continer from docker containers
+    List of commands after 'ddk<option>':
+        ${red}ri${normal}      remove an image from docker images
+        ${red}rc${normal}      remove a continer from docker containers
             **************************
     Docker special commands
       new       
-           c       Create a container from an image ex. ( ddk new c ddkits/lamp:7)   
-           run     Docker exec the new container ex. ( ddk new run 5d05535340b8 /bin/bash )
-    Containers DNS:
+           ${red}c${normal}       Create a container from an image ex. ( ddk new c ddkits/lamp:7)   
+           ${red}run${normal}     Docker exec the new container ex. ( ddk new run 5d05535340b8 /bin/bash )
+    ${yellow}Containers DNS:${normal}
     Jenkins     http://jenkins.YOUR_DOMAIN.ddkits.site
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v3.25
-        '
+    DDKits v4.20
+        "
   else
-    echo 'DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
-      To see all commands write " ddk -h / ddk --help "'
+    echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
+      To see all commands write ${red}'ddk -h / ddk --help'${normal} "
     ddk -h
   fi
 }
