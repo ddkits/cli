@@ -11,19 +11,37 @@ ddk() {
   RED='\033[0;31m'
   NC='\033[0m'
   FILE=~/.ddkits/ddkits-files/ddkits/p.sh
-  if test -f "$FILE"; then
+  FILEALIAS=~/.ddkits/ddkits-files/ddkits/p.sh
+  # check if the sudo variable exist for use
+  if test -z "$SUDOPASS" ; then
+      echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
+      read -s SUDOPASS      
+  fi
+  # check the file if exist
+  if test -f "$FILE" ; then
     source $FILE
+  fi
+  # check if the alias file exist in root
+  if test -f "$FILEALIAS" ; then
+      echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
+      echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
   fi
   FILE2=ddkits-files/ddkitsInfo.dev.sh
   # checking if the site has a root
-  if test -f "$FILE2"; then
+  if test -f "$FILE2" ; then
     # source the information needed to import
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
   fi
   
   if [[ $1 == "install" ]]; then
-      echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
-      read -s SUDOPASS
+      # check if the sudo variable exist for use
+      if [ -z "$SUDOPASS" ]
+      then
+          echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
+          read -s SUDOPASS      
+      fi
       echo $SUDOPASS | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
       # Downlaod all files into a seperate folder for ddkits only
       echo -e 'Creating DDkits folder .ddkits'
