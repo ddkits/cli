@@ -43,7 +43,11 @@ ddk() {
       echo -e 'export SUDOPASS='${SUDOPASS}'
               export LOGO='${LOGO}'' >~/.ddkits/ddkits-files/ddkits/p.sh
       echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits/ddkits-files/ddkits/p.sh
-      clear
+       docker-machine ip ddkits
+      echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
+      echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
       echo $SUDOPASS | sudo -S cat $LOGO
       echo -e 'Welcome to DDKits world...'
       export COMPOSE_TLS_VERSION=TLSv1_2
