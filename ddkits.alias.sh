@@ -13,16 +13,19 @@ ddk() {
   FILE=~/.ddkits/ddkits-files/ddkits/p.sh
   FILEALIAS=~/.ddkits/ddkits-files/ddkits/p.sh
   # check if the sudo variable exist for use
-  if test -z "$SUDOPASS" ; then
+  if test -z "$SUDOPASS"
+  then
       echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
       read -s SUDOPASS      
   fi
   # check the file if exist
-  if test -f "$FILE" ; then
+  if test -f "$FILE"
+  then
     source $FILE
   fi
   # check if the alias file exist in root
-  if test -f "$FILEALIAS" ; then
+  if test -f "$FILEALIAS"
+  then
       echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
       echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
       echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
@@ -30,7 +33,8 @@ ddk() {
   fi
   FILE2=ddkits-files/ddkitsInfo.dev.sh
   # checking if the site has a root
-  if test -f "$FILE2" ; then
+  if test -f "$FILE2" 
+  then
     # source the information needed to import
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
   fi
@@ -47,7 +51,7 @@ ddk() {
       echo -e 'Creating DDkits folder .ddkits'
       DIRECTORY="$(echo ~/.ddkits)"
       echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
-      if [ ! -d "$DIRECTORY" ]; then
+      if [[ ! -d "$DIRECTORY" ]]; then
         # Control will enter here if $DIRECTORY doesn't exist.
         git clone https://github.com/ddkits/base.git ~/.ddkits
         chmod -R 744 ~/.ddkits
@@ -135,6 +139,12 @@ ddk() {
   elif [[ $1 == "check" ]]; then
     docker ps --filter "name=ddkits"
   elif [[ $1 == "fix" ]]; then
+    # check if the sudo variable exist for use
+      if test -z "$SUDOPASS"
+      then
+          echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
+          read -s SUDOPASS      
+      fi
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
     echo -e 'ifconfig Refresh ->'
@@ -178,7 +188,7 @@ ddk() {
     echo $SUDOPASS | sudo -S cat $LOGO
     DIRECTORY="$(echo ~/.ddkits)"
     echo $SUDOPASS | sudo -S rm -rf ~/.ddkits
-    if [ ! -d "$DIRECTORY" ]; then
+    if [[ ! -d "$DIRECTORY" ]]; then
       # Control will enter here if $DIRECTORY doesn't exist.
       git clone https://github.com/ddkits/base.git ~/.ddkits
       chmod -R 744 ~/.ddkits
@@ -241,7 +251,7 @@ ddk() {
 
     # echo ${SUDOPASS} | sudo -S cat /etc/hosts
 
-    if [ ! -z "$matches_in_hosts" ]; then
+    if [[ ! -z "$matches_in_hosts" ]]; then
       echo "Updating existing hosts entry."
 
       # iterate over the line numbers on which matches were found
@@ -329,7 +339,7 @@ ddk() {
       # echo ${SUDOPASS} | sudo -S cat /etc/hosts
       # Remove the Source from Bash file
       matches="$(grep -n ${SITEDEL} /etc/hosts | cut -f1 -d:)"
-      if [ ! -z "$matches" ]; then
+      if [[ ! -z "$matches" ]]; then
         echo "Updating Hosts file"
         # iterate over the line numbers on which matches were found
         while read -r line_number; do
@@ -342,7 +352,7 @@ ddk() {
       BASHSITE=ddkits_alias
       BSHFILE=~/.bash_profile
       matchesbash="$(grep -n ${BASHSITE} ${BSHFILE} | cut -f1 -d:)"
-      if [ ! -z "$matchesbash" ]; then
+      if [[ ! -z "$matchesbash" ]]; then
         echo "Updating bash profile file"
         # iterate over the line numbers on which matches were found
         while read -r line_numbers; do
