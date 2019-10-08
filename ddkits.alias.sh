@@ -505,7 +505,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v4.20
+    DDKits v4.21
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
