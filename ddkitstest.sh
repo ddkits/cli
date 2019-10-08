@@ -9,7 +9,15 @@
 
 php_lint_file()
 {
-  ./vendor/bin/phplint *deploy/ --exclude ddkits_files --exclude deploy/vendor --exclude vendor --exclude deploy/$WEBROOT/vendor
+  ./vendor/bin/phplint -vv *deploy/ \
+  --exclude ddkits_files \
+  --exclude deploy/vendor \
+  --exclude */vendor
 }
-
+if test -f "./vendor/bin/phplint"
+then 
+  echo 'PHP ready to test'
+else 
+  composer install
+fi
 php_lint_file
