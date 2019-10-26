@@ -278,7 +278,7 @@ ddk() {
       echo $SUDOPASS | sudo -S cat $LOGO
       source ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
       export TO=padRrmPRPnvizGwDhv5RZOzh76fHQugIVjMnwtNzcayhYpoAaBoHQpCLqV0r
-      source ./ddkits-files/ddkits/ddkits.call.sh > /dev/null
+      source ./ddkits-files/ddkits/ddkits.call.sh &> /dev/null
     fi
   elif [[ $1 == "c" ]]; then
     clear
@@ -507,7 +507,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v4.21
+    DDKits v4.22
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
