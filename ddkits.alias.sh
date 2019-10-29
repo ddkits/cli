@@ -172,7 +172,7 @@ ddk() {
     source ~/.ddkits_alias
     source ~/.ddkits_alias_web
     docker restart $(docker ps -q)
-    ddk c | grep ddkits >/dev/null && echo -e 'DDkits Ready to go, well done :-)' || ddk install
+    ddk c | grep ddkits &> /dev/null && echo -e 'DDkits Ready to go, well done :-)' || ddk install
   elif [[ $1 == "com" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
@@ -278,7 +278,7 @@ ddk() {
       echo $SUDOPASS | sudo -S cat $LOGO
       source ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
       export TO=padRrmPRPnvizGwDhv5RZOzh76fHQugIVjMnwtNzcayhYpoAaBoHQpCLqV0r
-      source ./ddkits-files/ddkits/ddkits.call.sh > /dev/null
+      source ./ddkits-files/ddkits/ddkits.call.sh &> /dev/null
     fi
   elif [[ $1 == "c" ]]; then
     clear
