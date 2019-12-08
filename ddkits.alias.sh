@@ -26,10 +26,10 @@ ddk() {
   # check if the alias file exist in root
   if test -f "$FILEALIAS"
   then
-      echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
-      echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
-      echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
-      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
+      # echo $SUDOPASS | sudo -S rm ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits
   fi
   FILE2=ddkits-files/ddkitsInfo.dev.sh
   # checking if the site has a root
@@ -66,10 +66,10 @@ ddk() {
               export LOGO='${LOGO}'' >~/.ddkits/ddkits-files/ddkits/p.sh
       echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits/ddkits-files/ddkits/p.sh
        docker-machine ip ddkits
-      echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
-      echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
-      echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
-      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
+      # echo $SUDOPASS | sudo -S rm ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits
       echo $SUDOPASS | sudo -S cat $LOGO
       echo -e 'Welcome to DDKits world...'
       export COMPOSE_TLS_VERSION=TLSv1_2
@@ -112,17 +112,16 @@ ddk() {
       clear
       echo $SUDOPASS | sudo -S cat $LOGO
       docker-machine ip ddkits
-      echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
-      echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
       echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
-      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits
       docker restart $(docker ps -q)
       docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
       docker-machine start ddkits
       eval "$(docker-machine env ddkits)"
       docker-compose -f ~/.ddkits/ddkits.yml up -d --build
-      source ~/.ddkits_alias  ~/.ddkits_alias_web
-      echo 'command source ~/.ddkits_alias  ~/.ddkits_alias_web 2>/dev/null || true ' >> ~/.bash_profile
+      source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web
+      echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >> ~/.bash_profile
       echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
   elif [[ $1 == "ip" ]]; then
     Docker-machine ls | grep ddkits >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
@@ -164,12 +163,12 @@ ddk() {
     fi
     echo $SUDOPASS | sudo -S chmod u+x $DIRECTORY
     # build the bash files for different browsers
-    echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
-    echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
-    echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
-    source ~/.ddkits_alias ~/.ddkits_alias_web
-    echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
-    source ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits
+    source ~/.ddkits/ddkits.alias.sh ~/.ddkits_alias_web
+    echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits
+    source ~/.ddkits/ddkits.alias.sh
     source ~/.ddkits_alias_web
     docker restart $(docker ps -q)
     ddk c | grep ddkits &> /dev/null && echo -e 'DDkits Ready to go, well done :-)' || ddk install
@@ -203,10 +202,10 @@ ddk() {
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
-    echo $SUDOPASS | sudo -S rm ~/.ddkits_alias ddkits_alias
-    echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
-    echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
-    source ~/.ddkits_alias ~/.ddkits_alias_web
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+    echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+    echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits
+    source ~/.ddkits/ddkits.alias.sh ~/.ddkits_alias_web
     export CONFIGREBUILD=<(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES''))
     # create the crt files for ssl
     openssl req \
@@ -227,11 +226,11 @@ ddk() {
     echo "ssl crt and .key files moved correctly"
 
     docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
-    sudo rm ~/.ddkits_alias
-    echo $SUDOPASS | sudo -S cp ddkits.alias.sh ddkits_alias
-    echo $SUDOPASS | sudo -S cp ddkits_alias ~/.ddkits_alias
-    echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias
-    source ~/.ddkits_alias
+    # echo $SUDOPASS | sudo -S rm ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+      echo $SUDOPASS | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+      echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits
+    source ~/.ddkits/ddkits.alias.sh
     source ~/.ddkits_alias_web
     # export DDKITSIP=$(docker-machine ip ddkits)
     #  prepare ddkits container for the new websites
@@ -323,7 +322,7 @@ ddk() {
     echo -e ''
     echo ':---)) Welcome back ' && echo "$USER"
     echo -e ''
-    source ~/.ddkits_alias
+    source ~/.ddkits/ddkits.alias.sh
     docker-machine start ddkits
     eval $(docker-machine env ddkits)
   elif [[ $1 == "del" ]]; then
@@ -351,7 +350,7 @@ ddk() {
         done <<<"$matches"
       fi
       # Remove the Source from Bash file
-      BASHSITE=ddkits_alias
+      BASHSITE=ddkits
       BSHFILE=~/.bash_profile
       matchesbash="$(grep -n ${BASHSITE} ${BSHFILE} | cut -f1 -d:)"
       if [[ ! -z "$matchesbash" ]]; then
@@ -507,7 +506,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v4.21
+    DDKits v4.26
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
