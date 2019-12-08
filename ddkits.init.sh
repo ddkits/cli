@@ -858,7 +858,7 @@ else
       echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ~/.bash_profile
     done <<<"$matchesbash"
   fi
-  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias' >>~/.bashrc_profile
+  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits/ddkits.alias.sh' >>~/.bashrc_profile
   echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias_web' >>~/.bashrc_profile
   # echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
   echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
