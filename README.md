@@ -1,3 +1,12 @@
+# DDKits v4.27 Built by Mutasem Elayyoub melayyoub@outlook.com
+- More needed Commands for Docker within DDKits ex. New image 
+- Load all the functionalities from the Source not from the same Project folder 
+- Create a smarter Shell script for passwords and more
+
+# DDKits v4.24 Built by Mutasem Elayyoub melayyoub@outlook.com
+- DDKits more smarter in Docker side
+- DDKits would start your docker and check before installation
+
 # DDKits v3.24 Built by Mutasem Elayyoub melayyoub@outlook.com
 
 - Ddkits tester for PHP using PhpLint
