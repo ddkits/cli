@@ -4,7 +4,7 @@
 #
 # Cloud
 #
-# This system built by Mutasem Elayyoub DDKits.com 
+# This system built by Mutasem Elayyoub DDKits.com
 
 # delete the old environment yml file
 if [[ -f "${DDKITSFL}/ddkits.env.yml" ]]; then
@@ -28,35 +28,35 @@ fi
 if [[ -f "${DDKITSFL}/ddkits-files/cloud/ddkits-check.sh" ]]; then
   rm $DDKITSFL/ddkits-files/cloud/ddkits-check.sh
 fi
-if [[ ! -d "${DDKITSFL}/ddkits-files/cloud/sites" ]]; then 
+if [[ ! -d "${DDKITSFL}/ddkits-files/cloud/sites" ]]; then
   mkdir $DDKITSFL/ddkits-files/cloud/sites
-  chmod -R 777 $DDKITSFL/ddkits-files/cloud/sites 
+  chmod -R 777 $DDKITSFL/ddkits-files/cloud/sites
 fi
-if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then 
+if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then
   mkdir $DDKITSFL/ddkits-files/ddkits/ssl
-  chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl 
+  chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl
 fi
 
 cat "./ddkits-files/ddkits/logo.txt"
-      # create the crt files for ssl 
-          openssl req \
-              -newkey rsa:2048 \
-              -x509 \
-              -nodes \
-              -keyout $DDKITSSITES.key \
-              -new \
-              -out $DDKITSSITES.crt \
-              -subj /CN=$DDKITSSITES \
-              -reqexts SAN \
-              -extensions SAN \
-              -config <(cat /System/Library/OpenSSL/openssl.cnf \
-                  <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
-              -sha256 \
-              -days 3650
-          mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
-          mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
-          echo "ssl crt and .key files moved correctly"
-          
+# create the crt files for ssl
+openssl req \
+  -newkey rsa:2048 \
+  -x509 \
+  -nodes \
+  -keyout $DDKITSSITES.key \
+  -new \
+  -out $DDKITSSITES.crt \
+  -subj /CN=$DDKITSSITES \
+  -reqexts SAN \
+  -extensions SAN \
+  -config <(cat /System/Library/OpenSSL/openssl.cnf \
+    <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
+  -sha256 \
+  -days 3650
+mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
+mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
+echo "ssl crt and .key files moved correctly"
+
 echo -e '
 <VirtualHost *:80>
      ServerAdmin melayyoub@outlook.com
@@ -92,7 +92,7 @@ echo -e '
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
-  
+
   <Location "/">
       Require all granted
       AllowOverride All
@@ -105,9 +105,8 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost> 
-' > $DDKITSFL/ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
-
+</VirtualHost>
+' >$DDKITSFL/ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 #!/bin/sh
@@ -152,7 +151,7 @@ if [ -f ${ocpath}/data/.htaccess ]
  then
   chmod 0644 ${ocpath}/data/.htaccess
   chown ${rootuser}:${htgroup} ${ocpath}/data/.htaccess
-fi' > $DDKITSFL/ddkits-files/cloud/ddkits-check.sh
+fi' >$DDKITSFL/ddkits-files/cloud/ddkits-check.sh
 
 echo -e '
 FROM ddkits/lamp:latest
@@ -167,21 +166,21 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 COPY get-pip.py /var/www/html/get-pip.py
 COPY ddkits-check.sh /var/www/html/ddkits-check.sh
 RUN chmod 600 /etc/mysql/my.cnf \
-    && a2enmod rewrite 
-RUN chmod -R 777 /var/www/html 
+    && a2enmod rewrite
+RUN chmod -R 777 /var/www/html
 RUN chmod u+x /var/www/html/ddkits-check.sh
-RUN apt-get -f install -y 
+RUN apt-get -f install -y
 RUN a2enmod headers \
   && a2enmod env \
   && a2enmod dir \
   && a2enmod mime \
-  && service apache2 reload 
+  && service apache2 reload
 
-  # Fixing permissions 
+  # Fixing permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 
-  ' > $DDKITSFL/ddkits-files/cloud/Dockerfile
+  ' >$DDKITSFL/ddkits-files/cloud/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -189,48 +188,47 @@ services:
   web:
     build: $DDKITSFL/ddkits-files/cloud
     image: ddkits/cloud:latest
-    
+
     volumes:
       - $DDKITSFL/cloud-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: '$DDKITSHOSTNAME'_ddkits_cloud_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_web
     networks:
       - ddkits
     ports:
-      - "'$DDKITSWEBPORT':80" 
-      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORT':80"
+      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
 
-# Installing ownCloud9 on local host 
+# Installing ownCloud9 on local host
 
-   
 if [[ ! -d "cloud-deploy/${WEBROOT}" ]]; then
-  
+
   echo $DDKITSFL
-mkdir $DDKITSFL/cloud-deploy
-chmod -R 777 $DDKITSFL/cloud-deploy/$WEBROOT
-cd $DDKITSFL/cloud-deploy
-wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2
-wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2.sha256
-wget https://owncloud.org/owncloud.asc
-wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2.asc
-sha256sum -c owncloud-9.0.4.tar.bz2.sha256
-gpg --import owncloud.asc
-gpg --verify owncloud-9.0.4.tar.bz2.asc
-tar xjvf owncloud-9.0.4.tar.bz2 
-cp -r owncloud $WEBROOT
-rm -rf owncloud
-cd $DDKITSFL
-chmod -R 777 $DDKITSFL/cloud-deploy/$WEBROOT
+  mkdir $DDKITSFL/cloud-deploy
+  chmod -R 777 $DDKITSFL/cloud-deploy/$WEBROOT
+  cd $DDKITSFL/cloud-deploy
+  wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2
+  wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2.sha256
+  wget https://owncloud.org/owncloud.asc
+  wget https://download.owncloud.org/community/owncloud-9.0.4.tar.bz2.asc
+  sha256sum -c owncloud-9.0.4.tar.bz2.sha256
+  gpg --import owncloud.asc
+  gpg --verify owncloud-9.0.4.tar.bz2.asc
+  tar xjvf owncloud-9.0.4.tar.bz2
+  cp -r owncloud $WEBROOT
+  rm -rf owncloud
+  cd $DDKITSFL
+  chmod -R 777 $DDKITSFL/cloud-deploy/$WEBROOT
 fi
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
-alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_cloud_web /bin/bash'
-alias ddkc-$DDKITSSITES-fix='docker exec -it ${DDKITSHOSTNAME}_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
+alias ddkc-$DDKITSSITES-fix='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash /var/www/html/ddkits-check.sh'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash'" >> ~/.ddkits_alias_web
-echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_cloud_web /bin/bash /var/www/html/ddkits-check.sh'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash /var/www/html/ddkits-check.sh'" >>~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/cloud-deploy
 echo $SUDOPASS | sudo -S chmod -R 0770 $DDKITSFL/cloud-deploy/$WEBROOT/data
 

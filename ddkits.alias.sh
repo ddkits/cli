@@ -172,6 +172,7 @@ ddk() {
     source ~/.ddkits_alias_web
     docker restart $(docker ps -q)
     ddk c | grep ddkits &>/dev/null && echo -e 'DDkits Ready to go, well done :-)' || ddk install
+    source ./.ddkits/ddkits.alias.web.sh
   elif [[ $1 == "com" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
@@ -232,11 +233,11 @@ ddk() {
     echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
     source ~/.ddkits/ddkits.alias.sh
     source ~/.ddkits_alias_web
-    # export DDKITSIP=$(docker-machine ip ddkits)
+    export DDKITSIP=$(docker-machine ip ddkits)
     #  prepare ddkits container for the new websites
     echo -e 'copying conf files into ddkits and restart'
     docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
-    # docker cp ~/.ddkits/ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
+    docker cp ~/.ddkits/ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
     # copy ssl crt keys to ddkits proxy
     docker cp ./ddkits-files/ddkits/ssl/$DDKITSSITES.crt ddkits:/etc/ssl/certs/$DDKITSSITES.crt
     docker cp ./ddkits-files/ddkits/ssl/$DDKITSSITES.key ddkits:/etc/ssl/certs/$DDKITSSITES.key
@@ -245,31 +246,33 @@ ddk() {
     ddk ip
     export TO=padRrmPRPnvizGwDhv5RZOzh76fHQugIVjMnwtNzcayhYpoAaBoHQpCLqV0r
     source ./ddkits-files/ddkits/ddkits.call.sh &>/dev/null
-
-    matches_in_hosts="$(grep -n ${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
+    echo ${SUDOPASS} | sudo -S cat /etc/hosts
     host_entry="${DDKITSIP}  ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
     # echo "Please enter your password if requested."
-
-    # echo ${SUDOPASS} | sudo -S cat /etc/hosts
-
+    pat="jenkins.${DDKITSSITES}.ddkits.site"
     matches_in_hosts="$(grep -n ${DDKITSSITES} /etc/hosts | cut -f1 -d:)"
+    echo -e "Before your hosts are"
+
     if [ ! -z "$matches_in_hosts" ]; then
       echo "Updating existing hosts entry."
       # iterate over the line numbers on which matches were found
       while read -r line_number; do
         # replace the text of each line with the desired host entry
         # echo ${SUDOPASS} | sudo -S sed -i '' "${line_number}s/.*/${host_entry} /" /etc/hosts
-        echo ${SUDOPASS} | sudo -S sed "/${host_entry}/d" /etc/hosts >~/hosts
+        echo ${SUDOPASS} | sudo -S sed "/${DDKITSSITES}/d" /etc/hosts >~/hosts
         echo ${SUDOPASS} | sudo -S sed "/${pat}/d" /etc/hosts >~/hosts
         echo ${SUDOPASS} | sudo -S mv ~/hosts /etc/hosts
       done <<<"$matches_in_hosts"
       echo "Adding new hosts entry."
-      echo "${ddkits_host_entry}" | sudo tee -a /etc/hosts >/dev/null
+      echo "${host_entry}" | sudo tee -a /etc/hosts >/dev/null
     else
       echo "Adding new hosts entry."
-      echo "${ddkits_host_entry}" | sudo tee -a /etc/hosts >/dev/null
+      echo "${host_entry}" | sudo tee -a /etc/hosts >/dev/null
     fi
+    echo -e "After your hosts are"
     echo ${SUDOPASS} | sudo -S cat /etc/hosts
+    # create alias for the containers
+    source ./.ddkits/ddkits.alias.web.sh
     echo -e 'copying conf files into ddkits and restart'
     docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_$DDKITSHOSTNAME.conf
     # docker cp ~/.ddkits/ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
@@ -513,7 +516,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v4.27
+    DDKits v4.274
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
