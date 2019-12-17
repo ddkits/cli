@@ -89,8 +89,14 @@ ddk() {
     mv ~/.ddkits/ddkits.site.crt ~/.ddkits/ddkits-files/ddkits/ssl/
     chmod -R 777 ~/.ddkits/ddkits-files/ddkits/ssl
     echo "ssl crt and .key files moved correctly"
-    echo -e 'DDkits web
-      ' >>~/.ddkits_alias_web
+
+    FILEWEB=$(echo ~/.ddkits_alias_web)
+    if test -f "$FILEWEB"; then
+      echo 'Welcome back.'
+    else
+      echo -e 'DDkits web
+        ' >>~/.ddkits_alias_web
+    fi
     # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
     echo -e '(1) Localhost \n(2) virtualbox'
     read DDKITSVER
