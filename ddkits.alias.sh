@@ -278,6 +278,11 @@ ddk() {
     # docker cp ~/.ddkits/ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
     docker restart $(docker ps -q)
     ddk go
+  elif [[ $1 == "ready" ]]; then
+    clear
+    echo $SUDOPASS | sudo -S cat $LOGO
+    source ~/.ddkits/ddkits.ready.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d
+    # source ddkits.ready.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d
   elif [[ $1 == "start" ]]; then
     if [[ $2 == "com" ]]; then
       echo $SUDOPASS | sudo -S cat $LOGO
