@@ -4,7 +4,7 @@
 
 # Site information below
 MAIL_ADDRESS='m@m.com'  # Email address
-DDKITSSITES='sagawards.site' # Domain address
+DDKITSSITES='SITENAME.site' # Domain address
 DDKITSWEBPORT=9654 # Docker port for this web
 WEBROOT=public
 
