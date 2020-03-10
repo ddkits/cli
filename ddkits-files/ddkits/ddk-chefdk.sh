@@ -67,7 +67,7 @@ RUN rm /etc/apache2/sites-enabled/*
 COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
 RUN curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk -c stable
-RUN apt-get install tree
+RUN apt-get -y install tree
 # Set the default command to execute
 
 RUN chmod 600 /etc/mysql/my.cnf
