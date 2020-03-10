@@ -427,7 +427,7 @@ DDKITS_PLATFORM='Please pick which platform you want to install: '
 #
 # Setup options Please make sure of all options before publish pick list
 #
-options=("Custom" "Contao" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "nGrinder" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony" "ZenCart" "Zend" "Quit")
+options=("Custom" "Contao" "ChefDK" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "nGrinder" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony" "ZenCart" "Zend" "Quit")
 select opt in "${options[@]}"; do
   case $opt in
   "Drupal")
@@ -444,6 +444,11 @@ select opt in "${options[@]}"; do
     ;;
   "Wordpress")
     source ./ddkits-files/ddkits/ddk-wordpress.sh
+
+    break
+    ;;
+  "ChefDK")
+    source ./ddkits-files/ddkits/ddk-chefdk.sh
 
     break
     ;;
