@@ -66,35 +66,22 @@ RUN export TERM=xterm
 RUN rm /etc/apache2/sites-enabled/*
 COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
-RUN curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk -c stable
-# Server
-RUN wget https://packages.chef.io/files/stable/chef-server/13.1.13/ubuntu/18.04/chef-server-core_13.1.13-1_amd64.deb
-RUN dpkg -i chef-server-core_*.deb
-# Workstation
-RUN wget  https://packages.chef.io/files/stable/chef-workstation/0.2.43/ubuntu/18.04/chef-workstation_0.2.43-1_amd64.deb
-RUN dpkg -i chef-workstation_*.deb
-RUN chef generate repo chef-repo
-# Add workstation and chef server ips in hosts
-RUN echo -e " \
-192.0.1.0 localhost \
-192.0.1.0 '$DDKITSSITES' \
-192.0.2.0 workstation" > /etc/hosts
+# Chef server starts from here
+VOLUME /var/opt/opscode
 
-RUN rm chef-server-core_*.deb chef-workstation_*.deb
-RUN chef-server-ctl reconfigure
-RUN cd ~/ && mkdir .chef
-# create a user for Chef
-RUN chef-server-ctl user-create '$MYSQL_USER' '$MYSQL_USER' '$MYSQL_USER' '$MAIL_ADDRESS' '$MYSQL_PASSWORD' --filename ~/.chef/'$MYSQL_USER'.pem
-#create Org
-RUN chef-server-ctl org-create ddkits "DDKits" --association_user '$MYSQL_USER' --filename ~/.chef/ddkits.pem
-RUN chef-server-ctl org-list
-RUN chef-server-ctl user-list
-RUN mkdir ~/chef-repo/.chef
-COPY '$DDKITSFL'/ddkits-files/ddkits/ssl  ~/chef-repo/.chef
-# copy pem using scp
+COPY install.sh /tmp/install.sh
 
-RUN ssh-copy-id www-data@192.0.2.0
-RUN scp www-data@192.0.2.0:~/.chef/* ~/chef-repo/.chef/
+RUN [ "/bin/sh", "/tmp/install.sh" ]
+
+COPY init.rb /init.rb
+COPY chef-server.rb /.chef/chef-server.rb
+COPY logrotate /opt/opscode/sv/logrotate
+COPY knife.rb /etc/chef/knife.rb
+COPY backup.sh /usr/local/bin/chef-server-backup
+
+ENV KNIFE_HOME /etc/chef
+
+CMD [ "/opt/opscode/embedded/bin/ruby", "/init.rb" ]
 # Fix git user 
 RUN git config --global user.name '$MYSQL_USER'
 RUN git config --global user.email '$MAIL_ADDRESS'
