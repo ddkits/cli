@@ -15,19 +15,19 @@ if [[ -f "${DDKITSFL}/ddkitsnew.yml" ]]; then
   rm $DDKITSFL/ddkitsnew.yml
 fi
 # delete the old environment yml file
-if [[ -f "${DDKITSFL}/ddkits-files/chefdk/Dockerfile" ]]; then
-  rm $DDKITSFL/ddkits-files/chefdk/Dockerfile
+if [[ -f "${DDKITSFL}/ddkits-files/chefserver/Dockerfile" ]]; then
+  rm $DDKITSFL/ddkits-files/chefserver/Dockerfile
 fi
 # delete the old environment yml file
 if [[ -f "${DDKITSFL}/ddkits-files/ddkits.fix.sh" ]]; then
   rm $DDKITSFL/ddkits-files/ddkits.fix.sh
 fi
-if [[ -f "${DDKITSFL}/ddkits-files/chefdk/sites/$DDKITSHOSTNAME.conf" ]]; then
-  rm $DDKITSFL/ddkits-files/chefdk/sites/$DDKITSHOSTNAME.conf
+if [[ -f "${DDKITSFL}/ddkits-files/chefserver/sites/$DDKITSHOSTNAME.conf" ]]; then
+  rm $DDKITSFL/ddkits-files/chefserver/sites/$DDKITSHOSTNAME.conf
 fi
-if [[ ! -d "${DDKITSFL}/ddkits-files/chefdk/sites" ]]; then
-  mkdir $DDKITSFL/ddkits-files/chefdk/sites
-  chmod -R 777 $DDKITSFL/ddkits-files/chefdk/sites
+if [[ ! -d "${DDKITSFL}/ddkits-files/chefserver/sites" ]]; then
+  mkdir $DDKITSFL/ddkits-files/chefserver/sites
+  chmod -R 777 $DDKITSFL/ddkits-files/chefserver/sites
 fi
 if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then
   mkdir $DDKITSFL/ddkits-files/ddkits/ssl
@@ -102,7 +102,7 @@ RUN chmod -R 777 /var/www/html
 # Fixing permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
-  ' >>$DDKITSFL/ddkits-files/chefdk/Dockerfile
+  ' >>$DDKITSFL/ddkits-files/chefserver/Dockerfile
 
 # create different containers files for conf
 echo -e '
@@ -148,14 +148,14 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost>
-' >$DDKITSFL/ddkits-files/chefdk/sites/$DDKITSHOSTNAME.conf
+' >$DDKITSFL/ddkits-files/chefserver/sites/$DDKITSHOSTNAME.conf
 
 echo -e 'version: "3.1"
 
 services:
   web:
-    build: $DDKITSFL/ddkits-files/chefdk
-    image: ddkits/chefdk:latest
+    build: $DDKITSFL/ddkits-files/chefserver
+    image: ddkits/chefserver:latest
 
     stdin_open: true
     tty: true
@@ -168,9 +168,9 @@ services:
       - "'$DDKITSWEBPORT':80"
       - "'$DDKITSWEBPORTSSL':443"
     environment:
-       chefdk_DB_HOST: '$DDKITSIP':'$DDKITSDBPORT'
-       chefdk_DB_USER: '$MYSQL_USER'
-       chefdk_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >>$DDKITSFL/ddkits.env.yml
+       chefserver_DB_HOST: '$DDKITSIP':'$DDKITSDBPORT'
+       chefserver_DB_USER: '$MYSQL_USER'
+       chefserver_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >>$DDKITSFL/ddkits.env.yml
 
 # check if wget command exist
 
