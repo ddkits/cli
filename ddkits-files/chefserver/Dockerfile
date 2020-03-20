@@ -1,5 +1,5 @@
 
-FROM ddkits/lamp:7.3
+FROM ddkits/lamp:7
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -11,8 +11,9 @@ COPY php.ini /usr/local/etc/php/conf.d/php.ini
 # Chef server starts from here
 VOLUME /var/opt/opscode
 
-COPY install.sh /var/www/html/install.sh
-RUN source /var/www/html/install.sh
+COPY install.sh /tmp/install.sh
+
+RUN [ "/bin/sh", "/tmp/install.sh" ]
 
 COPY init.rb /init.rb
 COPY chef-server.rb /.chef/chef-server.rb
@@ -23,21 +24,12 @@ COPY backup.sh /usr/local/bin/chef-server-backup
 ENV KNIFE_HOME /etc/chef
 
 CMD [ "/opt/opscode/embedded/bin/ruby", "/init.rb" ]
-# Fix git user 
-RUN git config --global user.name ddk
-RUN git config --global user.email m@m.com
-
-# Add ignore for chef
-RUN ".chef" > ~/chef-repo/.gitignore
-RUN cd ~/chef-repo && git add . && git commit -m "initial commit"
-
-#  Run first cookbook
-RUN chef generate cookbook ddkits_cookbook
-RUN apt-get -y install tree
-# Set the default command to execute
-
 RUN chmod 600 /etc/mysql/my.cnf
-RUN chmod -R 777 /var/www/html
+RUN chmod -R +rwx /var/opt/opscode 
+
+# # Fixing permissions
+RUN chown -R www-data:www-data /var/opt/opscode 
+RUN usermod -u 1000 www-data
 
 
 # Fixing permissions

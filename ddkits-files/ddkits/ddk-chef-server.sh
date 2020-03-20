@@ -57,7 +57,7 @@ DOCUMENTROOT=$WEBROOT
 
 # Build out docker file to start our install
 echo -e '
-FROM ddkits/lamp:7.3
+FROM ddkits/lamp:7
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -82,27 +82,18 @@ COPY backup.sh /usr/local/bin/chef-server-backup
 ENV KNIFE_HOME /etc/chef
 
 CMD [ "/opt/opscode/embedded/bin/ruby", "/init.rb" ]
-# Fix git user 
-RUN git config --global user.name '$MYSQL_USER'
-RUN git config --global user.email '$MAIL_ADDRESS'
-
-# Add ignore for chef
-RUN ".chef" > ~/chef-repo/.gitignore
-RUN cd ~/chef-repo && git add . && git commit -m "initial commit"
-
-#  Run first cookbook
-RUN chef generate cookbook ddkits_cookbook
-RUN apt-get -y install tree
-# Set the default command to execute
-
 RUN chmod 600 /etc/mysql/my.cnf
-RUN chmod -R 777 /var/www/html
+RUN chmod -R +rwx /var/opt/opscode 
+
+# # Fixing permissions
+RUN chown -R www-data:www-data /var/opt/opscode 
+RUN usermod -u 1000 www-data
 
 
 # Fixing permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
-  ' >>$DDKITSFL/ddkits-files/chefserver/Dockerfile
+  ' >$DDKITSFL/ddkits-files/chefserver/Dockerfile
 
 # create different containers files for conf
 echo -e '
