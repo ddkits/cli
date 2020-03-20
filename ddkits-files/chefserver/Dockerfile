@@ -21,16 +21,21 @@ COPY logrotate /opt/opscode/sv/logrotate
 COPY knife.rb /etc/chef/knife.rb
 COPY backup.sh /usr/local/bin/chef-server-backup
 
+ENV PUBLIC_URL chefserver.site
 ENV KNIFE_HOME /etc/chef
 
-CMD [ "/opt/opscode/embedded/bin/ruby", "/init.rb" ]
+
 RUN chmod 600 /etc/mysql/my.cnf
-RUN chmod -R +rwx /var/opt/opscode 
+RUN chmod -R 777 /var/opt/opscode /etc/chef
 
 # # Fixing permissions
-RUN chown -R www-data:www-data /var/opt/opscode 
+RUN chown -R www-data:www-data /var/opt/opscode  /etc/chef
 RUN usermod -u 1000 www-data
 
+# clean up Chef for new version
+RUN chef-server-ctl cleanup
+CMD [ "/opt/opscode/embedded/bin/ruby", "/init.rb" ]
+RUN chef-server-ctl upgrade
 
 # Fixing permissions
 RUN chown -R www-data:www-data /var/www/html

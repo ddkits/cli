@@ -3,7 +3,7 @@
 # Install prerequisites
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -q -y
-apt-get install -q -y logrotate vim-nox hardlink wget ca-certificates
+apt-get install -q -y logrotate curl vim-nox hardlink wget ca-certificates
 
 # https://downloads.chef.io/chef-server#ubuntu
 SERVER_VERSION="12.18.14"
