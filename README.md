@@ -1,9 +1,19 @@
+# DDKits v4.302 Built by Mutasem Elayyoub melayyoub@outlook.com
+
+- HTTPS/HTTP
+- Bash Profile Commands Fix for DDkits
+- Cleanup Codes
+- Included Chef Development Kit and Server
+- Jenkins Alone Instance
+
 # DDKits v4.27 Built by Mutasem Elayyoub melayyoub@outlook.com
-- More needed Commands for Docker within DDKits ex. New image 
-- Load all the functionalities from the Source not from the same Project folder 
+
+- More needed Commands for Docker within DDKits ex. New image
+- Load all the functionalities from the Source not from the same Project folder
 - Create a smarter Shell script for passwords and more
 
 # DDKits v4.24 Built by Mutasem Elayyoub melayyoub@outlook.com
+
 - DDKits more smarter in Docker side
 - DDKits would start your docker and check before installation
 
@@ -13,9 +23,8 @@
 - Database Export/import functions to direct connection with MySql container
 - Ddkits Custom version: 1- auto pull from Git repo and organize the files into the deploy folder
 - Ddkits Webroot option, for consistency DDkits, give the option to change your webroot
-- DDkits Composer version:  composer create-project ddkits/cli Folder_Name
+- DDkits Composer version: composer create-project ddkits/cli Folder_Name
 - Ddkits rmn to clean all the unused images, None and all the unknown prebuilt images that never been used.
-
 
 # DDKits v2.01 Built by Mutasem Elayyoub melayyoub@outlook.com
 
@@ -80,6 +89,9 @@ Redis fully cache system can be used by your application.
 17. Zen Cart E-commerce
 18. Jenkins
 19. nGrinder
+20. ChefDK
+21. ChefServer
+22. Custom Version from Github Directly
 
 # For more information:
 
