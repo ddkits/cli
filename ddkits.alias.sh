@@ -2,7 +2,7 @@
 #  Script.sh
 #
 #
-#  Created by mutasem elayyoub ddkits.com
+#  by Sam Elayyoub ddkits.com
 #
 shopt -s extglob
 # Copy the new Alias system and making sure of the DDKits installation
@@ -35,6 +35,27 @@ ddk() {
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
   fi
 
+  # cleanup bash_profile
+  FILEBASH=~/.bash_profile
+  matches_in_New_Bash_Profile="$(grep -n ddkits ${FILEBASH} | cut -f1 -d:)" 
+    echo -e "Before your New_Bash_Profile is"
+    if [ ! -z "$matches_in_New_Bash_Profile" ]; then
+      echo "Updating existing New_Bash_Profile entry."
+      # iterate over the line numbers on which matches were found
+      while read -r line_number; do
+        # replace the text of each line with the desired host entry
+        # echo ${SUDOPASS} | sudo -S sed -i '' "${line_number}s/.*/${host_entry} /" $FILEBASH
+        echo ${SUDOPASS} | sudo -S sed "/ddkits/d" $FILEBASH >~/New_Bash_Profile
+        echo ${SUDOPASS} | sudo -S mv ~/New_Bash_Profile $FILEBASH
+      done <<<"$matches_in_New_Bash_Profile"
+      echo "Adding new New_Bash_Profile entry."
+      echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' | sudo tee -a $FILEBASH >/dev/null
+    else
+      echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' | sudo tee -a $FILEBASH >/dev/null
+    fi
+    echo ${SUDOPASS} | sudo -S cat $FILEBASH
+  
+    # end of cleanup 
   if [[ $1 == "install" ]]; then
     # check if the sudo variable exist for use
     if [ -z "$SUDOPASS" ]; then
@@ -122,7 +143,7 @@ ddk() {
     eval "$(docker-machine env ddkits)"
     docker-compose -f ~/.ddkits/ddkits.yml up -d --build
     source ~/.ddkits/ddkits.alias.sh ~/.ddkits_alias_web
-    echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
+    # echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
     echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
   elif [[ $1 == "ip" ]]; then
     Docker-machine ls | grep ddkits >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
