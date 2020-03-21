@@ -46,19 +46,19 @@ echo -e 'version: "3.1"
 services:
   web:
     build: ./ddkits-files/jenkins
-    image: ddkits/jenkins:latest
-    ports:
-      - "'$DDKITSJENKINSPORT':8080"
     volumes:
-      - ./jenkins:/var/jenkins_home
-    stdin_open: true
-    tty: true
-    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
+      - ./jenkins-deploy:/var/jenkins_home
     networks:
       - ddkits
+    ports:
+      - "'$DDKITSWEBPORT':80"
+      - "'$DDKITSWEBPORTSSL':443"
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_web
    '>$DDKITSFL/ddkits.env.yml
 
-if [[ ! -d "jenkins" ]]; then
+if [[ ! -d "jenkins-deploy" ]]; then
 
 fi
 
