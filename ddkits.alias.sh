@@ -352,6 +352,26 @@ ddk() {
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
     docker images
+  elif [[ $1 == "kube" ]]; then
+    clear
+    echo $SUDOPASS | sudo -S cat $LOGO
+    if ! [ -x "$(command -v kubectl)" ]; then
+      echo 'Error: kubectl is not installed.' >&2
+    elif
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
+    kubectl proxy &>/dev/null &
+    kubectl apply -f admin-user.yaml
+    kubectl get sa ddk -n kubernetes-dashboard
+    kubectl sa ddk -n kubernetes-dashboard
+    kubectl describe secret ddk
+    echo ''
+    echo -e "Make sure to make a copy of this token for UI access"
+    echo ''
+    kubectl describe secret ddk -n kubernetes-dashboard
+    echo ''
+    echo -e "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/overview?namespace=default"
+    fi
+
   elif [[ $1 == "go" ]]; then
     clear
     echo $SUDOPASS | sudo -S cat $LOGO
@@ -538,11 +558,14 @@ ddk() {
            ${red}c${normal}       Create a container from an image ex. ( ddk new c ddkits/lamp:7)
            ${red}run${normal}     Docker exec the new container ex. ( ddk new run 5d05535340b8 /bin/bash )
     ${yellow}Containers DNS:${normal}
+             **************************
+    Kubernetes special commands
+            ${red}kube${normal}   Start Kube and start the UI with Token
     Jenkins     http://jenkins.YOUR_DOMAIN.ddkits.site
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v4.302
+    DDKits v4.310
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
