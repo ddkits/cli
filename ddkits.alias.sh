@@ -357,7 +357,7 @@ ddk() {
     echo $SUDOPASS | sudo -S cat $LOGO
     if ! [ -x "$(command -v kubectl)" ]; then
       echo 'Error: kubectl is not installed.' >&2
-    elif
+    else
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
     kubectl proxy &>/dev/null &
     kubectl apply -f admin-user.yaml
@@ -565,7 +565,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v4.310
+    DDKits v4.311
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com

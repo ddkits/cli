@@ -93,6 +93,12 @@ Redis fully cache system can be used by your application.
 21. ChefServer
 22. Custom Version from Github Directly
 
+# How to start Kubernetes UI dashboard
+
+1- Enable Kubernetes from Docker app and run it
+2- ddk kube to get the token
+3- Click on the link and use token to initialize your authorization
+
 # For more information:
 
 http://www.ddkits.com by Mutasem Elayyoub
