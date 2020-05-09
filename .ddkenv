@@ -1,0 +1,33 @@
+########################################
+# DDKits Environment File DDKits.com ###
+########################################
+
+# Site information below
+MAIL_ADDRESS='EMAIL@ADDRESS.COM'  # Email address
+DDKITSSITES='SITENAME.site' # Domain address
+DDKITSWEBPORT=9654 # Docker port for this web
+WEBROOT=public # Some sites using web or docroot as webroot
+
+# Jenkins installation, if needed change 'n' to 'y'.
+JENKINS_ANSWER='n'
+JENKINS_ANSWER='n'
+
+# Extra Solr in network, if needed change 'n' to 'y'.
+SOLR_ANSWER='n'
+
+# DB information below
+MYSQL_USER='ddk'
+MYSQL_ROOT_PASSWORD='ddk'
+MYSQL_DATABASE='ddk'
+MYSQL_PASSWORD='ddk'
+
+
+# PHP version
+PHPVERSION=7
+
+######################
+# Don't Change below #
+DDKITSFL=$DDKITSFL
+DDKITSIP=$(docker-machine ip ddkits)
+JENKINS_ONLY='false'
+DDKITSHOSTNAME=${DDKITSSITES//./_}

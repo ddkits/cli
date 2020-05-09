@@ -59,7 +59,7 @@ export DDKITSADMINPORT='${DDKITSADMINPORT}'
 export DDKITSWEBPORT='${DDKITSWEBPORT}'
 export DDKITSWEBPORTSSL='${DDKITSWEBPORTSSL}'
 export DDKITSJENKINSPORT='${DDKITSJENKINSPORT}'
-' > $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
+' >$DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
 
 source $DDKITSFL'/ddkits.dev.sh'
 
@@ -68,7 +68,6 @@ cat $LOGO
 # Create our system ddkits enviroment
 if [[ "$JENKINS_ONLY" == "true" ]]; then
   echo -e 'version: "3.1"
-
 services:
   cache:
     image: redis:latest
@@ -77,7 +76,22 @@ services:
       - ddkits
     ports:
       - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
-
+  mariadb:
+    build: ./ddkits-files/db
+    image: ddkits/mariadb:latest
+    volumes:
+      - /var/lib/mysql
+    container_name: '$DDKITSHOSTNAME'_ddkits_db
+    ports:
+        - '$DDKITSDBPORT':3306
+    networks:
+      - ddkits
+    environment:
+     - MYSQL_ROOT_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_DATABASE='$MYSQL_DATABASE'
+     - MYSQL_USER='$MYSQL_USER'
+     - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - MYSQL_HOST='$DDKITSIP'
 networks:
     ddkits:
 
@@ -145,7 +159,7 @@ services:
     ports:
       - "'$DDKITSJENKINSPORT':8080"
     volumes:
-      - ./jenkins:/var/jenkins_home 
+      - ./jenkins:/var/jenkins_home
     stdin_open: true
     tty: true
     container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
@@ -215,7 +229,7 @@ services:
       - ddkits
     ports:
       - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
-  
+
 networks:
     ddkits:
 
@@ -276,7 +290,7 @@ services:
     ports:
       - "'$DDKITSJENKINSPORT':8080"
     volumes:
-      - ./jenkins:/var/jenkins_home 
+      - ./jenkins:/var/jenkins_home
     stdin_open: true
     tty: true
     container_name: '$DDKITSHOSTNAME'_ddkits_jenkins
@@ -345,7 +359,7 @@ networks:
 
 fi
 # create alias for the containers
-source ddkits.alias.web.sh
+source ~/.ddkits/ddkits.alias.web.sh
 
 #  All information in one file html as a referance
 
@@ -353,7 +367,7 @@ echo -e '#<html><head><!--
 
 # Your Bash script goes here
 
-<<HTML_CONTENT 
+<<HTML_CONTENT
 -->
 <body style="background-color:white; margin-top:-1em">
 <center><h3>Your DDKits information:</h3></center><br />
@@ -380,7 +394,7 @@ Ports:<br />
 - Your new Radis port is: '$DDKITSREDISPORT'<br />
 <br /><br /><br /><br />
 <center>Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com <br />
-Copyright @2017 <a href="http://ddkits.com/">DDKits.com</a></center> 
+Copyright @2017 <a href="http://ddkits.com/">DDKits.com</a></center>
 <!--
 HTML_CONTENT
 # --></body></html>' >./ddkits-$DDKITSHOSTNAME.html
@@ -406,9 +420,9 @@ Ports:
 - Your new PhpMyAdmin port is: '$DDKITSADMINPORT'
 - Your new Radis port is: '$DDKITSREDISPORT'
 
-Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com 
-Copyright @2017 DDKits.com. Mutasem Elayyoub 
-' > ./ddkits-files/ddkits/site.txt
+Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com
+Copyright @2017 DDKits.com. Mutasem Elayyoub
+' >./ddkits-files/ddkits/site.txt
 
 if [ -f "ddkits.prod.sh" ]; then
   echo -e 'Production'
@@ -426,8 +440,7 @@ else
       echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ${BSHFILE}
     done <<<"$matchesbash"
   fi
-  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits/ddkits.alias.sh' >> ~/.bash_profile
-  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias_web' >> ~/.bash_profile
+  echo $SUDOPASS | sudo -S echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
   # echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
   echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
   source ~/.bash_profile

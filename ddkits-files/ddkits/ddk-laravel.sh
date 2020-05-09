@@ -4,7 +4,7 @@
 #
 # Laravel
 #
-# This system built by Mutasem Elayyoub DDKits.com 
+# This system built by Mutasem Elayyoub DDKits.com
 
 export DOCUMENTROOT=$DDKITSHOSTNAME
 # create different containers files for conf
@@ -17,45 +17,45 @@ if [[ -f "${DDKITSFL}/ddkitsnew.yml" ]]; then
   rm $DDKITSFL/ddkitsnew.yml
 fi
 # delete the old environment yml file
-if [[  -f "${DDKITSFL}/ddkits-files/Laravel/Dockerfile" ]]; then
+if [[ -f "${DDKITSFL}/ddkits-files/Laravel/Dockerfile" ]]; then
   rm $DDKITSFL/ddkits-files/Laravel/Dockerfile
 fi
 # delete the old environment yml file
-if [[  -f "${DDKITSFL}/ddkits-files/ddkits.fix.sh" ]]; then
+if [[ -f "${DDKITSFL}/ddkits-files/ddkits.fix.sh" ]]; then
   rm $DDKITSFL/ddkits-files/ddkits.fix.sh
 fi
-if [[  -f "${DDKITSFL}/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf" ]]; then
+if [[ -f "${DDKITSFL}/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf" ]]; then
   rm $DDKITSFL/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
 fi
-if [[ ! -d "${DDKITSFL}/ddkits-files/laravel/sites" ]]; then 
+if [[ ! -d "${DDKITSFL}/ddkits-files/laravel/sites" ]]; then
   mkdir $DDKITSFL/ddkits-files/laravel/sites
-  chmod -R 777 $DDKITSFL/ddkits-files/laravel/sites 
+  chmod -R 777 $DDKITSFL/ddkits-files/laravel/sites
 fi
-if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then 
+if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then
   mkdir $DDKITSFL/ddkits-files/ddkits/ssl
-  chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl 
+  chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl
 fi
 
 cat "./ddkits-files/ddkits/logo.txt"
-      # create the crt files for ssl 
-          openssl req \
-              -newkey rsa:2048 \
-              -x509 \
-              -nodes \
-              -keyout $DDKITSSITES.key \
-              -new \
-              -out $DDKITSSITES.crt \
-              -subj /CN=$DDKITSSITES \
-              -reqexts SAN \
-              -extensions SAN \
-              -config <(cat /System/Library/OpenSSL/openssl.cnf \
-                  <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
-              -sha256 \
-              -days 3650
-          mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
-          mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
-          echo "ssl crt and .key files moved correctly"
-          
+# create the crt files for ssl
+openssl req \
+  -newkey rsa:2048 \
+  -x509 \
+  -nodes \
+  -keyout $DDKITSSITES.key \
+  -new \
+  -out $DDKITSSITES.crt \
+  -subj /CN=$DDKITSSITES \
+  -reqexts SAN \
+  -extensions SAN \
+  -config <(cat /System/Library/OpenSSL/openssl.cnf \
+    <(printf '[SAN]\nsubjectAltName=DNS:'$DDKITSSITES'')) \
+  -sha256 \
+  -days 3650
+mv $DDKITSSITES.key $DDKITSFL/ddkits-files/ddkits/ssl/
+mv $DDKITSSITES.crt $DDKITSFL/ddkits-files/ddkits/ssl/
+echo "ssl crt and .key files moved correctly"
+
 echo -e '
 <VirtualHost *:80>
      ServerAdmin melayyoub@outlook.com
@@ -76,7 +76,7 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost> 
+</VirtualHost>
 
 <VirtualHost *:443>
   ServerAdmin melayyoub@outlook.com
@@ -86,7 +86,7 @@ echo -e '
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
-  
+
   <Location "/">
       Require all granted
       AllowOverride All
@@ -99,7 +99,7 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost>' > $DDKITSFL/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
+</VirtualHost>' >$DDKITSFL/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 
@@ -112,17 +112,17 @@ MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 RUN ln -sf $DDKITSFL/logs /var/log/nginx/access.log \
     && ln -sf $DDKITSFL/logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
-    && rm /etc/apache2/sites-enabled/* 
+    && rm /etc/apache2/sites-enabled/*
 RUN chmod -R 777 /var/www/html
 
 COPY php.ini /etc/php/7.0/fpm/php.ini
 COPY $DDKITSFL/sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
 
-# Fixing permissions 
+# Fixing permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 
- ' >> $DDKITSFL/ddkits-files/Laravel/Dockerfile
+ ' >>$DDKITSFL/ddkits-files/Laravel/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -130,24 +130,23 @@ services:
   web:
     build: $DDKITSFL/ddkits-files/Laravel
     image: ddkits/laravel:latest
-    
+
     volumes:
       - $DDKITSFL/ll-deploy:/var/www/html
     stdin_open: true
     tty: true
-    container_name: '$DDKITSHOSTNAME'_ddkits_laravel_web
+    container_name: '$DDKITSHOSTNAME'_ddkits_web
     networks:
       - ddkits
     ports:
-      - "'$DDKITSWEBPORT':80" 
-      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORT':80"
+      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
-alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_laravel_web /bin/bash'
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash'" >> ~/.ddkits_alias_web
-
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
 
 if [[ ! -f "composer.phar" ]]; then
   wget https://getcomposer.org/composer.phar
@@ -158,13 +157,13 @@ php composer.phar create-project laravel/laravel ll-deploy "5.7.*" --prefer-dist
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
 
 if [[ -f "ll-deploy/storage/logs/laravel.logs" ]]; then
- rm -rf $DDKITSFL/ll-deploy/storage/logs/laravel.logs
+  rm -rf $DDKITSFL/ll-deploy/storage/logs/laravel.logs
 fi
 
 if [[ -d "ll-deploy" ]]; then
   cd ll-deploy
   php artisan cache:clear
-cat "${DDKITSFL}/ddkits-files/ddkits/logo.txt"
+  cat "${DDKITSFL}/ddkits-files/ddkits/logo.txt"
   php artisan config:cache
   cd ..
   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
@@ -208,12 +207,12 @@ MAIL_ENCRYPTION=null
 PUSHER_APP_ID=
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
-' >> $DDKITSFL/ll-deploy/.env
+' >>$DDKITSFL/ll-deploy/.env
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
-alias ddkf-$DDKITSSITES="docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash ddkits.fix.sh"
+alias ddkf-$DDKITSSITES="docker exec -d "$DDKITSHOSTNAME"_ddkits_web /bin/bash ddkits.fix.sh"
 #  fixed the alias for machine
-echo "alias ddkf-"$DDKITSSITES"='docker exec -d "$DDKITSHOSTNAME"_ddkits_laravel_web /bin/bash ddkits.fix.sh'" >> ~/.ddkits_alias_web
+echo "alias ddkf-"$DDKITSSITES"='docker exec -d "$DDKITSHOSTNAME"_ddkits_web /bin/bash ddkits.fix.sh'" >>~/.ddkits_alias_web
 
 echo -e '
 #!/bin/sh
@@ -232,6 +231,6 @@ php artisan config:clear
 php artisan cache:clear
 php artisan db:seed
 chmod -R 777 storage
- ' > $DDKITSFL/ll-deploy/ddkits.fix.sh
- 
+ ' >$DDKITSFL/ll-deploy/ddkits.fix.sh
+
 cd $DDKITSFL
