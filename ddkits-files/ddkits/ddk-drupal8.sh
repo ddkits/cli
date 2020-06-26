@@ -199,7 +199,7 @@ if [[ ! -d "deploy/${WEBROOT}" ]]; then
   cp -r $DDKITSFL/deploy1/ $DDKITSFL/deploy/
   rm -rf $DDKITSFL/deploy1
   echo $DDKITSFL
-  mv $DDKITSFL/deploy/public $DDKITSFL/deploy/$WEBROOT
+  mv $DDKITSFL/deploy/* $DDKITSFL/deploy/$WEBROOT
   chmod -R 777 $DDKITSFL/deploy/$WEBROOT
   mkdir $DDKITSFL/deploy/$WEBROOT/sites/default/files
   chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default
