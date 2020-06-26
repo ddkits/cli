@@ -140,7 +140,7 @@ echo -e '
 # Build out docker file to start our install
 echo -e '
 
-FROM ddkits/lamp:7
+FROM ddkits/lamp:73
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
