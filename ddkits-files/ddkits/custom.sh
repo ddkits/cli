@@ -7,6 +7,11 @@
 # This system built by Mutasem Elayyoub DDKits.com
 
 # delete the old environment yml file
+
+if [[ ! -d "${DDKITSFL}/ddkits-files/custom" ]]; then
+  mkdir $DDKITSFL/ddkits-files/custom
+  chmod -R 777 $DDKITSFL/ddkits-files/custom
+fi
 if [[ -f "${DDKITSFL}/ddkits.env.yml" ]]; then
   rm $DDKITSFL/ddkits.env.yml
 fi
@@ -22,6 +27,7 @@ fi
 if [[ -f "${DDKITSFL}/ddkits-files/ddkits.fix.sh" ]]; then
   rm $DDKITSFL/ddkits-files/ddkits.fix.sh
 fi
+
 if [[ -f "${DDKITSFL}/ddkits-files/custom/sites/$DDKITSHOSTNAME.conf" ]]; then
   rm $DDKITSFL/ddkits-files/custom/sites/$DDKITSHOSTNAME.conf
 fi
