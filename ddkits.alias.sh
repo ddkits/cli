@@ -39,6 +39,9 @@ ddk() {
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
   fi
 
+  # make the logo file from source
+    LOGO=~/.ddkits/ddkits-files/ddkits/logo.txt
+    export LOGO=~/.ddkits/ddkits-files/ddkits/logo.txt
   # cleanup bash_profile
   FILEBASH=~/.bash_profile
   matches_in_New_Bash_Profile="$(grep -n ddkits ${FILEBASH} | cut -f1 -d:)" 
@@ -82,8 +85,9 @@ ddk() {
     fi
     # make the logo file from source
     LOGO=~/.ddkits/ddkits-files/ddkits/logo.txt
+    export LOGO=~/.ddkits/ddkits-files/ddkits/logo.txt
     echo -e 'export SUDOPASS='"${SUDOPASS}"'
-              export LOGO='${LOGO}'' >~/.ddkits/ddkits-files/ddkits/p.sh
+              export LOGO=~/.ddkits/ddkits-files/ddkits/logo.txt' >~/.ddkits/ddkits-files/ddkits/p.sh
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits/ddkits-files/ddkits/p.sh
     docker-machine ip ddkits
     # echo "${SUDOPASS}" | sudo -S rm ddkits_alias
