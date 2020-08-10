@@ -118,7 +118,7 @@ RUN ln -sf $DDKITSFL/logs /var/log/nginx/access.log \
     && rm /etc/apache2/sites-enabled/*
 RUN chmod -R 777 /var/www/html
 
-COPY php.ini /etc/php/7.0/fpm/php.ini
+COPY ../lamp7/php.ini /etc/php/7.0/fpm/php.ini
 RUN rm -rf /etc/apache2/sites-enabled/no_site.conf
 COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
 
