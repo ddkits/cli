@@ -452,6 +452,7 @@ Ports:<br />
 - Your new Solr port is: '$DDKITSSOLRPORT'<br />
 - Your new PhpMyAdmin port is: '$DDKITSADMINPORT'<br />
 - Your new Radis port is: '$DDKITSREDISPORT'<br />
+- Your new Postgres port is: '$DDKITSPSTGPORT'<br />
 <br /><br /><br /><br />
 <center>Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com <br />
 Copyright @2017 <a href="http://ddkits.com/">DDKits.com</a></center>
@@ -479,6 +480,7 @@ Ports:
 - Your new Solr port is: '$DDKITSSOLRPORT'
 - Your new PhpMyAdmin port is: '$DDKITSADMINPORT'
 - Your new Radis port is: '$DDKITSREDISPORT'
+- Your new Postgres port is: '$DDKITSPSTGPORT'
 
 Thank you for using DDKits, feel free to contact us @ melayyoub@outlook.com
 Copyright @2017 DDKits.com. Mutasem Elayyoub
