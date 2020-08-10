@@ -26,6 +26,8 @@ DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+ran
 echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
 DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
+DDKITSPSTGPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+echo -e "Your new Radis port is  ${DDKITSPSTGPORT} "
 
 export DDKITSDBPORT=$DDKITSDBPORT
 export DDKITSREDISPORT=$DDKITSREDISPORT
@@ -34,6 +36,7 @@ export DDKITSADMINPORT=$DDKITSADMINPORT
 export DDKITSWEBPORT=$DDKITSWEBPORT
 export DDKITSWEBPORTSSL=$DDKITSWEBPORTSSL
 export DDKITSJENKINSPORT=$DDKITSJENKINSPORT
+export DDKITSPSTGPORT=$DDKITSPSTGPORT
 export DDKITSFL=$(pwd)
 
 if [[ -f $DDKITSFL'/ddkits-files/ddkitsInfo.ports.sh' ]]; then
@@ -59,6 +62,7 @@ export DDKITSADMINPORT='${DDKITSADMINPORT}'
 export DDKITSWEBPORT='${DDKITSWEBPORT}'
 export DDKITSWEBPORTSSL='${DDKITSWEBPORTSSL}'
 export DDKITSJENKINSPORT='${DDKITSJENKINSPORT}'
+export DDKITSPSTGPORT='${DDKITSPSTGPORT}'
 ' >$DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
 
 source $DDKITSFL'/ddkits.dev.sh'
@@ -76,6 +80,18 @@ services:
       - ddkits
     ports:
       - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
+  pstgdb:
+    image: postgres
+    restart: always
+    container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
+    environment:
+     - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - POSTGRES_USER='$MYSQL_USER'
+     - POSTGRES_DB='$MYSQL_DATABASE'
+    ports:
+        - '$DDKITSPSTGPORT':5432
+    networks:
+      - ddkits
   mariadb:
     build: ./ddkits-files/db
     image: ddkits/mariadb:latest
@@ -117,7 +133,18 @@ services:
      - MYSQL_USER='$MYSQL_USER'
      - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
      - MYSQL_HOST='$DDKITSIP'
-
+  pstgdb:
+    image: postgres
+    restart: always
+    container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
+    environment:
+     - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - POSTGRES_USER='$MYSQL_USER'
+     - POSTGRES_DB='$MYSQL_DATABASE'
+    ports:
+        - '$DDKITSPSTGPORT':5432
+    networks:
+      - ddkits
   solr:
     build: ./ddkits-files/solr
     image: ddkits/solr:latest
@@ -193,7 +220,18 @@ services:
      - MYSQL_USER='$MYSQL_USER'
      - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
      - MYSQL_HOST='$DDKITSIP'
-
+  pstgdb:
+    image: postgres
+    restart: always
+    container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
+    environment:
+     - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - POSTGRES_USER='$MYSQL_USER'
+     - POSTGRES_DB='$MYSQL_DATABASE'
+    ports:
+        - '$DDKITSPSTGPORT':5432
+    networks:
+      - ddkits
   solr:
     build: ./ddkits-files/solr
     image: ddkits/solr:latest
@@ -257,7 +295,18 @@ services:
      - MYSQL_USER='$MYSQL_USER'
      - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
      - MYSQL_HOST='$DDKITSIP'
-
+  pstgdb:
+    image: postgres
+    restart: always
+    container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
+    environment:
+     - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - POSTGRES_USER='$MYSQL_USER'
+     - POSTGRES_DB='$MYSQL_DATABASE'
+    ports:
+        - '$DDKITSPSTGPORT':5432
+    networks:
+      - ddkits
   phpmyadmin:
     build: ./ddkits-files/phpmyadmin
     image: ddkits/phpmyadmin
@@ -324,7 +373,18 @@ services:
      - MYSQL_USER='$MYSQL_USER'
      - MYSQL_PASSWORD='$MYSQL_ROOT_PASSWORD'
      - MYSQL_HOST='$DDKITSIP'
-
+  pstgdb:
+    image: postgres
+    restart: always
+    container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
+    environment:
+     - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
+     - POSTGRES_USER='$MYSQL_USER'
+     - POSTGRES_DB='$MYSQL_DATABASE'
+    ports:
+        - '$DDKITSPSTGPORT':5432
+    networks:
+      - ddkits
   phpmyadmin:
     build: ./ddkits-files/phpmyadmin
     image: ddkits/phpmyadmin
