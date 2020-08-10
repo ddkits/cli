@@ -11,19 +11,23 @@ ddk() {
   RED='\033[0;31m'
   NC='\033[0m'
   FILE=~/.ddkits/ddkits-files/ddkits/p.sh
-  FILEALIAS=~/.ddkits/ddkits-files/ddkits/p.sh
+  FILEALIAS=~/ddkits_alias
+  # check the file if exist
+  if test -f "$FILE"; then
+    source $FILE
+  fi
   # check if the sudo variable exist for use
   if test -z "$SUDOPASS"; then
     echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
     read -s SUDOPASS
   fi
-  # check the file if exist
-  if test -f "$FILE"; then
-    source $FILE
-  fi
+  
+  # Delete ddkits_alis if exist
+  if test -f "ddkits_alias"; then
+      echo "${SUDOPASS}" | sudo -S rm ddkits_alias
+    fi
   # check if the alias file exist in root
   if test -f "$FILEALIAS"; then
-    # echo "${SUDOPASS}" | sudo -S rm ddkits_alias
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
@@ -53,7 +57,7 @@ ddk() {
     else
       echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' | sudo tee -a $FILEBASH >/dev/null
     fi
-    echo "${SUDOPASS}" | sudo -S cat $FILEBASH
+    # echo "${SUDOPASS}" | sudo -S cat $FILEBASH
   
     # end of cleanup 
   if [[ $1 = "install" ]]; then
@@ -564,7 +568,7 @@ ddk() {
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
 
-    DDKits v4.320
+    DDKits v4.321
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
