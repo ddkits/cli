@@ -1,3 +1,7 @@
+# DDKits v4.322 Built by Mutasem Elayyoub melayyoub@outlook.com
+
+- Custom Version php.ini error fix 
+
 # DDKits v4.321 Built by Mutasem Elayyoub melayyoub@outlook.com
 
 - Custom Version
