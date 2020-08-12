@@ -12,6 +12,8 @@ alias ddkc-$DDKITSSITES-cache='docker exec -it '$DDKITSHOSTNAME'_ddkits_cache /b
 alias ddkc-$DDKITSSITES-jen='docker exec -it ddkits_jenkins /bin/bash'
 alias ddkc-$DDKITSSITES-solr='docker exec -it '$DDKITSHOSTNAME'_ddkits_solr /bin/bash'
 alias ddkc-$DDKITSSITES-admin='docker exec -it '$DDKITSHOSTNAME'_ddkits_admin /bin/bash'
+alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_web /bin/bash'
+alias ddkc-$DDKITSSITES-db='docker exec -it '$DDKITSHOSTNAME'_ddkits_db /bin/bash'
 alias ddkc-ddkits='docker exec -it ddkits /bin/bash'
 
 # echo "alias ddkc-"$DDKITSSITES"-cache='docker exec -it "$DDKITSHOSTNAME"_ddkits_cache /bin/bash'" >> ~/.ddkits_alias_web
@@ -24,7 +26,9 @@ entry1="alias ddkc-"$DDKITSSITES"-cache='docker exec -it "$DDKITSHOSTNAME"_ddkit
 entry2="alias ddkc-"$DDKITSSITES"-jen='docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins /bin/bash'"
 entry3="alias ddkc-"$DDKITSSITES"-solr='docker exec -it "$DDKITSHOSTNAME"_ddkits_solr /bin/bash'"
 entry4="alias ddkc-"$DDKITSSITES"-admin='docker exec -it "$DDKITSHOSTNAME"_ddkits_admin /bin/bash'"
-entry=($entry1 $entry2 $entry3 $entry4)
+entry5="alias ddkc-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'"
+entry6="alias ddkc-"$DDKITSSITES"-db='docker exec -it "$DDKITSHOSTNAME"_ddkits_db /bin/bash'"
+entry=($entry1 $entry2 $entry3 $entry4 $entry5 $entry6)
 matches="$(grep -n ${DDKITSSITES} ~/.ddkits_alias_web | cut -f1 -d:)"
 
 if [ ! -z "$matches" ]; then
