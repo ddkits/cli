@@ -14,6 +14,7 @@ alias ddkc-$DDKITSSITES-solr='docker exec -it '$DDKITSHOSTNAME'_ddkits_solr /bin
 alias ddkc-$DDKITSSITES-admin='docker exec -it '$DDKITSHOSTNAME'_ddkits_admin /bin/bash'
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_web /bin/bash'
 alias ddkc-$DDKITSSITES-db='docker exec -it '$DDKITSHOSTNAME'_ddkits_db /bin/bash'
+alias ddkc-$DDKITSSITES-pstgdb='docker exec -it '$DDKITSHOSTNAME'_ddkits_pstgdb /bin/bash'
 alias ddkc-ddkits='docker exec -it ddkits /bin/bash'
 
 # echo "alias ddkc-"$DDKITSSITES"-cache='docker exec -it "$DDKITSHOSTNAME"_ddkits_cache /bin/bash'" >> ~/.ddkits_alias_web
@@ -28,6 +29,7 @@ entry3="alias ddkc-"$DDKITSSITES"-solr='docker exec -it "$DDKITSHOSTNAME"_ddkits
 entry4="alias ddkc-"$DDKITSSITES"-admin='docker exec -it "$DDKITSHOSTNAME"_ddkits_admin /bin/bash'"
 entry5="alias ddkc-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'"
 entry6="alias ddkc-"$DDKITSSITES"-db='docker exec -it "$DDKITSHOSTNAME"_ddkits_db /bin/bash'"
+entry7="alias ddkc-"$DDKITSSITES"-pstgdb='docker exec -it "$DDKITSHOSTNAME"_ddkits_pstgdb /bin/bash'"
 entry=($entry1 $entry2 $entry3 $entry4 $entry5 $entry6)
 matches="$(grep -n ${DDKITSSITES} ~/.ddkits_alias_web | cut -f1 -d:)"
 
