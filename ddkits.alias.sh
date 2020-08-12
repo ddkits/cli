@@ -12,6 +12,7 @@ ddk() {
   NC='\033[0m'
   FILE=~/.ddkits/ddkits-files/ddkits/p.sh
   FILEALIAS=~/ddkits_alias
+  export COMPOSE_TLS_VERSION=TLSv1_2
   # check the file if exist
   if test -f "$FILE"; then
     source $FILE
@@ -181,6 +182,8 @@ ddk() {
     DIRECTORY="$(echo ~/.ddkits)"
     # remove the directory first to pull it again
     echo "${SUDOPASS}" | sudo -S rm -rf "$DIRECTORY"
+    # create alias for the containers
+    source ~/.ddkits/ddkits.alias.web.sh
     if [ ! -d "$DIRECTORY" ]; then
       # Control will enter here if $DIRECTORY doesn't exist.
       git clone https://github.com/ddkits/base.git "$DIRECTORY"
@@ -236,6 +239,8 @@ ddk() {
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
     source ~/.ddkits/ddkits.alias.sh ~/.ddkits_alias_web
+    # create alias for the containers
+    source ~/.ddkits/ddkits.alias.web.sh
     export CONFIGREBUILD=<(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:'"$DDKITSSITES"''))
     # create the crt files for ssl
     openssl req \
