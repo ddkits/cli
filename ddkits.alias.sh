@@ -458,7 +458,7 @@ ddk() {
     MARIADB=$DDKITSHOSTNAME'_ddkits_db'
     export MARIADB=$DDKITSHOSTNAME'_ddkits_db'
     echo "$MARIADB"
-    docker exec -i "$MARIADB" mysql -h 127.0.0.1 -P 3306 -u"$MYSQL_USER" -p"$MYSQL_ROOT_PASSWORD" --database="$MYSQL_DATABASE" <"$2"
+    docker exec -i "$MARIADB" mysql -h 127.0.0.1 -P 3306 -u"$MYSQL_USER" -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "$2"
   elif [[ $1 = "db-export" ]]; then
     clear
     echo "${SUDOPASS}" | sudo -S cat $LOGO
@@ -467,7 +467,7 @@ ddk() {
     MARIADB=$DDKITSHOSTNAME'_ddkits_db'
     export MARIADB=$DDKITSHOSTNAME'_ddkits_db'
     echo "$MARIADB"
-    docker exec -i "$MARIADB" mysql -h 127.0.0.1 -P 3306 -u"$MYSQL_USER" -p"$MYSQL_ROOT_PASSWORD" --database="$MYSQL_DATABASE" >"$2"
+    docker exec -i "$MARIADB" mysqldump -h 127.0.0.1 -P 3306 -u"$MYSQL_USER" -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" > "$2"
   elif [[ $1 = "ir" ]]; then
     clear
     echo "${SUDOPASS}" | sudo -S cat $LOGO
@@ -575,7 +575,7 @@ ddk() {
             ${red}kube${normal}   Start Kube and start the UI with Token
 
             **************************
-            
+
     Jenkins     http://jenkins.YOUR_DOMAIN.ddkits.site
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
