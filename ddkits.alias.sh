@@ -573,11 +573,18 @@ ddk() {
              **************************
     Kubernetes special commands
             ${red}kube${normal}   Start Kube and start the UI with Token
+
+            **************************
+            
     Jenkins     http://jenkins.YOUR_DOMAIN.ddkits.site
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
     PhpMyAdmin     http://admin.YOUR_DOMAIN.ddkits.site
+    MariaDB       ddkc-SiteName-db 
+    PostgreSQL    ddkc-SiteName-pstgdb 
+    Redis         ddkc-SiteName-cache
 
-    DDKits v4.321
+            **************************
+    DDKits v4.322
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
