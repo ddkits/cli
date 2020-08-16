@@ -22,11 +22,11 @@ DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+r
 echo -e "Your new Jenkins port is  ${DDKITSJENKINSPORT} "
 DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Solr port is  ${DDKITSSOLRPORT} "
-DDKITSADMINPORT="$(awk -v min=4101 -v max=5000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSADMINPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
-DDKITSREDISPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSREDISPORT="$(awk -v min=7001 -v max=8000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
-DDKITSPSTGPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSPSTGPORT="$(awk -v min=8001 -v max=9000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSPSTGPORT} "
 
 export DDKITSDBPORT=$DDKITSDBPORT
