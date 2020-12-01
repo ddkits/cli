@@ -23,9 +23,9 @@ if [[ -f '.ddkenv' ]]; then
     -newkey rsa:2048 \
     -x509 \
     -nodes \
-    -keyout $DDKITSSSL.key \
+    -keyout $DDKITSSITES.key \
     -new \
-    -out $DDKITSSSL.crt \
+    -out $DDKITSSITES.crt \
     -subj /CN=$DDKITSSSL \
     -reqexts SAN \
     -extensions SAN \
