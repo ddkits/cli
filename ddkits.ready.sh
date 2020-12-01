@@ -8,7 +8,9 @@
 
 DDKITSFL=$(pwd)
 export $DDKITSFL
-
+export $DDKITSSITES
+WORDTOREMOVE='.site'
+DDKITSSSL=${DDKITSSITES//$WORDTOREMOVE/}
 # Check DDKits ENV file
 if [[ -f '.ddkenv' ]]; then
   source .ddkenv
@@ -21,10 +23,10 @@ if [[ -f '.ddkenv' ]]; then
     -newkey rsa:2048 \
     -x509 \
     -nodes \
-    -keyout $DDKITSSITES.key \
+    -keyout $DDKITSSSL.key \
     -new \
-    -out $DDKITSSITES.crt \
-    -subj /CN=$DDKITSSITES \
+    -out $DDKITSSSL.crt \
+    -subj /CN=$DDKITSSSL \
     -reqexts SAN \
     -extensions SAN \
     -config <(cat /System/Library/OpenSSL/openssl.cnf \
@@ -556,7 +558,8 @@ Copyright @2017 DDKits.com. Mutasem Elayyoub
         echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ${BSHFILE}
       done <<<"$matchesbash"
     fi
-    echo $SUDOPASS | sudo -S echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
+    echo $SUDOPASS | sudo -S echo 'source ~/.ddkits/ddkits.alias.sh' >>~/.bash_profile
+    echo $SUDOPASS | sudo -S echo 'source ~/.ddkits_alias_web' >>~/.bash_profile
     # echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
     echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
     source ~/.bash_profile
