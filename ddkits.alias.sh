@@ -511,7 +511,8 @@ ddk() {
   elif [[ $1 = "docker" ]]; then
     if bash --login '/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh'; then
       echo 'Docker started'
-      elseddk caller
+      else
+      ddk caller
       echo 'Check your docker'
     fi
   elif [[ $1 = "init" ]]; then
