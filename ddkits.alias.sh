@@ -14,8 +14,12 @@ ddk() {
   FILEALIAS=~/ddkits_alias
   export COMPOSE_TLS_VERSION=TLSv1_2
   # check the file if exist
+  SUDOPASS=''
   if test -f "$FILE"; then
     source $FILE
+  else
+    echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
+    read -s SUDOPASS
   fi
   # check if the sudo variable exist for use
   if test -z "$SUDOPASS"; then
