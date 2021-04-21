@@ -4,7 +4,7 @@
 #
 #  by Sam Elayyoub ddkits.com
 #
-shopt -s extglob
+# shopt -s extglob
 # Copy the new Alias system and making sure of the DDKits installation
 ddk() {
   # Check if the file exist
@@ -20,11 +20,13 @@ ddk() {
   else
     echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
     read -s SUDOPASS
+    export SUDOPASS=$SUDOPASS
   fi
   # check if the sudo variable exist for use
   if test -z "$SUDOPASS"; then
     echo -e 'Enter your Sudo/Root Password "just for setup purposes":'
     read -s SUDOPASS
+    export SUDOPASS=$SUDOPASS
   fi
   
   # Delete ddkits_alis if exist
@@ -208,7 +210,7 @@ ddk() {
     source ~/.ddkits_alias_web
     docker restart $(docker ps -q)
     ddk c | grep ddkits &>/dev/null && echo -e 'DDkits Ready to go, well done :-)' || ddk install
-    source ./.ddkits/ddkits.alias.web.sh
+    source ~/.ddkits/ddkits.alias.web.sh
   elif [[ $1 = "com" ]]; then
     clear
     echo "${SUDOPASS}" | sudo -S cat $LOGO
@@ -310,7 +312,7 @@ ddk() {
     echo -e "After your hosts are"
     echo "${SUDOPASS}" | sudo -S cat /etc/hosts
     # create alias for the containers
-    source ./.ddkits/ddkits.alias.web.sh
+    source ~/.ddkits/ddkits.alias.web.sh
     echo -e 'copying conf files into ddkits and restart'
     docker cp ./ddkits-files/ddkits/sites/ddkitscust.conf ddkits:/etc/apache2/sites-enabled/ddkits_"$DDKITSHOSTNAME".conf
     # docker cp ~/.ddkits/ddkitscli.sh $DDKITSHOSTNAME'_ddkits_joomla_web':/var/www/html/ddkitscli.sh
