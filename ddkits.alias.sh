@@ -31,12 +31,12 @@ ddk() {
   
   # Delete ddkits_alis if exist
   if test -f "ddkits_alias"; then
-      echo "${SUDOPASS}" | sudo -S rm ddkits_alias
+      echo "${SUDOPASS}" | sudo -S rm ~/.ddkits_alias
     fi
   # check if the alias file exist in root
   if test -f "$FILEALIAS"; then
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
-    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
   fi
   FILE2=ddkits-files/ddkitsInfo.dev.sh
@@ -591,7 +591,7 @@ ddk() {
     Redis         ddkc-SiteName-cache
 
             **************************
-    DDKits v4.322
+    DDKits v4.323
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
