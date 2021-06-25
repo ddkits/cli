@@ -245,7 +245,7 @@ ddk() {
     # create alias for the containers
     source ~/.ddkits/ddkits.alias.web.sh
     export COMPOSE_TLS_VERSION=TLSv1_2
-    CONFIGIS=$(echo $(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site')))
+    CONFIGIS=$(echo $(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:'$(echo $DDKITSSITES))))
     # create the crt files for ssl
     echo -e 'Creating Self assigned KEY & CRT'
     openssl req \
