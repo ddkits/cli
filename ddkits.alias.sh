@@ -255,7 +255,7 @@ ddk() {
       -keyout $DDKITSSITES.key \
       -new \
       -out $DDKITSSITES.crt \
-      -subj /CN=ddkits.site \
+      -subj /CN=$DDKITSSITES \
       -sha256 \
       -days 60
     mv "$DDKITSSITES".key "$DDKITSFL"/ddkits-files/ddkits/ssl/
