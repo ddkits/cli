@@ -4,7 +4,7 @@
 #
 #  by Sam Elayyoub ddkits.com
 #
-shopt -s extglob
+# shopt -s extglob
 # Copy the new Alias system and making sure of the DDKits installation
 ddk() {
   # Check if the file exist
