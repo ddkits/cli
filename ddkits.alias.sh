@@ -119,7 +119,7 @@ ddk() {
       -extensions SAN \
       -config "$CONFIGIS" \
       -sha256 \
-      -days 3650
+      -days 60
     mkdir ~/.ddkits/ddkits-files/ddkits/ssl
     mv ~/.ddkits/ddkits.site.key ~/.ddkits/ddkits-files/ddkits/ssl/
     mv ~/.ddkits/ddkits.site.crt ~/.ddkits/ddkits-files/ddkits/ssl/
@@ -261,7 +261,7 @@ ddk() {
       -extensions SAN \
       -config "$CONFIGREBUILD" \
       -sha256 \
-      -days 3650
+      -days 60
     mv "$DDKITSSITES".key "$DDKITSFL"/ddkits-files/ddkits/ssl/
     mv "$DDKITSSITES".crt "$DDKITSFL"/ddkits-files/ddkits/ssl/
     echo "ssl crt and .key files moved correctly"
