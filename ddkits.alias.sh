@@ -115,9 +115,6 @@ ddk() {
       -new \
       -out ddkits.site.crt \
       -subj /CN=ddkits.site \
-      -reqexts SAN \
-      -extensions SAN \
-      -config "$CONFIGIS" \
       -sha256 \
       -days 60
     mkdir ~/.ddkits/ddkits-files/ddkits/ssl
@@ -259,9 +256,6 @@ ddk() {
       -new \
       -out ddkits.site.crt \
       -subj /CN=ddkits.site \
-      -reqexts SAN \
-      -extensions SAN \
-      -config "$CONFIGIS" \
       -sha256 \
       -days 60
     mv "$DDKITSSITES".key "$DDKITSFL"/ddkits-files/ddkits/ssl/
