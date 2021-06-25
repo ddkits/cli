@@ -252,9 +252,9 @@ ddk() {
       -newkey rsa:2048 \
       -x509 \
       -nodes \
-      -keyout ddkits.site.key \
+      -keyout $DDKITSSITES.key \
       -new \
-      -out ddkits.site.crt \
+      -out $DDKITSSITES.crt \
       -subj /CN=ddkits.site \
       -sha256 \
       -days 60
@@ -587,7 +587,7 @@ ddk() {
     Redis         ddkc-SiteName-cache
 
             **************************
-    DDKits v4.323
+    DDKits v4.324
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
