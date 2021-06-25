@@ -104,16 +104,16 @@ ddk() {
     echo "${SUDOPASS}" | sudo -S cat $LOGO
     echo -e 'Welcome to DDKits world...'
     export COMPOSE_TLS_VERSION=TLSv1_2
-    export CONFIGIS=<(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site'))
+    CONFIGIS=$(echo $(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site')))
     # create the crt files for ssl
     echo -e 'Creating Self assigned KEY & CRT'
     openssl req \
       -newkey rsa:2048 \
       -x509 \
       -nodes \
-      -keyout ~/.ddkits/ddkits.site.key \
+      -keyout ddkits.site.key \
       -new \
-      -out ~/.ddkits/ddkits.site.crt \
+      -out ddkits.site.crt \
       -subj /CN=ddkits.site \
       -reqexts SAN \
       -extensions SAN \
@@ -121,8 +121,8 @@ ddk() {
       -sha256 \
       -days 60
     mkdir ~/.ddkits/ddkits-files/ddkits/ssl
-    mv ~/.ddkits/ddkits.site.key ~/.ddkits/ddkits-files/ddkits/ssl/
-    mv ~/.ddkits/ddkits.site.crt ~/.ddkits/ddkits-files/ddkits/ssl/
+    mv ./ddkits.site.key ~/.ddkits/ddkits-files/ddkits/ssl/
+    mv ./ddkits.site.crt ~/.ddkits/ddkits-files/ddkits/ssl/
     chmod -R 777 ~/.ddkits/ddkits-files/ddkits/ssl
     echo "ssl crt and .key files moved correctly"
 
