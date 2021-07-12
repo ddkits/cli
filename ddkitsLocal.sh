@@ -12,21 +12,21 @@ export DDKITSFL=$(pwd)
 
 echo -ne '#############             (66%)\r'
 sleep 1
-DDKITSWEBPORT="$(awk -v min=1000 -v max=1500 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSWEBPORT="$(awk -v min=10000 -v max=15000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "  Your new Web port is  ${DDKITSWEBPORT}  "
-DDKITSWEBPORTSSL="$(awk -v min=6001 -v max=7000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSWEBPORTSSL="$(awk -v min=60010 -v max=70000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "  Your new Web SSL port is  ${DDKITSWEBPORTSSL}  "
-DDKITSDBPORT="$(awk -v min=1501 -v max=2000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSDBPORT="$(awk -v min=15010 -v max=20000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new DB port is  ${DDKITSDBPORT}  "
-DDKITSJENKINSPORT="$(awk -v min=4040 -v max=4140 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSJENKINSPORT="$(awk -v min=40400 -v max=41400 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Jenkins port is  ${DDKITSJENKINSPORT} "
-DDKITSSOLRPORT="$(awk -v min=3001 -v max=4000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSSOLRPORT="$(awk -v min=30010 -v max=40000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Solr port is  ${DDKITSSOLRPORT} "
-DDKITSADMINPORT="$(awk -v min=5001 -v max=6000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSADMINPORT="$(awk -v min=50010 -v max=60000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new PhpMyAdmin port is  ${DDKITSADMINPORT} "
-DDKITSREDISPORT="$(awk -v min=7001 -v max=8000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSREDISPORT="$(awk -v min=70010 -v max=80000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
-DDKITSPSTGPORT="$(awk -v min=8001 -v max=9000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
+DDKITSPSTGPORT="$(awk -v min=80010 -v max=90000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSPSTGPORT} "
 
 export DDKITSDBPORT=$DDKITSDBPORT
