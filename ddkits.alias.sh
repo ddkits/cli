@@ -180,6 +180,9 @@ ddk() {
     clear
     echo "${SUDOPASS}" | sudo -S cat $LOGO
     echo -e 'ifconfig Refresh ->'
+    unset DOCKER_HOST
+    unset DOCKER_CERT_PATH
+    unset DOCKER_TLS_VERIFY
     echo "${SUDOPASS}" | sudo -S ifconfig vboxnet0 down
     echo "${SUDOPASS}" | sudo -S ifconfig vboxnet0 up
     echo -e 'ifconfig Refresh -> done ifconfig'
