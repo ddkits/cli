@@ -114,7 +114,7 @@ ddk() {
       -keyout ddkits.site.key \
       -new \
       -out ddkits.site.crt \
-      -subj /CN=ddkits.site \
+      -subj "/C=CA/ST=QC/O=DDKits Inc/CN=ddkits.site" \
       -sha256 \
       -days 60
     mkdir ~/.ddkits/ddkits-files/ddkits/ssl
@@ -180,7 +180,8 @@ ddk() {
     clear
     echo "${SUDOPASS}" | sudo -S cat $LOGO
     echo -e 'ifconfig Refresh ->'
-    echo "${SUDOPASS}" | sudo -S ifconfig vboxnet0 down && sudo ifconfig vboxnet0 up
+    echo "${SUDOPASS}" | sudo -S ifconfig vboxnet0 down
+    echo "${SUDOPASS}" | sudo -S ifconfig vboxnet0 up
     echo -e 'ifconfig Refresh -> done ifconfig'
     DIRECTORY="$(echo ~/.ddkits)"
     # remove the directory first to pull it again
@@ -255,7 +256,7 @@ ddk() {
       -keyout $DDKITSSITES.key \
       -new \
       -out $DDKITSSITES.crt \
-      -subj /CN=$DDKITSSITES \
+      -subj "/C=CA/ST=QC/O=DDKits Inc/CN=$(echo $DDKITSSITES)" \
       -sha256 \
       -days 60
     mv "$DDKITSSITES".key "$DDKITSFL"/ddkits-files/ddkits/ssl/
