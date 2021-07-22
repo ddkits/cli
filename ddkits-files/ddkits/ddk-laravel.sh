@@ -156,21 +156,25 @@ else
 fi
 echo $SUDOPASS | sudo -S chmod 777 composer.phar
 echo -e 'Now installing Laravel through composer '
-php composer.phar create-project laravel/laravel ll-deploy --prefer-dist
-echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
+
+
+
 
 if [[ -f "ll-deploy/storage/logs/laravel.logs" ]]; then
   rm -rf $DDKITSFL/ll-deploy/storage/logs/laravel.logs
 fi
 
 if [[ -d "ll-deploy" ]]; then
-  cd ll-deploy
+  cd ll-deploy && rm -rf composer.lock vendor && php ../composer.phar install
   php artisan cache:clear
   cat "${DDKITSFL}/ddkits-files/ddkits/logo.txt"
   php artisan config:cache
   cd ..
   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy/storage
+else
+   php composer.phar create-project laravel/laravel ll-deploy --prefer-dist
+   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
 fi
 
 if [[ -f "ll-deploy/.env" ]]; then
