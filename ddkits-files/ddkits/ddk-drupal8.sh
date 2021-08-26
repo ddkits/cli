@@ -236,17 +236,14 @@ echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy
 #   echo -e 'Not a valid version please try again.'
 # fi
 
-alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web '$WEBROOT'/drush'
-
-alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'
-
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_web /bin/bash'
-alias ddkd-$DDKITSSITES='docker exec -i '$DDKITSHOSTNAME'_ddkits_web /bin/bash -c "cd '$WEBROOT' & drush "'
+alias ddkd-$DDKITSSITES='docker exec -i '$DDKITSHOSTNAME'_ddkits_web vendor/bin/drush' >> ~/.ddkits_alias_web
 
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web " >>~/.ddkits_alias_web
+echo "alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkd-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web " >> ~/.ddkits_alias_web
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/drupal-deploy
 
