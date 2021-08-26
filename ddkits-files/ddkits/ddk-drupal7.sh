@@ -2,7 +2,7 @@
 
 #  Script.sh
 #
-# Drupal 8
+#Drupal 7
 #
 # This system built by Mutasem Elayyoub DDKits.com
 # check if the ddkitscli.sh exist and delete it if yes else create new one
@@ -41,7 +41,6 @@ if [[ ! -d "${DDKITSFL}/ddkits-files/drupal/sites" ]]; then
   mkdir $DDKITSFL/ddkits-files/drupal/sites
   chmod -R 777 $DDKITSFL/ddkits-files/drupal/sites
 fi
-
 if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then
   mkdir $DDKITSFL/ddkits-files/ddkits/ssl
   chmod -R 777 $DDKITSFL/ddkits-files/ddkits/ssl
@@ -101,15 +100,10 @@ echo -e '
       allow from all
   </Location>
   <Directory "/var/www/html">
-      Options Indexes FollowSymLinks
-  AllowOverride All
-  Require all granted
-  RewriteEngine on
-    RewriteBase /
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} !=/favicon.ico
-    RewriteRule ^ index.php [L]
+      Require all granted
+      AllowOverride All
+      Order allow,deny
+      allow from all
   </Directory>
 </VirtualHost>
 
@@ -138,9 +132,7 @@ echo -e '
 ' >$DDKITSFL/ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf
 
 # Build out docker file to start our install
-echo -e '
-
-FROM ddkits/lamp:73
+echo -e 'FROM ddkits/lamp:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -149,23 +141,14 @@ RUN export TERM=xterm
 RUN rm /etc/apache2/sites-enabled/*
 COPY sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'.conf
 COPY ddkitscli.sh /var/www/html/ddkitscli.sh
-COPY php7.ini /usr/local/etc/php/conf.d/php.ini
+COPY php5.ini /usr/local/etc/php/conf.d/php.ini
 
 # Set the default command to execute
 
-RUN chmod 600 /etc/mysql/my.cnf
-RUN chmod -R 777 /var/www/html
-RUN composer require drush/drush && composer outdated && composer update
-RUN export PATH="$HOME/.composer/vendor/bin:$PATH"
-RUN echo "export PATH="$HOME/.composer/vendor/bin:$PATH" ">> ~/.bashrc
+RUN chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite
+
 RUN chmod -R 777 /var/www/html/ddkitscli.sh
-RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B188E2B695BD4743
-# RUN apt-get update && apt-get install -y libgmp-dev php7.2-gmp
-# RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
-# RUN docker-php-ext-install gmp
-# RUN curl https://drupalconsole.com/installer -L -o drupal.phar
-# RUN mv drupal.phar /usr/local/bin/drupal
-# RUN chmod +x /usr/local/bin/drupal
 
 # Fixing permissions
 RUN chown -R www-data:www-data /var/www/html
@@ -179,7 +162,7 @@ echo -e 'version: "3.1"
 services:
   web:
     build: $DDKITSFL/ddkits-files/drupal
-    image: ddkits/drupal8:latest
+    image: ddkits/drupal7:latest
     volumes:
       # Mount the local drupal directory in the container
       - $DDKITSFL/deploy:/var/www/html
@@ -195,46 +178,20 @@ services:
       - "'$DDKITSWEBPORT':80"
       - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
 if [[ ! -d "deploy/${WEBROOT}" ]]; then
-  git clone https://github.com/ddkits/drupal-8.git $DDKITSFL/deploy1
-  cp -r $DDKITSFL/deploy1/ $DDKITSFL/deploy/
-  rm -rf $DDKITSFL/deploy1
+  git clone https://github.com/ddkits/drupal-7.git $DDKITSFL/deploy
+  cp -R deploy/deploy/* deploy
+  rm -rf deploy/deploy
   echo $DDKITSFL
-  mv $DDKITSFL/deploy/* $DDKITSFL/deploy/$WEBROOT
-  chmod -R 777 $DDKITSFL/deploy/$WEBROOT
+  mv $DDKITSFL/deploy/public $DDKITSFL/deploy/$WEBROOT
+  chmod -R 755 $DDKITSFL/deploy/$WEBROOT
   mkdir $DDKITSFL/deploy/$WEBROOT/sites/default/files
-  chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default
-  rm -rf $DDKITSFL/deploy/$WEBROOT/vendor
-  cp -f $DDKITSFL/deploy/$WEBROOT/sites/default/default.settings.php $DDKITSFL/deploy/$WEBROOT/sites/default/settings.php
-  cp -f $DDKITSFL/deploy/$WEBROOT/sites/default/default.services.yml $DDKITSFL/deploy/$WEBROOT/sites/default/services.yml
-  cp $DDKITSFL/deploy/composer.phar $DDKITSFL/deploy/$WEBROOT/ddkits.phar
-  cd $DDKITSFL/deploy/$WEBROOT && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
-  cd $DDKITSFL
-else
-  echo 'if you need a new drupal 8 installation please make sure to remove deploy/'$WEBROOT' folder and restart this step again.'
-
-  echo $DDKITSFL
-  rm -rf $DDKITSFL/deploy/$WEBROOT/vendor
-  cd $DDKITSFL/deploy/$WEBROOT && php ddkits.phar self-update && php ddkits.phar config --global discard-changes true && php ddkits.phar update drupal/core --with-dependencies && php ddkits.phar update --lock && php ddkits.phar install -n
-  cd $DDKITSFL
   chmod -R 777 $DDKITSFL/deploy/$WEBROOT/sites/default/files
-  # chown $(echo "$USER") $DDKITSFL/deploy
+elif [[ -d "deploy/${WEBROOT}" ]]; then
+  echo 'if you need a new drupal7 installation please make sure to remove deploy/'$WEBROOT' folder and restart this step again.'
 fi
-
-# if [[ ! -d "deploy/drush" ]]; then
-#     wget "https://github.com/drush-ops/drush/archive/8.2.2.zip"
-#     unzip 8.2.2.zip
-#     rm 8.2.2.zip
-#     mv drush-8.2.2 drush
-#     cd drush
-#     composer install
-#     cd $DDKITSFL
-# fi
-
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy
 
-#  else
-#   echo -e 'Not a valid version please try again.'
-# fi
+alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web '$WEBROOT'/drush '
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
@@ -244,7 +201,9 @@ alias ddkd-$DDKITSSITES='docker exec -i '$DDKITSHOSTNAME'_ddkits_web vendor/bin/
 #  fixed the alias for machine
 echo "alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
 echo "alias ddkd-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web " >> ~/.ddkits_alias_web
-
+# echo "alias ddkd-"$DDKITSSITES"='docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash -c 'cd $WEBROOT && drush''" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/drupal-deploy
+
+ln -sfn $DDKITSFL/deploy/sites $DDKITSFL/deploy/$WEBROOT/sites/default
 
 cd $DDKITSFL
