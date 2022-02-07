@@ -124,7 +124,7 @@ ddk() {
     if test -f "$FILEWEB"; then
       echo 'Welcome back.'
     else
-      echo -e 'DDkits web
+      echo -e '# DDkits web
         ' >>~/.ddkits_alias_web
     fi
     # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
