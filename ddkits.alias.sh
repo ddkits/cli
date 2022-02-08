@@ -157,14 +157,14 @@ ddk() {
     source ~/.ddkits/ddkits.alias.sh ~/.ddkits_alias_web
     # echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
     echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
-  elif [[ $1 = "ip" ]]; then
-    Docker-machine ls | grep ddkits >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
+ elif [[ $1 = "ip" ]]; then
     # export DDKITSIP=$(docker-machine ip ddkits)
     if [[ $DDKMACHINE = "1" && $DDKITSVER = "1" ]]; then
       ddk go
+      Docker-machine ls | grep ddkits >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
       ddk c | grep ddkits >/dev/null && export DDKITSIP=$(docker-machine ip ddkits) || export DDKITSIP='Please make sure your DDKits container is installed and running'
     else
-      ddk c | grep ddkits >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
+      ddk c | grep ddkits >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='DDKits is running on Localhost'
       # docker-machine ls | grep error >/dev/null && docker-machine create --driver virtualbox default || echo -e 'DDkits need to be installed first'
     fi
     echo -e 'Your DDkits ip:
