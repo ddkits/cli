@@ -32,8 +32,7 @@ else
   echo "there is no old file we will create new file for you ==> "
 fi
 echo -e "DDKits required field are all required please make sure to write them correct. \n
-  Your DDKits IP is : '$DDKITSIP'\n
-  in case of using your localhost then please ignore this ip and use your localhost ip (127.0.0.1)\n
+  Your DDKits IP is : '$(ddk ip)'\n
   to cancel anytime use the regular system command ==> ctrl+c
   "
 echo -e "Enter your E-mail address that you want to use in your website as an admin: "
@@ -601,6 +600,7 @@ sleep 1
 
 # export all results
 export DDKITSFL=$DDKITSFL
+export DDKITSVER=$DDKITSVER
 export DDKITSIP=$DDKITSIP
 export JENKINS_ANSWER=${JENKINS_ANSWER}
 export JENKINS_ONLY=${JENKINS_ONLY}
@@ -632,6 +632,7 @@ echo -e "
 #
 
 # export all results
+export DDKITSVER="${DDKITSVER}"
 export WEBROOT="${WEBROOT}"
 export DDKITSFL="${DDKITSFL}"
 export DDKITSIP="${DDKITSIP} "
