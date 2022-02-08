@@ -8,7 +8,7 @@
 # insert DDKits alias into anyh system command lines
 # source 'ddkits.alias.sh'
 DDKITSFL=$(pwd)
-export DDKITSFL=$(pwd)
+export $DDKITSFL
 
 echo -ne '#############             (66%)\r'
 sleep 1
@@ -28,7 +28,10 @@ DDKITSREDISPORT="$(awk -v min=70010 -v max=80000 'BEGIN{srand(); print int(min+r
 echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
 DDKITSPSTGPORT="$(awk -v min=80010 -v max=90000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSPSTGPORT} "
+DDKITSVER="$(ddk ip)"
+echo -e "Your new Server is using ip  ${DDKITSVER} "
 
+export DDKITSVER=$DDKITSVER
 export DDKITSDBPORT=$DDKITSDBPORT
 export DDKITSREDISPORT=$DDKITSREDISPORT
 export DDKITSSOLRPORT=$DDKITSSOLRPORT
@@ -433,6 +436,7 @@ echo -e '#<html><head><!--
 <center><h3>Your DDKits information:</h3></center><br />
 <br /><br /><br /><br />
 <br />
+DDKITSVER = '$DDKITSVER'
 MAIL_ADDRESS = '$MAIL_ADDRESS'<br />
 Website = '$DDKITSSITES'<br />
 DDKits ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORT'<br />
@@ -461,6 +465,7 @@ HTML_CONTENT
 # --></body></html>' >./ddkits-$DDKITSHOSTNAME.html
 
 echo -e '
+DDKITSVER = '$DDKITSVER'
 MAIL_ADDRESS = '$MAIL_ADDRESS'
 Website = '$DDKITSSITES'
 DDKits ip = '$DDKITSIP' ==> Port = '$DDKITSWEBPORT'
