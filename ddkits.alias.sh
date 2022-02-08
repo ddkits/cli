@@ -136,11 +136,14 @@ ddk() {
     if [[ $DDKITSVER = 1 ]]; then
       clear
       echo "${SUDOPASS}" | sudo -S cat $LOGO
+      export DDKITSVER='1'
       docker-compose -f ~/.ddkits/ddkits.yml up -d --build
     elif [[ $DDKITSVER = 2 ]]; then
       clear
       echo "${SUDOPASS}" | sudo -S cat $LOGO
-      source ~/.ddkits/ddkitsStart.sh
+      export DDKITSIP='127.0.0.1'
+      export DDKITSVER='2'
+      docker-compose -f ~/.ddkits/ddkits.yml up -d --build
     fi
     # after check from here
     clear
