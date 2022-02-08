@@ -102,6 +102,8 @@ ddk() {
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
     echo "${SUDOPASS}" | sudo -S cat $LOGO
+    source ~/.ddkits_alias 
+    source ~/.ddkits_alias_web
     echo -e 'Welcome to DDKits world...'
     export COMPOSE_TLS_VERSION=TLSv1_2
     CONFIGIS=$(echo $(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site')))
@@ -132,7 +134,7 @@ ddk() {
     fi
     # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'
     echo -e '(1) Localhost \n(2) virtualbox'
-    read DDKITSVER
+   read DDKITSVER
     if [[ $DDKITSVER = 1 ]]; then
       clear
       echo "${SUDOPASS}" | sudo -S cat $LOGO
@@ -594,7 +596,7 @@ ddk() {
     Redis         ddkc-SiteName-cache
 
             **************************
-    DDKits v4.330
+    DDKits v4.335
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
