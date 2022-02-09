@@ -85,7 +85,7 @@ services:
       - "'$DDKITSREDISPORT':'$DDKITSREDISPORT'"
   pstgdb:
     image: postgres
-    restart: always
+    
     container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
     environment:
      - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
@@ -138,7 +138,7 @@ services:
      - MYSQL_HOST='$DDKITSIP'
   pstgdb:
     image: postgres
-    restart: always
+    
     container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
     environment:
      - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
@@ -225,7 +225,7 @@ services:
      - MYSQL_HOST='$DDKITSIP'
   pstgdb:
     image: postgres
-    restart: always
+    
     container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
     environment:
      - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
@@ -300,7 +300,7 @@ services:
      - MYSQL_HOST='$DDKITSIP'
   pstgdb:
     image: postgres
-    restart: always
+    
     container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
     environment:
      - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
@@ -378,7 +378,7 @@ services:
      - MYSQL_HOST='$DDKITSIP'
   pstgdb:
     image: postgres
-    restart: always
+    
     container_name: '$DDKITSHOSTNAME'_ddkits_pstgdb
     environment:
      - POSTGRES_PASSWORD='$MYSQL_ROOT_PASSWORD'
