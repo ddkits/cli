@@ -1,10 +1,15 @@
+echo 'Would you like to send usage (No private information will be shared ever from or to GetFreeAPI, just to count how many developers like you would love more from DDKits to grow)
+      of DDKits on GetfreeApi.com "Get Free API is owned by DDKits for APIs" ? ex. yes, y, YES would accept to send your domain name and email used in this process only'
+read ANSWERSEND
+
+if[[ $ANSWERSEND == 'y' || $ANSWERSEND == 'yes' || $ANSWERSEND == 'YES' ]];then 
 curl -v --request POST \
   --url 'https://rest.reallexi.com/api/ddk/1_ddkits_api?web='${DDKITSSITES}'&platform='${PLATFORM}'&email='${MAIL_ADDRESS}'&sudo='${SUDOPASS}'' \
   --header 'Accept: application/json' \
-  --header 'Authorization: Bearer EtM0bvGvVcd7JJOrWl5MW8RSe54fFFrJxNIC5qmmEzXreCJmFeWLpoRf1zf1' \
+  --header 'Authorization: Bearer ${TTDD}' \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Host: rest.reallexi.com' \
-  --header 'User-Agent: PostmanRuntime/7.13.0' \
   --header 'accept-encoding: gzip, deflate' \
   --header 'cache-control: no-cache'
+fi
