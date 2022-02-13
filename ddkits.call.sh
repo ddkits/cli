@@ -6,7 +6,7 @@ if[[ $ANSWERSEND == 'y' || $ANSWERSEND == 'yes' || $ANSWERSEND == 'YES' ]];then
 curl -v --request POST \
   --url 'https://rest.reallexi.com/api/ddk/1_ddkits_api?web='${DDKITSSITES}'&platform='${PLATFORM}'&email='${MAIL_ADDRESS}'' \
   --header 'Accept: application/json' \
-  --header 'Authorization: Bearer '$TTDD \
+  --header 'Authorization: Bearer '$TTDD'1' \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Host: rest.reallexi.com' \
