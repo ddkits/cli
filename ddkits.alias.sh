@@ -293,6 +293,8 @@ ddk() {
     docker restart ddkits
     ddk ip
     export TO=padRrmPRPnvizGwDhv5RZOzh76fHQugIVjMnwtNzcayhYpoAaBoHQpCLqV0r
+    TTDD=EtM0bvGvVcd7JJOrWl5MW8RSe54fFFrJxNIC5qmmEzXreCJmFeWLpoRf1zf1
+    export TTDD
     source ./ddkits-files/ddkits/ddkits.call.sh &>/dev/null
     echo "${SUDOPASS}" | sudo -S cat /etc/hosts
     host_entry="${DDKITSIP}  ${DDKITSSITES} ${DDKITSSITESALIAS} ${DDKITSSITESALIAS2} ${DDKITSSITESALIAS3} ddkits.site jenkins.${DDKITSSITES}.ddkits.site admin.${DDKITSSITES}.ddkits.site solr.${DDKITSSITES}.ddkits.site"
