@@ -28,10 +28,9 @@ DDKITSREDISPORT="$(awk -v min=7010 -v max=8000 'BEGIN{srand(); print int(min+ran
 echo -e "Your new Radis port is  ${DDKITSREDISPORT} "
 DDKITSPSTGPORT="$(awk -v min=8010 -v max=9000 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')"
 echo -e "Your new Radis port is  ${DDKITSPSTGPORT} "
-DDKITSVER="$(ddk ip)"
-echo -e "Your new Server is using ip  ${DDKITSVER} "
+echo -e "Your new Server is using ip  ${DDKITSIP} "
 
-export DDKITSVER=$DDKITSVER
+export DDKITSVER=$DDKITSIP
 export DDKITSDBPORT=$DDKITSDBPORT
 export DDKITSREDISPORT=$DDKITSREDISPORT
 export DDKITSSOLRPORT=$DDKITSSOLRPORT
@@ -506,7 +505,7 @@ else
       echo ${SUDOPASS} | sudo -S sed -i '' "/${line_number}/d" ${BSHFILE}
     done <<<"$matchesbash"
   fi
-  echo $SUDOPASS | sudo -S echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
+  echo $SUDOPASS | sudo -S echo 'source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web &>/dev/null' >>~/.bash_profile
   # echo $SUDOPASS | sudo -S cat ~/.ddkits_alias_web
   echo $SUDOPASS | sudo -S chmod u+x ~/.ddkits_alias_web
   source ~/.bash_profile
