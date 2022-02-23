@@ -32,7 +32,6 @@ else
   echo "there is no old file we will create new file for you ==> "
 fi
 echo -e "DDKits required field are all required please make sure to write them correct. \n
-  Your DDKits IP is : '$(ddk ip)'\n
   to cancel anytime use the regular system command ==> ctrl+c
   "
 echo -e "Enter your E-mail address that you want to use in your website as an admin: "
