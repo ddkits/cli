@@ -67,7 +67,7 @@ export DDKITSJENKINSPORT='${DDKITSJENKINSPORT}'
 export DDKITSPSTGPORT='${DDKITSPSTGPORT}'
 ' >$DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
 
-source $DDKITSFL'/ddkits.dev.sh'
+source ~/.ddkits/ddkits.dev.sh
 
 cat $LOGO
 
