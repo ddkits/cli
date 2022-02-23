@@ -167,7 +167,7 @@ ddk() {
     echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
  elif [[ $1 = "ip" ]]; then
     # export DDKITSIP=$(docker-machine ip ddkits)
-    if [[ $DDKMACHINE != "2" || $(Docker-machine ls | grep ddkits) != null ]]; then
+    if [[ $DDKMACHINE != "2" && $(Docker-machine ls | grep ddkits) == null ]]; then
       ddk go
       Docker-machine ls | grep ddkits >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
       ddk c | grep ddkits >/dev/null && export DDKITSIP=$(docker-machine ip ddkits) || export DDKITSIP='Please make sure your DDKits container is installed and running'
