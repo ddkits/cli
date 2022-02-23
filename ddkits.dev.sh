@@ -304,7 +304,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   PLATFORM='MacOS'
   echo 'This machine is '$PLATFORM' Docker setup will start now'
-  echo $SUDOPASS | sudo -S gem install wget git -y
+  echo $SUDOPASS | sudo -S gem install wget git &>/dev/null
 elif [[ "$OSTYPE" == "cygwin" ]]; then
   PLATFORM='cygwin'
   echo 'This machine is '$PLATFORM' Docker setup will start now PLEASE MAKE SURE TO HAVE "WGET" INSTALLED ON YOUR SYSTEM'
