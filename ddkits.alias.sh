@@ -170,9 +170,9 @@ ddk() {
     if [[ $DDKMACHINE != "2" && $(Docker-machine ls | grep ddkits) == null ]]; then
       ddk go
       Docker-machine ls | grep ddkits >/dev/null && export DDKMACHINE=1 || echo 'DDKits container is not using DDKits Docker Machine'
-      ddk c | grep ddkits >/dev/null && export DDKITSIP=$(docker-machine ip ddkits) || export DDKITSIP='Please make sure your DDKits container is installed and running'
+      ddk c | grep ddkits >/dev/null && export DDKITSIP=$(docker-machine ip ddkits) && DDKITSIP=$(docker-machine ip ddkits)
     else
-      ddk c | grep ddkits >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='DDKits is running on Localhost'
+      ddk c | grep ddkits >/dev/null && export DDKITSIP='127.0.0.1' && DDKITSIP='127.0.0.1'
       # docker-machine ls | grep error >/dev/null && docker-machine create --driver virtualbox default || echo -e 'DDkits need to be installed first'
     fi
     echo -e 'Your DDkits ip:
@@ -339,7 +339,7 @@ ddk() {
       source ddkitsLocal.sh && composer install
     else
       export COMPOSE_TLS_VERSION=TLSv1_2
-      echo "${SUDOPASS}" | sudo -S cat $LOGO
+      # source ~/.ddkits/ddkits.ready.sh && docker-compose -f ddkitsnew.yml up -d &>/dev/null
       source ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
       export TO=padRrmPRPnvizGwDhv5RZOzh76fHQugIVjMnwtNzcayhYpoAaBoHQpCLqV0r
       TTDD=EtM0bvGvVcd7JJOrWl5MW8RSe54fFFrJxNIC5qmmEzXreCJmFeWLpoRf1zf
@@ -603,7 +603,7 @@ ddk() {
     Redis         ddkc-SiteName-cache
 
             **************************
-    DDKits v4.337
+    DDKits v4.339
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
