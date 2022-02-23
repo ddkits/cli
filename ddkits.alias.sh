@@ -64,9 +64,9 @@ ddk() {
         echo "${SUDOPASS}" | sudo -S mv ~/New_Bash_Profile $FILEBASH
       done <<<"$matches_in_New_Bash_Profile"
       echo "Adding new New_Bash_Profile entry."
-      echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' | sudo tee -a $FILEBASH >/dev/null
+      echo 'source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web &>/dev/null' | sudo tee -a $FILEBASH >/dev/null
     else
-      echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' | sudo tee -a $FILEBASH >/dev/null
+      echo 'source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web &>/dev/null' | sudo tee -a $FILEBASH >/dev/null
     fi
     # echo "${SUDOPASS}" | sudo -S cat $FILEBASH
   
@@ -163,7 +163,6 @@ ddk() {
     eval "$(docker-machine env ddkits)"
     docker-compose -f ~/.ddkits/ddkits.yml up -d --build
     source ~/.ddkits_alias ~/.ddkits_alias_web
-    # echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
     echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
  elif [[ $1 = "ip" ]]; then
     # export DDKITSIP=$(docker-machine ip ddkits)
@@ -600,7 +599,7 @@ ddk() {
     Redis         ddkc-SiteName-cache
 
             **************************
-    DDKits v4.339
+    DDKits v4.340
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
