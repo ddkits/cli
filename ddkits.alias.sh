@@ -35,9 +35,10 @@ ddk() {
     fi
   # check if the alias file exist in root
   if test -f "$FILEALIAS"; then
-    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
-    echo "${SUDOPASS}" | sudo -S cp ddkits_alias ~/.ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
+    source ~/.ddkits_alias ~/.ddkits_alias_web
   fi
   FILE2=ddkits-files/ddkitsInfo.dev.sh
   # checking if the site has a root
@@ -98,12 +99,10 @@ ddk() {
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits/ddkits-files/ddkits/p.sh
     docker-machine ip ddkits
     # echo "${SUDOPASS}" | sudo -S rm ddkits_alias
-    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
-    echo "${SUDOPASS}" | sudo -S cat $LOGO
-    source ~/.ddkits_alias 
-    source ~/.ddkits_alias_web
+    source ~/.ddkits_alias ~/.ddkits_alias_web
     echo -e 'Welcome to DDKits world...'
     export COMPOSE_TLS_VERSION=TLSv1_2
     CONFIGIS=$(echo $(cat /System/Library/OpenSSL/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:ddkits.site')))
@@ -154,15 +153,16 @@ ddk() {
     clear
     echo "${SUDOPASS}" | sudo -S cat $LOGO
     docker-machine ip ddkits
-    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
-    echo "${SUDOPASS}" | sudo -S cp ddkits_alias ~/.ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
+    source ~/.ddkits_alias ~/.ddkits_alias_web
     docker restart $(docker ps -q)
     docker-machine create --driver virtualbox --virtualbox-hostonly-cidr "192.168.55.55/24" ddkits
     docker-machine start ddkits
     eval "$(docker-machine env ddkits)"
     docker-compose -f ~/.ddkits/ddkits.yml up -d --build
-    source ~/.ddkits/ddkits.alias.sh ~/.ddkits_alias_web
+    source ~/.ddkits_alias ~/.ddkits_alias_web
     # echo 'command source ~/.ddkits/ddkits.alias.sh  ~/.ddkits_alias_web 2>/dev/null || true ' >>~/.bash_profile
     echo -e '\nDDKits installed successfully, \nThank you for using DDKits'
  elif [[ $1 = "ip" ]]; then
@@ -210,13 +210,11 @@ ddk() {
     fi
     echo "${SUDOPASS}" | sudo -S chmod u+x "$DIRECTORY"
     # build the bash files for different browsers
-    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
-    source ~/.ddkits/ddkits.alias.sh ~/.ddkits_alias_web
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits
-    source ~/.ddkits/ddkits.alias.sh
-    source ~/.ddkits_alias_web
+    source ~/.ddkits_alias ~/.ddkits_alias_web
     docker restart $(docker ps -q)
     ddk c | grep ddkits &>/dev/null && echo -e 'DDkits Ready to go, well done :-)' || ddk install
     source ~/.ddkits/ddkits.alias.web.sh
@@ -250,10 +248,10 @@ ddk() {
     clear
     echo "${SUDOPASS}" | sudo -S cat $LOGO
     source ddkits-files/ddkitsInfo.dev.sh ddkits-files/ddkitsInfo.ports.sh ddkits-files/ddkitscli.sh
-    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
-    source ~/.ddkits/ddkits.alias.sh ~/.ddkits_alias_web
+    source ~/.ddkits_alias ~/.ddkits_alias_web
     # create alias for the containers
     source ~/.ddkits/ddkits.alias.web.sh
     export COMPOSE_TLS_VERSION=TLSv1_2
@@ -276,11 +274,10 @@ ddk() {
 
     docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --build --force-recreate
     # echo "${SUDOPASS}" | sudo -S rm ddkits_alias
-    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ddkits_alias
+    echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits.alias.sh ~/.ddkits/ddkits_alias
     echo "${SUDOPASS}" | sudo -S cp ~/.ddkits/ddkits_alias ~/.ddkits_alias
     echo "${SUDOPASS}" | sudo -S chmod u+x ~/.ddkits_alias ~/.ddkits_alias_web ~/.ddkits
-    source ~/.ddkits/ddkits.alias.sh
-    source ~/.ddkits_alias_web
+    source ~/.ddkits_alias ~/.ddkits_alias_web
     export DDKITSIP=$(docker-machine ip ddkits)
     #  prepare ddkits container for the new websites
     echo -e 'copying conf files into ddkits and restart'
@@ -420,7 +417,7 @@ ddk() {
       echo -e 'Removing DDKits files'
       echo "${SUDOPASS}" | sudo -S rm -rf ~/.ddkits
       echo "${SUDOPASS}" | sudo -S rm ~/.ddkits_alias
-      echo "${SUDOPASS}" | sudo -S rm ~/.ddkits_alias_web
+      # echo "${SUDOPASS}" | sudo -S rm ~/.ddkits_alias_web
       # echo "Please enter your password if requested."
       SITEDEL="ddkits.site"
       # echo ${SUDOPASS} | sudo -S cat /etc/hosts
