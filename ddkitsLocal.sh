@@ -8,7 +8,7 @@
 # insert DDKits alias into anyh system command lines
 # source 'ddkits.alias.sh'
 DDKITSFL=$(pwd)
-export DDKITSFL=$(pwd)
+export DDKITSFL=$DDKITSFL
 
 echo -ne '#############             (66%)\r'
 sleep 1
@@ -40,7 +40,6 @@ export DDKITSWEBPORT=$DDKITSWEBPORT
 export DDKITSWEBPORTSSL=$DDKITSWEBPORTSSL
 export DDKITSJENKINSPORT=$DDKITSJENKINSPORT
 export DDKITSPSTGPORT=$DDKITSPSTGPORT
-export DDKITSFL=$(pwd)
 
 if [[ -f $DDKITSFL'/ddkits-files/ddkitsInfo.ports.sh' ]]; then
   rm -rf $DDKITSFL/ddkits-files/ddkitsInfo.ports.sh
@@ -56,7 +55,7 @@ echo -e '
 #  Created by mutasem elayyoub ddkits.com
 #
 
-export DDKITSFL='$(pwd)'
+export DDKITSFL='${DDKITSFL}'
 export DDKITSDBPORT='${DDKITSDBPORT}'
 export SUDOPASS='${SUDOPASS}'
 export DDKITSREDISPORT='${DDKITSREDISPORT}'
