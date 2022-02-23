@@ -8,7 +8,7 @@
 # insert DDKits alias into anyh system command lines
 # source 'ddkits.alias.sh'
 DDKITSFL=$(pwd)
-export $DDKITSFL
+export DDKITSFL=$(pwd)
 
 echo -ne '#############             (66%)\r'
 sleep 1
