@@ -343,8 +343,8 @@ export DDKITSHOSTNAME=$DDKITSHOSTNAME
 
 echo -e "'Do you have docker, docker compose and machine installed properly on your machine? (if you said No DDKits will install all the required to make sure they are working fine.)'"
 DDKITS_DOCKER='Do you have docker'
-system_options=("Yes" "No" "Quit")
-select opt in "${system_options[@]}"; do
+systemoptions=("Yes" "No" "Quit")
+select opt in "${systemoptions[@]}"; do
   case $opt in
   "Yes")
     echo 'This machine is '$PLATFORM' No need to install Docker then :-)'
@@ -426,8 +426,8 @@ DDKITS_PLATFORM='Please pick which platform you want to install: '
 #
 # Setup options Please make sure of all options before publish pick list
 #
-start_options=("Custom" "Contao" "ChefDK" "Chef-server" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "nGrinder" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony" "ZenCart" "Zend" "Quit")
-select opt in "${start_options[@]}"; do
+startoptions=("Custom" "Contao" "ChefDK" "Chef-server" "DreamFactory" "Drupal" "Expression Engine" "Elgg" "Git Server" "Joomla" "Jenkins" "Laravel" "LAMP/PHP5" "LAMP/PHP7" "Magento" "nGrinder" "Umbraco" "Wordpress" "Silverstripe" "Cloud" "Symfony" "ZenCart" "Zend" "Quit")
+select opt in "${startoptions[@]}"; do
   case $opt in
   "Drupal")
     echo -e ""
