@@ -631,7 +631,7 @@ echo -e "
 #
 
 # export all results
-export DDKITSVER="${DDKITSVER}"
+export DDKITSVER="${DDKITSIP}"
 export WEBROOT="${WEBROOT}"
 export DDKITSFL="${DDKITSFL}"
 export DDKITSIP="${DDKITSIP} "
