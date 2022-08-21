@@ -1,3 +1,3 @@
 # Standard mariadb latest container
 
-FROM mariadb:latest
+FROM mariadb:10.6
