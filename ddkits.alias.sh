@@ -656,8 +656,8 @@ ddkscan() {
     echo 'Remove WP phpadmin'
         find . -name "wp-phpmyadmin" -type d | xargs rm -rf
         echo 'Find Exter suspesious files'
-    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak 's/<?php eval(base64_decode[^;]*;/<?phpn/g'  >> /home/ddkits/public_html/ddkits-suspected-extra.txt
-    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak '/eval(base64_decode*/d'  >> /home/ddkits/public_html/ddkits-suspected-extra.txt
+    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak 's/<?php eval(base64_decode[^;]*;/<?phpn/g'  >> $filename-extra.txt
+    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak '/eval(base64_decode*/d'  >> $filename-extra.txt
     
     echo 'List all suspected php files files'
     cat $filename
