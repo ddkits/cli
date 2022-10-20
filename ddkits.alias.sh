@@ -599,6 +599,18 @@ ddk() {
             ${red}kube${normal}   Start Kube and start the UI with Token
 
             **************************
+    Linux/Ubuntu special commands
+            ddkscan file-name.txt  - This will scan all the folder using find and list the suspected files into the file-name.txt
+                                   - Grep and remove suspected @include files in php 
+                                   - Find one line php files
+                                   - Find random files names 
+                                   - Grep location of suspected files
+                                   
+            deleteSuspectedPhp  file-name.txt   This will go through the file and delete all the listed items only 
+            deleteSuspected   file-name.txt     This will go through the file and delete all the listed items, 
+                               Root is must in this hook using chattr will unchattr the file in permission denied and folder, then delete, after that will lock the folder back again 
+            ddkscanclean  file-name.txt   This do full clean up with scan and delete using the Root chattr for suspected folders to stop the malicious
+            **************************
 
     Jenkins     http://jenkins.YOUR_DOMAIN.ddkits.site
     SOLR     http://solr.YOUR_DOMAIN.ddkits.site
@@ -608,7 +620,7 @@ ddk() {
     Redis         ddkc-SiteName-cache
 
             **************************
-    DDKits v4.342
+    DDKits v4.350
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
@@ -616,5 +628,129 @@ ddk() {
     ddk -h
   fi
 }
+
+# extra useful clean up hooks for security and removing malicious php, ico files
+ddkmysql(){
+echo 'DDkits fix DB'
+sudo mysqlcheck --all-databases --auto-repair
+}
+
+# Clean malicious by Sam Ayoub
+# Clean malicious by Sam Ayoub
+ddkscan(){
+    touch $1
+    filename=$1
+    echo 'sus_$(date +%F).txt' >> /home/ddkits/public_html/clean.txt
+    echo 'Delete all suspected ico files'
+    find . -name ".*.ico" -type f &>> $filename
+
+    echo 'Find all suspected php files files'
+    find . -name index.php  -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec grep -rnwl '@include ' {} \; &>> $filename
+    find . -name '????????.php' -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; &>> $filename
+    find . -name '*[0-9]*.ph*' -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec wc -l {} \; | egrep "^\s*1\s" &>> $filename
+    echo 'Find all suspected Directories files files'
+#    find . -name '??????' -type d -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; &>> $filename
+#    find . -name '???????' -type d -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; &>> $filename
+#    find . -name '?????' -type d -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; &>> $filename
+    echo 'Find Radio files'
+    find . -name '*radio.txt' -not -path "*/vendor/*" -not -path "*/node_modules/*" -type f  &>> $filename
+     find . -name '*radio.php' -not -path "*/vendor/*" -not -path "*/node_modules/*" -type f  &>> $filename
+     find . -name '*Elayyoub.*' -type f  &>> $filename
+    echo 'Remove WP phpadmin'
+        find . -name "wp-phpmyadmin" -type d | xargs rm -rf
+        echo 'Find Exter suspesious files'
+    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak 's/<?php eval(base64_decode[^;]*;/<?phpn/g'  &>> /home/ddkits/public_html/ddkits-suspected-extra.txt
+    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak '/eval(base64_decode*/d'  &>> /home/ddkits/public_html/ddkits-suspected-extra.txt
+    
+    echo 'List all suspected php files files'
+    cat $filename
+}
+
+ddkscanclean(){
+   ddkscan
+    filename=$1
+
+    echo 'List all suspected php files files'
+    cat $filename
+    deleteSuspects
+    # cat /home/ddkits/public_html/clean.txt
+    # deleteSuspectsPhp
+    #ddkchattr
+}
+# check the ddkits-suspected.txt file before running the command below
+deleteSuspects(){
+    #!/bin/bash
+    filename=$1
+    input=$filename
+    while IFS= read -r line
+    do
+    echo "$line"
+    folder="$(dirname "${line}")"
+    chattr -i $folder;
+    chattr -i $line 
+    rm -rf $line
+    chattr +i $folder;
+    done < "$input"
+}
+
+# check the ddkits-suspected.txt file before running the command below
+deleteSuspectsCustom(){
+    #!/bin/bash
+    input=$1
+    while IFS= read -r line
+    do
+    echo "$line"
+    folder="$(dirname "${line}")"
+    #chattr -i $folder;
+    #chattr -i $line 
+    rm -rf $line
+    #chattr +i $folder;
+    done < "$input"
+}
+
+# Protect your public folder by running the command below in each web server root .public_html/ddkits to protect ddkits
+ddkchattr(){
+    chattr +i -R .
+    # laravel
+    chattr -i -R storage
+    chattr -i -R public/storage
+    chattr -i -R bootstrap/cache
+    chattr -i -R public/uploads
+    # drupal
+    chattr -i -R web/sites/default/files
+    # wordpress
+    chattr -i -R wp-content/
+    #Modern with SQLlite in servers 
+    chattr -i -R core/data
+    #custom folders can be added below 
+    chattr -i -R tmp
+    chattr -i -R cache
+    chattr -i -R /home/ddkits/public_html/*/storage/app/public
+    chattr -i -R /home/ddkits/public_html/*/core/data
+}
+
+# In case of suspecious files wouldn't delete because of a permission run the ddkunchattr first then source the file again
+ddkunchattr(){
+    chattr -i -R .
+}
+
+homechattr(){
+    chattr +i -R *
+    # laravel
+    chattr -i -R */storage
+    chattr -i -R */public/storage
+    chattr -i -R */bootstrap/cache
+    chattr -i -R */public/uploads
+    # drupal
+    chattr -i -R */web/sites/default/files
+    # wordpress
+    chattr -i -R */wp-content/
+    #Modern with SQLlite in servers 
+    chattr -i -R */core/data
+    #custom folders can be added below 
+    chattr -i -R */tmp
+    chattr -i -R */cache
+}
+
 alias ddkrc='docker rm -f '
 alias ddkri='docker rmi -f '
