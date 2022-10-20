@@ -630,43 +630,40 @@ ddk() {
 }
 
 # extra useful clean up hooks for security and removing malicious php, ico files
-ddkmysql(){
+ddkmysql() {
 echo 'DDkits fix DB'
 sudo mysqlcheck --all-databases --auto-repair
 }
 
 # Clean malicious by Sam Ayoub
 # Clean malicious by Sam Ayoub
-ddkscan(){
+ddkscan() {
     touch $1
     filename=$1
-    echo 'sus_$(date +%F).txt' >> /home/ddkits/public_html/clean.txt
+    echo  $filename
     echo 'Delete all suspected ico files'
-    find . -name ".*.ico" -type f &>> $filename
+    find . -name ".*.ico" -type f >> $filename
 
     echo 'Find all suspected php files files'
-    find . -name index.php  -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec grep -rnwl '@include ' {} \; &>> $filename
-    find . -name '????????.php' -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; &>> $filename
-    find . -name '*[0-9]*.ph*' -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec wc -l {} \; | egrep "^\s*1\s" &>> $filename
+    find . -name index.php  -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec grep -rnwl '@include ' {} \; >> $filename
+    find . -name '????????.php' -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; >> $filename
+    find . -name '*[0-9]*.ph*' -not -path "*/vendor/*" -not -path "*/node_modules/*" -exec wc -l {} \; | egrep "^\s*1\s" >> $filename
     echo 'Find all suspected Directories files files'
-#    find . -name '??????' -type d -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; &>> $filename
-#    find . -name '???????' -type d -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; &>> $filename
-#    find . -name '?????' -type d -exec grep -rnwl 'substr(md5(time()), 0, 8)' {} \; &>> $filename
     echo 'Find Radio files'
-    find . -name '*radio.txt' -not -path "*/vendor/*" -not -path "*/node_modules/*" -type f  &>> $filename
-     find . -name '*radio.php' -not -path "*/vendor/*" -not -path "*/node_modules/*" -type f  &>> $filename
-     find . -name '*Elayyoub.*' -type f  &>> $filename
+    find . -name '*radio.txt' -not -path "*/vendor/*" -not -path "*/node_modules/*" -type f  >> $filename
+     find . -name '*radio.php' -not -path "*/vendor/*" -not -path "*/node_modules/*" -type f  >> $filename
+     find . -name '*Elayyoub.*' -type f  >> $filename
     echo 'Remove WP phpadmin'
         find . -name "wp-phpmyadmin" -type d | xargs rm -rf
         echo 'Find Exter suspesious files'
-    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak 's/<?php eval(base64_decode[^;]*;/<?phpn/g'  &>> /home/ddkits/public_html/ddkits-suspected-extra.txt
-    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak '/eval(base64_decode*/d'  &>> /home/ddkits/public_html/ddkits-suspected-extra.txt
+    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak 's/<?php eval(base64_decode[^;]*;/<?phpn/g'  >> /home/ddkits/public_html/ddkits-suspected-extra.txt
+    grep -lr --include=*.php "eval(base64_decode" . | xargs sed -i.bak '/eval(base64_decode*/d'  >> /home/ddkits/public_html/ddkits-suspected-extra.txt
     
     echo 'List all suspected php files files'
     cat $filename
 }
 
-ddkscanclean(){
+ddkscanclean() {
    ddkscan
     filename=$1
 
@@ -678,7 +675,7 @@ ddkscanclean(){
     #ddkchattr
 }
 # check the ddkits-suspected.txt file before running the command below
-deleteSuspects(){
+deleteSuspects() {
     #!/bin/bash
     filename=$1
     input=$filename
@@ -694,7 +691,7 @@ deleteSuspects(){
 }
 
 # check the ddkits-suspected.txt file before running the command below
-deleteSuspectsCustom(){
+deleteSuspectsCustom() {
     #!/bin/bash
     input=$1
     while IFS= read -r line
@@ -709,7 +706,7 @@ deleteSuspectsCustom(){
 }
 
 # Protect your public folder by running the command below in each web server root .public_html/ddkits to protect ddkits
-ddkchattr(){
+ddkchattr() {
     chattr +i -R .
     # laravel
     chattr -i -R storage
@@ -730,11 +727,11 @@ ddkchattr(){
 }
 
 # In case of suspecious files wouldn't delete because of a permission run the ddkunchattr first then source the file again
-ddkunchattr(){
+ddkunchattr() {
     chattr -i -R .
 }
 
-homechattr(){
+homechattr() {
     chattr +i -R *
     # laravel
     chattr -i -R */storage
