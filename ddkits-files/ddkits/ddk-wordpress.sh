@@ -57,7 +57,7 @@ DOCUMENTROOT=$WEBROOT
 
 # Build out docker file to start our install
 echo -e '
-FROM ddkits/lamp:7
+FROM ddkits/lamp:'$DDKITSPHPVERSION'
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 

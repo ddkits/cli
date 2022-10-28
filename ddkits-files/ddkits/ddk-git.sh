@@ -139,7 +139,7 @@ gitlab_rails['redis_port'] = "${DDKITSREDISPORT}"
 " >>$DDKITSFL/ddkits-files/git/sites/gitlab.rb
 
 echo -e '
-FROM ddkits/lamp:7
+FROM ddkits/lamp:'$DDKITSPHPVERSION'
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 

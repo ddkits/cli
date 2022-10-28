@@ -104,7 +104,7 @@ echo -e '
 
 #  Created by mutasem elayyoub ddkits.co#  Created by mutasem elayyoub ddkits.co
 
-FROM ddkits/lamp:7
+FROM ddkits/lamp:'$DDKITSPHPVERSION'
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 

@@ -15,19 +15,19 @@ if [[ -f "${DDKITSFL}/ddkitsnew.yml" ]]; then
   rm $DDKITSFL/ddkitsnew.yml
 fi
 # delete the old environment yml file
-if [[ -f "${DDKITSFL}/ddkits-files/chefserver/Dockerfile" ]]; then
-  rm $DDKITSFL/ddkits-files/chefserver/Dockerfile
+if [[ -f "${DDKITSFL}/ddkits-files/chefdk/Dockerfile" ]]; then
+  rm $DDKITSFL/ddkits-files/chefdk/Dockerfile
 fi
 # delete the old environment yml file
 if [[ -f "${DDKITSFL}/ddkits-files/ddkits.fix.sh" ]]; then
   rm $DDKITSFL/ddkits-files/ddkits.fix.sh
 fi
-if [[ -f "${DDKITSFL}/ddkits-files/chefserver/sites/$DDKITSHOSTNAME.conf" ]]; then
-  rm $DDKITSFL/ddkits-files/chefserver/sites/$DDKITSHOSTNAME.conf
+if [[ -f "${DDKITSFL}/ddkits-files/chefdk/sites/$DDKITSHOSTNAME.conf" ]]; then
+  rm $DDKITSFL/ddkits-files/chefdk/sites/$DDKITSHOSTNAME.conf
 fi
-if [[ ! -d "${DDKITSFL}/ddkits-files/chefserver/sites" ]]; then
-  mkdir $DDKITSFL/ddkits-files/chefserver/sites
-  chmod -R 777 $DDKITSFL/ddkits-files/chefserver/sites
+if [[ ! -d "${DDKITSFL}/ddkits-files/chefdk/sites" ]]; then
+  mkdir $DDKITSFL/ddkits-files/chefdk/sites
+  chmod -R 777 $DDKITSFL/ddkits-files/chefdk/sites
 fi
 if [[ ! -d "${DDKITSFL}/ddkits-files/ddkits/ssl" ]]; then
   mkdir $DDKITSFL/ddkits-files/ddkits/ssl
@@ -57,7 +57,7 @@ DOCUMENTROOT=$WEBROOT
 
 # Build out docker file to start our install
 echo -e '
-FROM ddkits/lamp:7
+FROM ddkits/lamp:'$DDKITSPHPVERSION'
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -79,28 +79,30 @@ COPY logrotate /opt/opscode/sv/logrotate
 COPY knife.rb /etc/chef/knife.rb
 COPY backup.sh /usr/local/bin/chef-server-backup
 
-ENV PUBLIC_URL '$DDKITSSITES'
 ENV KNIFE_HOME /etc/chef
 
+CMD [ "/opt/opscode/embedded/bin/ruby", "/init.rb" ]
+# Fix git user 
+RUN git config --global user.name '$MYSQL_USER'
+RUN git config --global user.email '$MAIL_ADDRESS'
+
+# Add ignore for chef
+RUN ".chef" > ~/chef-repo/.gitignore
+RUN cd ~/chef-repo && git add . && git commit -m "initial commit"
+
+#  Run first cookbook
+RUN chef generate cookbook ddkits_cookbook
+RUN apt-get -y install tree
+# Set the default command to execute
 
 RUN chmod 600 /etc/mysql/my.cnf
-RUN chmod -R 777 /var/opt/opscode /etc/chef
+RUN chmod -R 777 /var/www/html
 
-# # Fixing permissions
-RUN chown -R www-data:www-data /var/opt/opscode  /etc/chef
-RUN usermod -u 1000 www-data
-
-# clean up Chef for new version
-# RUN chef-server-ctl cleanup
-# RUN chef-server-ctl upgrade
 
 # Fixing permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
-
-CMD [ "/opt/opscode/embedded/bin/ruby", "/init.rb" ]
-
-  ' >$DDKITSFL/ddkits-files/chefserver/Dockerfile
+  ' >>$DDKITSFL/ddkits-files/chefdk/Dockerfile
 
 # create different containers files for conf
 echo -e '
@@ -146,14 +148,14 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost>
-' >$DDKITSFL/ddkits-files/chefserver/sites/$DDKITSHOSTNAME.conf
+' >$DDKITSFL/ddkits-files/chefdk/sites/$DDKITSHOSTNAME.conf
 
 echo -e 'version: "3.1"
 
 services:
   web:
-    build: $DDKITSFL/ddkits-files/chefserver
-    image: ddkits/chefserver:latest
+    build: $DDKITSFL/ddkits-files/chefdk
+    image: ddkits/chefdk:latest
 
     stdin_open: true
     tty: true
@@ -166,9 +168,9 @@ services:
       - "'$DDKITSWEBPORT':80"
       - "'$DDKITSWEBPORTSSL':443"
     environment:
-       chefserver_DB_HOST: '$DDKITSIP':'$DDKITSDBPORT'
-       chefserver_DB_USER: '$MYSQL_USER'
-       chefserver_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >>$DDKITSFL/ddkits.env.yml
+       chefdk_DB_HOST: '$DDKITSIP':'$DDKITSDBPORT'
+       chefdk_DB_USER: '$MYSQL_USER'
+       chefdk_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >>$DDKITSFL/ddkits.env.yml
 
 # check if wget command exist
 

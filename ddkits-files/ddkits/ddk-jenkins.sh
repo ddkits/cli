@@ -45,29 +45,31 @@ echo -e 'version: "3.1"
 
 services:
   web:
-    build: ./ddkits-files/jenkins
+    build: $DDKITSFL/ddkits-files/jenkins
+    image: ddkits/jenkins:latest
+
     volumes:
-      - ./jenkins-deploy:/var/jenkins_home
+      - $DDKITSFL/jenkins-deploy:/var/jenkins_home
+      - $DDKITSFL/logs/jenkins.log:/var/log/jenkins/
+    stdin_open: true
+    tty: true
+    container_name: '$DDKITSHOSTNAME'_ddkits_jenkins_web
     networks:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443"
-    stdin_open: true
-    tty: true
-    container_name: '$DDKITSHOSTNAME'_ddkits_web
-   '>$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
 
-if [[ ! -d "jenkins-deploy" ]]; then
+if [[ ! -d "jenkins" ]]; then
 
 fi
 
 # create get into ddkits container
 echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
-alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
+alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_jenkins_web /bin/bash'
 alias ddkc-$DDKITSSITES-pass='cat "${DDKITSFL}/jenkins-deploy/secrets/initialAdminPassword"'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins_web /bin/bash'" >>~/.ddkits_alias_web
 echo "alias ddkc-"$DDKITSSITES"-pass='cat '"$DDKITSFL"/jenkins-deploy/secrets/initialAdminPassword''" >>~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/jenkins
 

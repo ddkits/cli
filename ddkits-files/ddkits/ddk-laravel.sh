@@ -105,7 +105,7 @@ echo -e '
 
 #  Script.s#  Script.s
 
-FROM ddkits/lamp:7
+FROM ddkits/lamp:'$DDKITSPHPVERSION'
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
@@ -167,7 +167,7 @@ fi
 if [[ -d "ll-deploy" ]]; then
   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
   cd ll-deploy && rm -rf $DDKITSFL/ll-deploy/composer.lock $DDKITSFL/ll-deploy/vendor 
-  php ../composer.phar install
+  php ../composer.phar install --ignore-platform-reqs
   php artisan cache:clear
   cat "${DDKITSFL}/ddkits-files/ddkits/logo.txt"
   php artisan config:cache
