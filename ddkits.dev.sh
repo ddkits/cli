@@ -34,6 +34,18 @@ fi
 echo -e "DDKits required field are all required please make sure to write them correct. \n
   to cancel anytime use the regular system command ==> ctrl+c
   "
+echo -e 'WHat PHP version to use? ex. 5, 7 or 8'
+read DDKITSPHPVERSIONBEFORE
+if [[ $DDKITSPHPVERSIONBEFORE = 5 ]]; then
+  DDKITSPHPVERSION='5'
+  export DDKITSPHPVERSION='5'
+elif [[ $DDKITSPHPVERSIONBEFORE = 7 ]]; then
+  DDKITSPHPVERSION='7.3'
+  export DDKITSPHPVERSION='7.3'
+elif [[ $DDKITSPHPVERSIONBEFORE = 8 ]]; then
+  DDKITSPHPVERSION='8.1'
+  export DDKITSPHPVERSION='8.1' 
+fi
 echo -e "Enter your E-mail address that you want to use in your website as an admin: "
 read MAIL_ADDRESS
 echo -e ""
@@ -415,6 +427,7 @@ echo -e "
   MYSQL_ROOT_PASSWORD='"$MYSQL_ROOT_PASSWORD"'
   MYSQL_DATABASE='"$MYSQL_DATABASE"'
   WEBROOT='"$WEBROOT"'
+  DDKITSPHPVERSION='"$DDKITSPHPVERSION"'
   MYSQL_PASSWORD='"$MYSQL_PASSWORD"'
   MAIL_ADDRESS='"$MAIL_ADDRESS"'" >$DDKITSFL/ddkits-files/ddkitscli.sh
 # cat $DDKITSFL/ddkits-files/ddkits-drupal.sh >> $DDKITSFL/ddkits-files/ddkitscli.sh
