@@ -34,12 +34,9 @@ fi
 echo -e "DDKits required field are all required please make sure to write them correct. \n
   to cancel anytime use the regular system command ==> ctrl+c
   "
-echo -e 'WHat PHP version to use? ex. 5, 7 or 8'
+echo -e 'WHat PHP version to use? ex. 7 or 8'
 read DDKITSPHPVERSIONBEFORE
-if [[ $DDKITSPHPVERSIONBEFORE = 5 ]]; then
-  DDKITSPHPVERSION='5'
-  export DDKITSPHPVERSION='5'
-elif [[ $DDKITSPHPVERSIONBEFORE = 7 ]]; then
+if [[ $DDKITSPHPVERSIONBEFORE = 7 ]]; then
   DDKITSPHPVERSION='7.3'
   export DDKITSPHPVERSION='7.3'
 elif [[ $DDKITSPHPVERSIONBEFORE = 8 ]]; then
