@@ -131,19 +131,6 @@ ddk() {
       echo -e '# DDkits web' >>~/.ddkits_alias_web
     fi
     # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'DDKITSPHPVERSION
-    # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'DDKITSPHPVERSION
-    echo -e 'WHat PHP version to use? ex. 5, 7 or 8'
-    read DDKITSPHPVERSIONBEFORE
-    if [[ $DDKITSPHPVERSIONBEFORE = 5 ]]; then
-      DDKITSPHPVERSION='5'
-      export DDKITSPHPVERSION='5'
-    elif [[ $DDKITSPHPVERSIONBEFORE = 7 ]]; then
-      DDKITSPHPVERSION='7.3'
-      export DDKITSPHPVERSION='7.3'
-    elif [[ $DDKITSPHPVERSIONBEFORE = 8 ]]; then
-      DDKITSPHPVERSION='8.1'
-      export DDKITSPHPVERSION='8.1' 
-    fi
     echo -e '(1) Localhost \n(2) virtualbox'
     read DDKITSVER
     if [[ $DDKITSVER = 1 ]]; then
@@ -356,19 +343,6 @@ ddk() {
       source ddkitsLocal.sh && composer install
     else
       export COMPOSE_TLS_VERSION=TLSv1_2
-       # ddk c | grep ddkits  >/dev/null && export DDKITSIP='127.0.0.1' || export DDKITSIP='Please make sure your DDKits container is installed and running'DDKITSPHPVERSION
-        echo -e 'WHat PHP version to use? ex. 5, 7 or 8'
-        read DDKITSPHPVERSIONBEFORE
-        if [[ $DDKITSPHPVERSIONBEFORE = 5 ]]; then
-          DDKITSPHPVERSION='5'
-          export DDKITSPHPVERSION='5'
-        elif [[ $DDKITSPHPVERSIONBEFORE = 7 ]]; then
-          DDKITSPHPVERSION='7.3'
-          export DDKITSPHPVERSION='7.3'
-        elif [[ $DDKITSPHPVERSIONBEFORE = 8 ]]; then
-          DDKITSPHPVERSION='8.1'
-          export DDKITSPHPVERSION='8.1' 
-        fi
       # source ~/.ddkits/ddkits.ready.sh && docker-compose -f ddkitsnew.yml up -d &>/dev/null
       source ddkitsLocal.sh && docker-compose -f ddkitsnew.yml -f ddkits.env.yml up -d --force-recreate
       export TO=padRrmPRPnvizGwDhv5RZOzh76fHQugIVjMnwtNzcayhYpoAaBoHQpCLqV0r
