@@ -161,6 +161,7 @@ ddk() {
     # Fix new Mac issues with configs
     echo "${SUDOPASS}" | sudo -S mkdir /etc/vbox
     echo "${SUDOPASS}" | sudo -S echo '* 0.0.0.0/0 ::/0' > /etc/vbox/networks.conf
+    sudo launchctl load /Library/LaunchDaemons/org.virtualbox.startup.plist
     # -------
     docker-machine create --driver virtualbox ddkits
     docker-machine start ddkits
@@ -619,7 +620,7 @@ ddk() {
     Redis         ddkc-SiteName-cache
 
             **************************
-    DDKits v4.352
+    DDKits v4.353
         "
   else
     echo "DDkits build by Mutasem Elayyoub and ready to usesource  www.DDKits.com
