@@ -117,3 +117,7 @@ Redis fully cache system can be used by your application.
 # For more information:
 
 http://www.ddkits.com by Mutasem Elayyoub
+
+Powered By:
+www.reallexi.com
+ReaLexi | The Real Word
