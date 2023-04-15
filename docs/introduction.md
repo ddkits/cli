@@ -47,3 +47,8 @@ DDKits is an open source proxy software built using Docker and virtualBox which 
 *   [Zen Cart E-commerce Installation](https://ddkits.com/content/zen-cart-e-commerce-installation)
 *   [Zend Framework installation](https://ddkits.com/content/zend-framework-installation)
 *   [ownCloud installation](https://ddkits.com/content/owncloud-installation)
+
+### Resources
+*   [DDKits CLI Homepage](https://ddkits.com)
+*   [DDKits CLI Developer Guide](https://developer.ddkits.com)
+*   [DDKits CLI Github](https://github.com/ddkits/cli)
