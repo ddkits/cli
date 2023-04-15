@@ -102,7 +102,7 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost>' >$DDKITSFL/ddkits-files/ngrinder/sites/$DDKITSHOSTNAME.conf
+</VirtualHost>' > $DDKITSFL/ddkits-files/ngrinder/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 
@@ -123,7 +123,7 @@ agent.limit_xmx=true
 # some jvm is not compatible with DNSJava. If so, set this false.
 #agent.enable_local_dns=false
 
-' >$DDKITSFL/ddkits-files/ngrinder/ngrinder-agent/__agent.conf
+' > $DDKITSFL/ddkits-files/ngrinder/ngrinder-agent/__agent.conf
 
 echo -e 'version: "3.1"
 
@@ -175,16 +175,16 @@ services:
           - web
         environment:
           - CONTROLLER_ADDR='$DDKITSIP':'$DDKITSWEBPORT'
-' >$DDKITSFL/ddkits.env.yml
+' > $DDKITSFL/ddkits.env.yml
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ngrinder-deploy
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ddkits-files/ngrinder/ngrinder-agent
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ngrinder-deploy
 
 cd $DDKITSFL

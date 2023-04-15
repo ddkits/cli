@@ -10,15 +10,15 @@ mkdir -p $destdir
 cd $destdir
 
 mkdir users
-for user in $(chef-server-ctl user-list) ; do
-    chef-server-ctl user-show -l -F json $user > users/$user.json
+for user in $(chef-server-ctl user-list); do
+  chef-server-ctl user-show -l -F json $user > users/$user.json
 done
 
 mkdir organizations
-for org in $(chef-server-ctl org-list) ; do
-    chef-server-ctl org-show -F json $org > organizations/$org.json
-    mkdir organizations/$org
-    env CHEF_ORGANIZATION=$org knife download --chef-repo-path=organizations/$org /
+for org in $(chef-server-ctl org-list); do
+  chef-server-ctl org-show -F json $org > organizations/$org.json
+  mkdir organizations/$org
+  env CHEF_ORGANIZATION=$org knife download --chef-repo-path=organizations/$org /
 done
 
 cd ..

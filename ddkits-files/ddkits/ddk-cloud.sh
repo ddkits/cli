@@ -106,7 +106,7 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost>
-' >$DDKITSFL/ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
+' > $DDKITSFL/ddkits-files/cloud/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 #!/bin/sh
@@ -151,7 +151,7 @@ if [ -f ${ocpath}/data/.htaccess ]
  then
   chmod 0644 ${ocpath}/data/.htaccess
   chown ${rootuser}:${htgroup} ${ocpath}/data/.htaccess
-fi' >$DDKITSFL/ddkits-files/cloud/ddkits-check.sh
+fi' > $DDKITSFL/ddkits-files/cloud/ddkits-check.sh
 
 echo -e '
 FROM ddkits/lamp:latest
@@ -180,7 +180,7 @@ RUN a2enmod headers \
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 
-  ' >$DDKITSFL/ddkits-files/cloud/Dockerfile
+  ' > $DDKITSFL/ddkits-files/cloud/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -198,7 +198,7 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 # Installing ownCloud9 on local host
 
@@ -223,12 +223,12 @@ if [[ ! -d "cloud-deploy/${WEBROOT}" ]]; then
 fi
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
 alias ddkc-$DDKITSSITES-fix='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash /var/www/html/ddkits-check.sh'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
-echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash /var/www/html/ddkits-check.sh'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-fix='docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash /var/www/html/ddkits-check.sh'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/cloud-deploy
 echo $SUDOPASS | sudo -S chmod -R 0770 $DDKITSFL/cloud-deploy/$WEBROOT/data
 

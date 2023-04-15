@@ -104,7 +104,7 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost>
-' >$DDKITSFL/ddkits-files/custom/sites/$DDKITSHOSTNAME.conf
+' > $DDKITSFL/ddkits-files/custom/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 
@@ -126,7 +126,7 @@ COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 
-' >$DDKITSFL/ddkits-files/custom/Dockerfile
+' > $DDKITSFL/ddkits-files/custom/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -143,7 +143,7 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 # git your custom repo and install it into your webroot folder
 
@@ -160,10 +160,10 @@ git clone $GITREPO gitfoldertmp
 cp -a gitfoldertmp/. custom-deploy/
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/custom-deploy
 
 cd $DDKITSFL

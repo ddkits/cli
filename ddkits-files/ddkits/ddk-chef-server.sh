@@ -102,7 +102,7 @@ RUN chmod -R 777 /var/www/html
 # Fixing permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
-  ' >>$DDKITSFL/ddkits-files/chefdk/Dockerfile
+  ' >> $DDKITSFL/ddkits-files/chefdk/Dockerfile
 
 # create different containers files for conf
 echo -e '
@@ -148,7 +148,7 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost>
-' >$DDKITSFL/ddkits-files/chefdk/sites/$DDKITSHOSTNAME.conf
+' > $DDKITSFL/ddkits-files/chefdk/sites/$DDKITSHOSTNAME.conf
 
 echo -e 'version: "3.1"
 
@@ -170,7 +170,7 @@ services:
     environment:
        chefdk_DB_HOST: '$DDKITSIP':'$DDKITSDBPORT'
        chefdk_DB_USER: '$MYSQL_USER'
-       chefdk_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >>$DDKITSFL/ddkits.env.yml
+       chefdk_DB_PASSWORD: '$MYSQL_ROOT_PASSWORD' ' >> $DDKITSFL/ddkits.env.yml
 
 # check if wget command exist
 
@@ -179,10 +179,10 @@ mkdir $DDKITSFL/chef-server-deploy/$WEBROOT
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/chef-server-deploy
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/chef-server-deploy
 
 cd $DDKITSFL

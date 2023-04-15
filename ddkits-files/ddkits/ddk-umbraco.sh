@@ -31,7 +31,7 @@ if [[ ! -d "${DDKITSFL}/ddkits-files/umbraco/sites" ]]; then
 fi
 # Umbraco with ASPNET server
 
-echo -e 'FROM kevinobee/umbraco:latest ' >>$DDKITSFL/ddkits-files/umbraco/Dockerfile
+echo -e 'FROM kevinobee/umbraco:latest ' >> $DDKITSFL/ddkits-files/umbraco/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -49,7 +49,7 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/um-deploy
 

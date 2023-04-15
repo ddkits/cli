@@ -6,7 +6,7 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Sam Elayyoub",
+      "name": "Sam Ayoub",
       "email": "m22386@live.com",
       "homepage": "http://ddkits.com"
     }
@@ -38,9 +38,9 @@
     "post-update-cmd": [
       "source ddkits.alias.sh"
     ],
-    "ddk":[
-       "ddk install" 
-     ],
+    "ddk": [
+      "ddk install"
+    ],
     "lint": [
       "./vendor/bin/phplint"
     ],

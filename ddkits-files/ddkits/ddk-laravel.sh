@@ -99,7 +99,7 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost>' >$DDKITSFL/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
+</VirtualHost>' > $DDKITSFL/ddkits-files/Laravel/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 
@@ -122,7 +122,7 @@ COPY $DDKITSFL/sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSH
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 
- ' >>$DDKITSFL/ddkits-files/Laravel/Dockerfile
+ ' >> $DDKITSFL/ddkits-files/Laravel/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -140,13 +140,13 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
 
 if [[ ! -f "composer.phar" ]]; then
   wget https://getcomposer.org/composer.phar
@@ -157,16 +157,13 @@ fi
 echo $SUDOPASS | sudo -S chmod 777 composer.phar
 echo -e 'Now installing Laravel through composer '
 
-
-
-
 if [[ -f "ll-deploy/storage/logs/laravel.logs" ]]; then
   rm -rf $DDKITSFL/ll-deploy/storage/logs/laravel.logs
 fi
 
 if [[ -d "ll-deploy" ]]; then
   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
-  cd ll-deploy && rm -rf $DDKITSFL/ll-deploy/composer.lock $DDKITSFL/ll-deploy/vendor 
+  cd ll-deploy && rm -rf $DDKITSFL/ll-deploy/composer.lock $DDKITSFL/ll-deploy/vendor
   php ../composer.phar install --ignore-platform-reqs
   php artisan cache:clear
   cat "${DDKITSFL}/ddkits-files/ddkits/logo.txt"
@@ -175,8 +172,8 @@ if [[ -d "ll-deploy" ]]; then
   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy/storage
   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy/bootstrap
 else
-   php composer.phar create-project laravel/laravel ll-deploy --prefer-dist
-   echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
+  php composer.phar create-project laravel/laravel ll-deploy --prefer-dist
+  echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
 fi
 
 if [[ -f "ll-deploy/.env" ]]; then
@@ -216,12 +213,12 @@ MAIL_ENCRYPTION=null
 PUSHER_APP_ID=
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
-' >>$DDKITSFL/ll-deploy/.env
+' >> $DDKITSFL/ll-deploy/.env
 
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ll-deploy
 alias ddkf-$DDKITSSITES="docker exec -d "$DDKITSHOSTNAME"_ddkits_web /bin/bash ddkits.fix.sh"
 #  fixed the alias for machine
-echo "alias ddkf-"$DDKITSSITES"='docker exec -d "$DDKITSHOSTNAME"_ddkits_web /bin/bash ddkits.fix.sh'" >>~/.ddkits_alias_web
+echo "alias ddkf-"$DDKITSSITES"='docker exec -d "$DDKITSHOSTNAME"_ddkits_web /bin/bash ddkits.fix.sh'" >> ~/.ddkits_alias_web
 
 echo -e '
 #!/bin/sh
@@ -240,6 +237,6 @@ php artisan config:clear
 php artisan cache:clear
 php artisan db:seed
 chmod -R 777 storage
- ' >$DDKITSFL/ll-deploy/ddkits.fix.sh
+ ' > $DDKITSFL/ll-deploy/ddkits.fix.sh
 
 cd $DDKITSFL

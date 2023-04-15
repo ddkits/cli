@@ -99,7 +99,7 @@ echo -e '
       Order allow,deny
       allow from all
   </Directory>
-</VirtualHost>' >$DDKITSFL/ddkits-files/magento/sites/$DDKITSHOSTNAME.conf
+</VirtualHost>' > $DDKITSFL/ddkits-files/magento/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 
@@ -122,7 +122,7 @@ COPY $DDKITSFL/sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSH
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 
-' >>$DDKITSFL/ddkits-files/magento/Dockerfile
+' >> $DDKITSFL/ddkits-files/magento/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -140,7 +140,7 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 if [[ ! -d "mag-deploy/${WEBROOT}" ]]; then
   mkdir $DDKITSFL/mag-deploy
@@ -161,10 +161,10 @@ fi
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/mag-deploy
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/magento-deploy
 
 cd $DDKITSFL

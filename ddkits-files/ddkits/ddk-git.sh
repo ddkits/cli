@@ -100,9 +100,9 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost>
-' >$DDKITSFL/ddkits-files/git/sites/$DDKITSHOSTNAME.conf
+' > $DDKITSFL/ddkits-files/git/sites/$DDKITSHOSTNAME.conf
 
-cat $DDKITSFL/ddkits-files/git/sites/gitlab-example.rb >$DDKITSFL/ddkits-files/git/sites/gitlab.rb
+cat $DDKITSFL/ddkits-files/git/sites/gitlab-example.rb > $DDKITSFL/ddkits-files/git/sites/gitlab.rb
 
 echo -e "## GitLab URL
 ##! URL on which GitLab will be reachable.
@@ -136,7 +136,7 @@ gitlab_rails['redis_port'] = "${DDKITSREDISPORT}"
 # gitlab_rails['redis_password'] = nil
 # gitlab_rails['redis_database'] = 0
 
-" >>$DDKITSFL/ddkits-files/git/sites/gitlab.rb
+" >> $DDKITSFL/ddkits-files/git/sites/gitlab.rb
 
 echo -e '
 FROM ddkits/lamp:'$DDKITSPHPVERSION'
@@ -159,7 +159,7 @@ COPY ./sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSHOSTNAME'
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 
-' >$DDKITSFL/ddkits-files/git/Dockerfile
+' > $DDKITSFL/ddkits-files/git/Dockerfile
 
 echo -e '
 apt-get install -y curl openssh-server ca-certificates --force-yes -y
@@ -175,7 +175,7 @@ systemctl restart gitlab-runsvdir \
   && systemctl enable sshd postfix \
   && iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT \
   && /etc/init.d/iptables save \
-  && gitlab-ctl reconfigure ' >$DDKITSFL/git-deploy/ddkits.fix.sh
+  && gitlab-ctl reconfigure ' > $DDKITSFL/git-deploy/ddkits.fix.sh
 
 echo -e 'version: "3.1"
 
@@ -195,13 +195,13 @@ services:
       - "'$DDKITSWEBPORT':80"
       - "'$DDKITSWEBPORTSSL':443"
 
-      ' >>$DDKITSFL/ddkits.env.yml
+      ' >> $DDKITSFL/ddkits.env.yml
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/git-deploy
 
 cd $DDKITSFL

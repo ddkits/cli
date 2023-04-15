@@ -38,3 +38,4 @@ ddkits-files/drupal/Dockerfile
 ddkits-files/ddkitsInfo.ports.sh
 ddkits-files/ddkitscli.sh
 ddkits-files/ddkitsInfo.dev.sh
+node_modules

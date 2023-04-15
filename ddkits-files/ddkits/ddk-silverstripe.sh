@@ -99,7 +99,7 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost>
-' >$DDKITSFL/ddkits-files/ss/sites/$DDKITSHOSTNAME.conf
+' > $DDKITSFL/ddkits-files/ss/sites/$DDKITSHOSTNAME.conf
 
 echo -e '
 
@@ -120,7 +120,7 @@ COPY $DDKITSFL/sites/'$DDKITSHOSTNAME'.conf /etc/apache2/sites-enabled/'$DDKITSH
 # Fixing permissions
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
-' >>$DDKITSFL/ddkits-files/ss/Dockerfile
+' >> $DDKITSFL/ddkits-files/ss/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -138,13 +138,13 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443" ' >$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' > $DDKITSFL/ddkits.env.yml
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web /bin/bash'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_web /bin/bash'" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/ss-deploy
 
 if [[ ! -d "ss-deploy/${WEBROOT}" ]]; then

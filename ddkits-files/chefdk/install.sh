@@ -13,16 +13,14 @@ CLIENT_VERSION="14.6.47"
 CLIENT_SHA256="81dc8634609493a8e9c9dbcb027855027812c902db95e1884b18fe368acbd047"
 
 # Temporary work dir
-tmpdir="`mktemp -d`"
+tmpdir="$(mktemp -d)"
 cd "$tmpdir"
-
-
 
 # Download and install Chef's packages
 wget -nv https://packages.chef.io/files/stable/chef-server/${SERVER_VERSION}/ubuntu/16.04/chef-server-core_${SERVER_VERSION}-1_amd64.deb
 wget -nv https://packages.chef.io/files/stable/chef/${CLIENT_VERSION}/ubuntu/16.04/chef_${CLIENT_VERSION}-1_amd64.deb
 
-sha256sum -c - <<EOF
+sha256sum -c - << EOF
 ${SERVER_SHA256}  chef-server-core_${SERVER_VERSION}-1_amd64.deb
 ${CLIENT_SHA256}  chef_${CLIENT_VERSION}-1_amd64.deb
 EOF

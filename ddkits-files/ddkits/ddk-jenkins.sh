@@ -39,7 +39,7 @@ FROM whywebs/jenkins:latest
 
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
-' >>$DDKITSFL/ddkits-files/jenkins/Dockerfile
+' >> $DDKITSFL/ddkits-files/jenkins/Dockerfile
 
 echo -e 'version: "3.1"
 
@@ -58,19 +58,19 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 
 if [[ ! -d "jenkins" ]]; then
 
 fi
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_jenkins_web /bin/bash'
 alias ddkc-$DDKITSSITES-pass='cat "${DDKITSFL}/jenkins-deploy/secrets/initialAdminPassword"'
 #  fixed the alias for machine
-echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins_web /bin/bash'" >>~/.ddkits_alias_web
-echo "alias ddkc-"$DDKITSSITES"-pass='cat '"$DDKITSFL"/jenkins-deploy/secrets/initialAdminPassword''" >>~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"='ddk go && docker exec -it "$DDKITSHOSTNAME"_ddkits_jenkins_web /bin/bash'" >> ~/.ddkits_alias_web
+echo "alias ddkc-"$DDKITSSITES"-pass='cat '"$DDKITSFL"/jenkins-deploy/secrets/initialAdminPassword''" >> ~/.ddkits_alias_web
 echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/jenkins
 
 cd $DDKITSFL

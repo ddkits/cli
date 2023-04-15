@@ -81,8 +81,8 @@ MYSQL_USER='"$MYSQL_USER"'\n
 MYSQL_ROOT_PASSWORD='"$MYSQL_ROOT_PASSWORD"'\n
 MYSQL_DATABASE='"$MYSQL_DATABASE"'\n
 MYSQL_PASSWORD='"$MYSQL_PASSWORD"'\n
-MAIL_ADDRESS='"$MAIL_ADDRESS"'\n" >>./ddkits-files/drupal/ddkitscli.sh
-cat ./ddkits-files/drupal/ddkits-drupal.sh >>./ddkits-files/drupal/ddkitscli.sh
+MAIL_ADDRESS='"$MAIL_ADDRESS"'\n" >> ./ddkits-files/drupal/ddkitscli.sh
+cat ./ddkits-files/drupal/ddkits-drupal.sh >> ./ddkits-files/drupal/ddkitscli.sh
 
 # create different containers files for conf
 echo -e '
@@ -129,7 +129,7 @@ echo -e '
       allow from all
   </Directory>
 </VirtualHost>
-' >$DDKITSFL/ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf
+' > $DDKITSFL/ddkits-files/drupal/sites/$DDKITSHOSTNAME.conf
 
 # Build out docker file to start our install
 echo -e 'FROM ddkits/lamp:latest
@@ -154,7 +154,7 @@ RUN chmod -R 777 /var/www/html/ddkitscli.sh
 RUN chown -R www-data:www-data /var/www/html
 RUN usermod -u 1000 www-data
 
-' >>$DDKITSFL/ddkits-files/drupal/Dockerfile
+' >> $DDKITSFL/ddkits-files/drupal/Dockerfile
 
 #  create ddkits compose file for the new website
 echo -e 'version: "3.1"
@@ -176,7 +176,7 @@ services:
       - ddkits
     ports:
       - "'$DDKITSWEBPORT':80"
-      - "'$DDKITSWEBPORTSSL':443" ' >>$DDKITSFL/ddkits.env.yml
+      - "'$DDKITSWEBPORTSSL':443" ' >> $DDKITSFL/ddkits.env.yml
 if [[ ! -d "deploy/${WEBROOT}" ]]; then
   git clone https://github.com/ddkits/drupal-7.git $DDKITSFL/deploy
   cp -R deploy/deploy/* deploy
@@ -194,7 +194,7 @@ echo $SUDOPASS | sudo -S chmod -R 777 $DDKITSFL/deploy
 alias ddkd-$DDKITSSITES='docker exec -it ${DDKITSHOSTNAME}_ddkits_web '$WEBROOT'/drush '
 
 # create get into ddkits container
-echo $SUDOPASS | sudo -S cat ~/.ddkits_alias >/dev/null
+echo $SUDOPASS | sudo -S cat ~/.ddkits_alias > /dev/null
 alias ddkc-$DDKITSSITES='docker exec -it '$DDKITSHOSTNAME'_ddkits_web /bin/bash'
 alias ddkd-$DDKITSSITES='docker exec -i '$DDKITSHOSTNAME'_ddkits_web vendor/bin/drush' >> ~/.ddkits_alias_web
 

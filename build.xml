@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="mutasem-drupal-build" default="build">
+<project name="sam-drupal-build" default="build">
   <!-- Generic variables -->
   <property name="dir.base" value="${project.basedir}"/>
   <property name="dir.baselibraries" value="${project.basedir}/libraries"/>
@@ -16,7 +16,7 @@
   <property name="dir.zendlibraries" value="${dir.base}/libraries/Zend"/>
   <property name="vendorname" value="ddkits"/>
   <property name="memory" value='ini_set("memory_limit", "512M");'/>
-  <property name="message" value="This phing built by Mutasem Elayyoub for DDKits.com"/>
+  <property name="message" value="This phing built by sam Ayoub for DDKits.com"/>
   
   <target name="welcome">
       <echo msg="${message}"/>
@@ -269,7 +269,7 @@
         <copy file="${dir.base}/ddkits-files/drupal/settings.php" tofile="${dir.sites}/default/default.settings.php" />
         <copy file="${dir.base}/ddkits-files/drupal/settings.php" tofile="${dir.sites}/default/settings.php" />
        <chmod file="${dir.sites}/default/settings.php" mode="0777" />
-       <exec command="echo '/* This version build by Mutasem Elayyoub DDKits.com. */' >> ${dir.tmp}/sites/default/settings.php" checkreturn="true"/>
+       <exec command="echo '/* This version build by Sam Ayoub https://ddkits.com. */' >> ${dir.tmp}/sites/default/settings.php" checkreturn="true"/>
        <!-- <exec command=". ${dir.base}/ddkits.alias.sh" checkreturn="true"/> -->
       </then>
     </if>
@@ -322,7 +322,7 @@
         <mkdir dir="${dir.files}/${site}" mode="0777" />
         <chmod file="${dir.files}/${site}/settings.php" mode="0777" />
         <exec command="echo '${memory}' >> public/sites/${site}/settings.php" checkreturn="false"/>
-        <exec command='echo "// This version build by Mutasem Elayyoub DDKits.com. " >> ${dir.files}/${site}/settings.php' checkreturn="false"/>
+        <exec command='echo "// This version build by Sam Ayoub https://ddkits.com. " >> ${dir.files}/${site}/settings.php' checkreturn="false"/>
       </then>
     </if>
      <!-- Copy all sites files directories to the build. -->

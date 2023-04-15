@@ -1,6 +1,4 @@
-########################################
-# DDKits Environment File DDKits.com ###
-########################################
+######################################## DDKits Environment File DDKits.com ##########################################
 
 # Site information below
 MAIL_ADDRESS='EMAIL@ADDRESS.COM'  # Email address
@@ -25,8 +23,7 @@ MYSQL_PASSWORD='ddk'
 # PHP version
 PHPVERSION=7
 
-######################
-# Don't Change below #
+###################### Don't Change below #
 DDKITSFL=$DDKITSFL
 DDKITSIP=$(docker-machine ip ddkits)
 JENKINS_ONLY='false'
