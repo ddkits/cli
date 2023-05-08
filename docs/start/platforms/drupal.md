@@ -1,13 +1,13 @@
-DDKits Drupal 8 installation
+DDKits Drupal 8 installation
 ============================
 
-Drupal is software that allows an individual or a community of users to easily publish, manage and organize a great variety of content on a website. Tens of thousands of people and organizations have used Drupal to set up scores of different kinds of web sites.
+Drupal is software that allows an individual or a community of users to easily publish, manage and organize a great variety of content on a website. Tens of thousands of people and organizations have used Drupal to set up scores of different kinds of websites.
 
 [Drupal website »](https://drupal.org/)  
 
 Tags:
 
-Linux Content Management Popular
+Linux Content Management Popular
 
 * * *
 
@@ -19,22 +19,22 @@ ddk install
 
 ddk start
 
-3- Fill all information needed as the image below
+3- Fill in all information needed as in the image below
 
 ![](https://ddkits.com/sites/default/files/Screen%20Shot%202017-07-05%20at%203.26.28%20PM.png)
 
-4- Open any browser and try to opend the domain that you picked for your environment (our example here we picked drupal-8.dev)
+4- Open any browser and try to open the domain that you picked for your environment (in our example here we picked drupal-8.dev)
 
 ![](https://ddkits.com/sites/default/files/Screen%20Shot%202017-07-05%20at%203.36.49%20PM.png)
 
-DDKits Drupal 8  Drush
+DDKits Drupal 8  Drush
 ======================
 
-\*\*- Without Drush, Drupal is hard to control, that's why DDKits allowing you to use drush from your localhost same as you are hosting your Drupal on your local folder without the need to create drush alias:
+\*\*- Without Drush, Drupal is hard to control, that's why DDKits allows you to use Drush from your localhost same as you are hosting your Drupal on your local folder without the need to create Drush alias:
 
 **ddkd-DOMAIN**
 
-ex. 
+ex. 
 
 **ddkd-drupal-8.dev**
 
@@ -44,9 +44,9 @@ To clear Drupal Cache:
 
 drush without DDKits ==> drush cr or drush cache rebuild
 
-drush with DDKIts ==> ddkd DOMAIN cr or ddkd DOMAIN cache rebuild
+drush with DDKIts ==> ddkd DOMAIN cr or ddkd DOMAIN cache rebuild
 
-ex. to clear the cahce of a DDKits project domain drupal-8.dev
+ex. to clear the cache of a DDKits project domain drupal-8.dev
 
 **ddkd-drupal-8.dev cr**
 
@@ -61,7 +61,7 @@ ex. to clear the cahce of a DDKits project domain drupal-8.dev
 
 ![DDKts Drupal 8 Installation](https://ddkits.com/sites/files/Screen%20Shot%202017-07-13%20at%207.07.34%20PM.png "DDKts Drupal 8 Installation")
 
-Drupal 8 home directory :
+Drupal 8 home directory :
 
 deploy/public
 

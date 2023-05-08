@@ -3,13 +3,13 @@
 DDKits Laravel installation
 ===========================
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching. Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.
 
 [Laravel website »](https://laravel.com/)  
 
 Tags:
 
-Windows Linux Content Management Popular  PHP FRAMEWORK
+Windows Linux Content Management Popular  PHP FRAMEWORK
 
 * * *
 
@@ -21,20 +21,20 @@ ddk install
 
 ddk start
 
-3- Fill all information needed as the image below
+3- Fill in all information needed as in the image below
 
 [DDKits Laravel Installation](/file/38)
 ---------------------------------------
 
 ![DDKits Laravel Installation ](https://ddkits.com/sites/files/Screen%20Shot%202017-07-03%20at%204.51.59%20PM.png "DDKits Laravel Installation ")
 
-4- After installation done, run the command below to make sure that your laravel cache cleared and the old log or laravel removed
+4- After installation is done, run the command below to make sure that your Laravel cache is cleared and the old log or Laravel removed
 
 ddkf-DOMAIN
 
 ![](https://ddkits.com/sites/default/files/Screen%20Shot%202017-07-03%20at%204.53.18%20PM.png)
 
-5- Open any browser and try to opend the domain that you picked for your environment (our example here we picked ddkits-laravel.dev)
+5- Open any browser and try to open the domain that you picked for your environment (in our example here we picked ddkits-laravel. dev)
 
 ![](https://ddkits.com/sites/default/files/Screen%20Shot%202017-07-03%20at%204.53.45%20PM.png)
 

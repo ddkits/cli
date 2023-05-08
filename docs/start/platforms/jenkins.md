@@ -3,13 +3,13 @@
 DDKits Jenkins installation
 ===========================
 
-Jenkins is an open source automation server written in Java. Jenkins helps to automate the non-human part of software development process, with continuous integration and facilitating technical aspects of continuous delivery. It is a server-based system that runs in servlet containers such as Apache Tomcat. It supports version control tools, including AccuRev, CVS, Subversion, Git, Mercurial, Perforce, ClearCase and RTC, and can execute Apache Ant, Apache Maven and sbt based projects as well as arbitrary shell scripts and Windows batch commands.
+Jenkins is an open-source automation server written in Java. Jenkins helps to automate the non-human part of the software development process, with continuous integration and facilitating technical aspects of continuous delivery. It is a server-based system that runs in servlet containers such as Apache Tomcat. It supports version control tools, including AccuRev, CVS, Subversion, Git, Mercurial, Perforce, ClearCase, and RTC, and can execute Apache Ant, Apache Maven, and based projects as well as arbitrary shell scripts and Windows batch commands.
 
 [Joomla website »](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjc6_H_je7VAhXph1QKHdthBcMQFggoMAA&url=https%3A%2F%2Fjenkins.io%2F&usg=AFQjCNHwOJU-lmtmG89TB7bVdt1VJu8R8A)  
 
 Tags:
 
-Windows Linux Content Management Popular  AD CD
+Windows Linux Content Management Popular  AD CD
 
 * * *
 
@@ -21,7 +21,7 @@ ddk install
 
 ddk start
 
-3- Fill all information needed as the image below
+3- Fill in all information needed as in the image below
 
 [DDKits Jenkins installation](/file/144)
 ----------------------------------------
@@ -33,7 +33,7 @@ ddk start
 
 ![DDKits Jenkins installation](https://ddkits.com/sites/files/Screen%20Shot%202017-08-23%20at%2011.37.15%20AM.png "DDKits Jenkins installation")
 
-4- Open any browser and try to opend the domain that you picked for your environment (our example here we picked jen.dev)
+4- Open any browser and try to open the domain that you picked for your environment (in our example here we picked jen. dev)
 
 ![](https://ddkits.com/sites/default/files/Screen%20Shot%202017-07-03%20at%206.25.59%20PM.png)
 
@@ -42,7 +42,7 @@ ddk start
 
 ![DDKits Jenkins installation](https://ddkits.com/sites/files/Screen%20Shot%202017-08-23%20at%2011.40.40%20AM.png "DDKits Jenkins installation")
 
-5.1- To get the passcode to unlock Jenkins, open the terminal and use the command below  :
+5.1- To get the passcode to unlock Jenkins, open the terminal and use the command below  :
 
 ddkc-DOMAIN-pass
 
@@ -53,7 +53,7 @@ ddkc-DOMAIN-pass
 
 or
 
-5.2- Open Jenkins folder (jenkins-deploy) in your DDKits installation folder, and go to secrets folder, then open the intialAdminPassword file and copy the passcode from it.
+5.2- Open the Jenkins folder (Jenkins-deploy) in your DDKits installation folder, go to the secrets folder, then open the intialAdminPassword file and copy the passcode from it.
 
 [DDKits Jenkins installation](/file/149)
 ----------------------------------------
@@ -67,7 +67,7 @@ or
 
 ![DDKits Jenkins installation](https://ddkits.com/sites/files/Screen%20Shot%202017-08-23%20at%2011.37.37%20AM.png "DDKits Jenkins installation")
 
-please give jenkins more time if it didn't work after 2 mins then do the command below within the root folder of Jenkins DDKits installed in:
+please give Jenkins more time if it didn't work after 2 mins then do the command below within the root folder of Jenkins DDKits installed in:
 
 ddk rebuild
 
@@ -78,7 +78,7 @@ ddk rebuild
 
 Joomla home directory :
 
-jenkins-deploy/
+Jenkins-deploy/
 
 *   [Add child page](/node/add/book?parent=693)
 *   [Printer-friendly version](/book/export/html/36 "Show a printer-friendly version of this book page and its sub-pages.")

@@ -9,28 +9,28 @@ composer create-project ddkits/cli <folder\_name>
 
 3- DDKits will automatically install and clone the base CLI into your home folder ~/.
 
-4- DDkits will run install as one of the composer automatic installation
+4- DDkits will run install as one of the composer's automatic installation
 
-Localhost or Virtual host 
+Localhost or Virtual host 
 
-4.1- if you need localhost then no need to worry about Virtual Host 
+4.1- if you need localhost then no need to worry about Virtual Host 
 
-4.2- If you are using different tools and containers that using default localhost, preferred to use Virtual host option
+4.2- If you are using different tools and containers that use default localhost, preferred to use the Virtual host option
 
 5- Check the command "ddk" after installing and proxy DDkits is running
 
-Using github:
+Using GitHub:
 =============
 
-1- Open terminal and clone DDKits from github as below:
+1- Open the terminal and clone DDKits from GitHub as below:
 
-git clone [https://github.com/ddkits/cli.git](https://github.com/ddkits/cli.git)  PATH/TO/FOLDER
+git clone [https://github.com/ddkits/cli.git](https://github.com/ddkits/cli.git)  PATH/TO/FOLDER
 
-2- Run DDKits alias file in terminal, make sure you are in the same folder that you cloned the reposatory in. This step to add DDKits command " ddk " into your terminal:
+2- Run the DDKits alias file in the terminal, make sure you are in the same folder that you cloned the repository in. This step to add DDKits command " ddk " into your terminal:
 
-cd  PATH/TO/FOLDER && source ddkits.alias.sh
+cd  PATH/TO/FOLDER && source ddkits.alias.sh
 
-3- After it finish, check your ddk by running the main command as below:
+3- After it finishes, check your ddk by running the main command as below:
 
 ddk
 
@@ -39,22 +39,22 @@ Using the zip file:
 
 1- extract the content of the file into the folder that you want your site to load from:
 
-2- Run DDKits alias file in terminal \*\*make sure you are in the same folder that you cloned the reposatory in .\*\*, this step to add DDKits command " ddk " into your terminal:
+2- Run the DDKits alias file in terminal \*\*make sure you are in the same folder that you cloned the repository in .\*\*, this step to add DDKits command " ddk " into your terminal:
 
 source ddkits.alias.sh
 
-3- After it finish, check your ddk by running the main command as below:
+3- After it finishes, check your ddk by running the main command as below:
 
 ddk
 
 Next:
 =====
 
-Check your Docker, Docker-compose, docker-machine and DDKits installations by 
+Check your Docker, Docker-compose, docker-machine, and DDKits installations by 
 
-\-In your terminal then: 
+\-In your terminal then: 
 
->  docker -v && docker-compose --version && docker-machine -version  && ddk
+>  docker -v && docker-compose --version && docker-machine -version  && ddk
 
 [Before DDKits Installation](/file/142)
 ---------------------------------------
@@ -66,7 +66,7 @@ Check your Docker, Docker-compose, docker-machine and DDKits installations by 
 
 ![Before start](https://ddkits.com/sites/files/Screen%20Shot%202017-08-17%20at%201.53.39%20PM.png "Before start")
 
-\-If DDKits  "ddk not found ", go to any DDKits project then:
+\-If DDKits  "ddk not found ", go to any DDKits project then:
 
 > . ddkits.alias.sh
 > 
@@ -82,9 +82,9 @@ Check your Docker, Docker-compose, docker-machine and DDKits installations by 
 
 > ddk
 
-\- DDKits is a Unix base software which means it can be controled 100%.
+\- DDKits is a Unix base software which means it can be controlled 100%.
 
-To start your DDKits new website you need to begin your software first and install DDKits main containers first by 
+To start your DDKits new website you need to begin your software first and install DDKits main containers first by 
 
 ddk install
 
@@ -95,11 +95,11 @@ ddk install
 
 ![DDKits install](https://ddkits.com/sites/files/Screen%20Shot%202017-07-03%20at%209.25.41%20AM.png "DDKits install")
 
-\- then 
+\- then 
 
 ddk start
 
-\- Drupal version only start it with composer by using the command below
+\- Drupal version only starts it with the composer by using the command below
 
 ddk start com
 
