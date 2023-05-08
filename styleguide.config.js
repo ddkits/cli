@@ -18,6 +18,7 @@ module.exports = {
     };
   },
   skipComponentsWithoutExample: true,
+  title: 'DDKits CLI',
   sections: [
     {
       name: 'Home',
@@ -25,8 +26,46 @@ module.exports = {
       href: 'https://home.ddkits.com'
     },
     {
+      name: 'Prerequisite',
+      content: 'docs/start/before.md'
+    },
+    {
+      name: 'Get Started',
+      content: 'docs/start/getstarted.md'
+    },
+    {
+      name: 'Main Commands CLI',
+      content: 'docs/start/commands.md'
+    },
+    {
       name: 'Introduction',
       content: 'docs/introduction.md'
+    },
+    {
+      name: 'Custom Platforms',
+      description: 'More than 20 custom platforms can be spinned up in seconds',
+      sections: [
+        {
+          name: 'Other',
+          content: 'docs/start/platforms/all.md'
+        },
+        {
+          name: 'Drupal',
+          content: 'docs/start/platforms/drupal.md'
+        },
+        {
+          name: 'WordPress',
+          content: 'docs/start/platforms/wordpress.md'
+        },
+        {
+          name: 'Jenkins',
+          content: 'docs/start/platforms/jenkins.md'
+        },
+        {
+          name: 'Laravel',
+          content: 'docs/start/platforms/laravel.md'
+        }
+      ]
     },
     {
       name: 'Documentation',
