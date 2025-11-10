@@ -3,7 +3,7 @@
   "version": "5.0.01",
   "description": "DDKits Open-source containarized solution for Docker and local environments, DDKits reverse proxy and automation is the solution for multiple environments domain base, with the varaiety of MVCs and CMSs, with clear CLI commands to build any environment in less than 5 mins. By Reallexi LLC @ Apidocpro.com",
   "author": "Sam Ayoub",
-  "url": "https://home.ddkits.com",
+  "url": "https://ddkits.com",
   "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/reallexi"
