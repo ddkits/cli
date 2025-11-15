@@ -1,25 +1,56 @@
-MIT License
+REALLEXI UNIFIED PROTECTION LICENSE (RUPL-2025)
+© 2025 RealLexi LLC / DDKits. All rights reserved.
 
-Copyright (c) 2017 DDKits for sam Ayoub melayyoub@outlook.com
+1. RESTRICTIONS (DEFAULT)
+Unless explicit written permission is granted by RealLexi LLC, 
+NO PERSON or ENTITY may:
+  • Copy this software
+  • Modify or create derivative works
+  • Redistribute or publish the software
+  • Use the software in any commercial, business, or revenue-generating activity
+  • Host the software publicly or privately
+  • Incorporate it into any product or service
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Unauthorized use in any form is strictly prohibited and may result in civil 
+and criminal liability.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. PERMITTED USE (IF APPROVED BY REALLEXI)
+If RealLexi LLC grants written permission, allowed use is subject to ALL 
+conditions below:
 
-DDKits copyrighted for sam Ayoub, and any use of DDKits codes else 
-than individuale for a personal use only, The coorporate/indivituale must pay paid 
-(the price that sam Ayoub request) in case of DDkits been used in 
-coorporates projects with a different name or been modified or been sold in any circumstances. 
+A. PUBLIC ATTRIBUTION REQUIRED  
+Any public-facing app, website, software, or service using this code 
+must display visible attribution:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+"Powered by RealLexi LLC (DDKits)"
+
+Attribution must appear in a footer, splash screen, or About section.  
+Removal or hiding of attribution is strictly prohibited.
+
+B. NON-COMMERCIAL USE ONLY BY DEFAULT  
+Permission grants only non-commercial use unless RealLexi LLC issues 
+a paid commercial license.  
+Commercial use without a paid license is prohibited.
+
+C. SHARE-ALIKE (COPYLEFT REQUIREMENT)  
+If permission is granted to modify the software:
+  • All modifications or derivative works MUST be released under this same 
+    RUPL-2025 license.
+  • Any software incorporating this code must make its source code available 
+    under RUPL-2025 or a compatible open-source license.
+
+D. LICENSE NOTICE  
+All permitted copies or substantial portions must retain this full license 
+and the copyright notice.
+
+3. COMMERCIAL LICENSE
+Businesses, SaaS platforms, agencies, or commercial products must obtain a 
+paid commercial license from RealLexi LLC.  
+Contact: legal@reallexi.com
+
+4. NO WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT ANY WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED. IN NO EVENT SHALL REALLEXI LLC BE LIABLE FOR ANY CLAIM, DAMAGES, OR 
+OTHER LIABILITY ARISING FROM USE OF THE SOFTWARE.
+
+This license is enforceable worldwide.
