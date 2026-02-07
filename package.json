@@ -128,7 +128,7 @@
     "shell-loader": "^1.2.1",
     "text-loader": "^0.0.1",
     "url-loader": "^4.1.1",
-    "webpack": "^5.78.0",
+    "webpack": "^5.105.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.2"
   }
